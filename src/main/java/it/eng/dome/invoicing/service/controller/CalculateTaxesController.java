@@ -22,7 +22,7 @@ public class CalculateTaxesController {
 	private static final Logger logger = LoggerFactory.getLogger(CalculateTaxesController.class);
 	
 	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> calculateOrderPrice(@RequestBody String orderJson) throws Throwable {
+    public ResponseEntity<String> applyTaxes(@RequestBody String orderJson) throws Throwable {
 		logger.info("Received request for applying taxes for the invoicing");
 		Assert.state(!StringUtils.isBlank(orderJson), "Missing the instance of ProductOrder in the request body");
 		
