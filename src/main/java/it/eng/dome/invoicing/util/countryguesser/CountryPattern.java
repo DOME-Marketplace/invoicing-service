@@ -49,9 +49,9 @@ class CountryPattern {
     public void setRulesFromFile(String fileName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
+        String line;
         String ls = System.getProperty("line.separator");
-            while ((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
 	        stringBuilder.append(line);
 	        stringBuilder.append(ls);
         }
@@ -93,12 +93,8 @@ class CountryPattern {
         this.phonePattern = Pattern.compile(phone_re, Pattern.CASE_INSENSITIVE);
 
         // Domain RE
-        try {
-            String domain_re = obj.getString("domain_re");
-            this.domainPattern = Pattern.compile(domain_re, Pattern.CASE_INSENSITIVE);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        String domain_re = obj.getString("domain_re");
+        this.domainPattern = Pattern.compile(domain_re, Pattern.CASE_INSENSITIVE);
 
         // Phone regular expressions
         JSONArray legal_entity_res = obj.getJSONArray("legal_entity_res");
