@@ -86,7 +86,7 @@ public class TEDBClient implements TEDB {
                 SearchResult searchResult = gson.fromJson(response.body(), SearchResult.class);
                 return searchResult;
         } catch (JsonSyntaxException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 String msg = String.format("Bad request. Unable to search taxes for country '%s', tax type '%s' and date '%s'", tedbCountryId, taxType, date);
                 throw new IllegalArgumentException(msg);
         }
@@ -127,7 +127,7 @@ public class TEDBClient implements TEDB {
                 }
                 return taxRate;
         } catch (JsonSyntaxException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 String msg = String.format("Bad request. Unable to retrive tax rate for tax '%s', version '%s'", taxId, versionDate);
                 throw new IllegalArgumentException(msg);
         }
