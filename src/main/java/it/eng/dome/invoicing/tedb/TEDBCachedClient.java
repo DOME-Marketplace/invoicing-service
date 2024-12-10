@@ -68,11 +68,8 @@ public class TEDBCachedClient extends TEDBClient {
     public Configurations getConfigurations() throws IOException, InterruptedException {
         String key = "unique";
         if (!this.configCache.containsKey(key)) {
-            System.out.println("Configs MISS");
             Configurations configs = super.getConfigurations();
             this.configCache.put(key, configs);
-        } else {
-            System.out.println("Configs HIT");
         }
         return this.configCache.get(key);
     }
@@ -81,11 +78,8 @@ public class TEDBCachedClient extends TEDBClient {
     public SearchResult searchTaxes(String tedbCountryId, String taxType, Calendar date) throws IOException, InterruptedException {
         String key = tedbCountryId + taxType + date.get(Calendar.YEAR) + date.get(Calendar.DAY_OF_YEAR);
         if (!this.searchResultCache.containsKey(key)) {
-            System.out.println("Search MISS");
             SearchResult sr = super.searchTaxes(tedbCountryId, taxType, date);
             this.searchResultCache.put(key, sr);
-        } else {
-            System.out.println("Search HIT");
         }
         return this.searchResultCache.get(key);
     }
@@ -94,11 +88,8 @@ public class TEDBCachedClient extends TEDBClient {
     public TaxRate getTaxRate(String taxId, String versionDate) throws IOException, InterruptedException {
         String key = taxId + versionDate;
         if (!this.taxRateCache.containsKey(key)) {
-            System.out.println("TaxRate MISS");
             TaxRate sr = super.getTaxRate(taxId, versionDate);
             this.taxRateCache.put(key, sr);
-        } else {
-            System.out.println("TaxRate HIT");
         }
         return this.taxRateCache.get(key);
     }

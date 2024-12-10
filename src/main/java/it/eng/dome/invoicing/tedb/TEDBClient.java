@@ -8,6 +8,9 @@ import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.util.Calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -21,6 +24,8 @@ import it.eng.dome.invoicing.tedb.model.TaxVersion;
 public class TEDBClient implements TEDB {
 
     private static final String DEFAULT_URL = "https://ec.europa.eu/taxation_customs/tedb/rest-api";
+
+private static final Logger log = LoggerFactory.getLogger(TEDBClient.class);
 
     private String url;
 
@@ -64,7 +69,6 @@ public class TEDBClient implements TEDB {
         HttpClient client = HttpClient.newHttpClient();
 
         String situationOn = String.format("%s/%s/%s", date.get(Calendar.YEAR), date.get(Calendar.MONTH)+1, date.get(Calendar.DAY_OF_MONTH));
-        System.out.println(situationOn);
 
         String body = "{\"searchForm\":{\"selectedTaxTypes\":[\"" + taxType + "\"],\"selectedMemberStates\":["
                 + tedbCountryId + "],\"situationOn\":\""+situationOn+"\",\"historized\":\"" + false
@@ -145,12 +149,12 @@ public class TEDBClient implements TEDB {
         String tedbCountryId = this.getCountryIdFor(countryCode);
         SearchResult sr = this.searchTaxes(tedbCountryId, "VAT", date);
         if(sr.getTaxVersions().size()>1) {
-                String msg = String.format("WARNING: found %d different VAT taxes for %s at date %s", sr.getTaxVersions().size(), countryCode, date);
-                System.out.println(msg);
+                String msg = String.format("Found %d different VAT taxes for %s at date %s", sr.getTaxVersions().size(), countryCode, date);
+                log.warn(msg);
         }
         if(sr.getTaxVersions().size()==0) {
-                String msg = String.format("ERROR: unable to find VAT taxes for %s at date %s", sr.getTaxVersions().size(), countryCode, date);
-                System.out.println(msg);
+                String msg = String.format("Unable to find VAT taxes for %s at date %s", sr.getTaxVersions().size(), countryCode, date);
+                log.error(msg);
         }
         TaxVersion tv = sr.getTaxVersions().get(0);
         return this.getTaxRate(tv.taxId, tv.versionDate).getVatRateStructure().getStandardRate().getRate().getValue();
