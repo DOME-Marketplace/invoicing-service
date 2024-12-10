@@ -1,7 +1,7 @@
 package it.eng.dome.invoicing.tedb.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class SearchResult {
 
@@ -10,7 +10,7 @@ public class SearchResult {
     public List<TaxVersion> result;
 
     public SearchResult() {
-        this.result = new Vector<>();
+        this.result = new ArrayList<>();
     }
 
     public List<TaxVersion> getTaxVersions() {
