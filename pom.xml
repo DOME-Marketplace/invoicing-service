@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.10</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
 
     <groupId>it.eng.dome.invoicing</groupId>
@@ -37,16 +38,28 @@
             <scope>test</scope>
         </dependency>
         <!-- Springdoc OpenAPI dependency -->
-	    <dependency>
-	        <groupId>org.springdoc</groupId>
-	        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-	        <version>2.1.0</version>
-	    </dependency>
-	    <!-- TMF622 Ordering -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <!-- TMF622 Ordering -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf622-v4</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.10.8</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
         </dependency>
     </dependencies>
 
@@ -57,18 +70,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
-					<execution>
-						<id>build-info</id>
-						<goals>
-							<goal>build-info</goal>
-						</goals>
-						<configuration>
-							<additionalProperties>
-								<version>${project.version}</version>
-							</additionalProperties>
-						</configuration>
-					</execution>
-				</executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <version>${project.version}</version>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
