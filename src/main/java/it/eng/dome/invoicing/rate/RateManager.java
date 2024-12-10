@@ -10,11 +10,9 @@ import it.eng.dome.invoicing.tedb.TEDBClient;
 public class RateManager {
 
     private static final RateManager instance = new RateManager();
-
     private TEDBClient tedbclient;
 
     private RateManager() {
-        System.out.println("instantiating the tedbclient");
         this.tedbclient = new TEDBCachedClient();
     }
 
@@ -39,11 +37,6 @@ public class RateManager {
         }
         // same countries => ask the VAT service for the VAT for the SELLER
         return this.tedbclient.getVATRateInCountryAtDate(sellerCountry, date);
-    }
-
-    public static void main(String[] args) throws Exception {
-        Number rate = new RateManager().getVATRateFor("ATS", "ATS", Calendar.getInstance());
-        System.out.println(rate);
     }
 
 }
