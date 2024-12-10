@@ -24,9 +24,7 @@ import it.eng.dome.invoicing.tedb.model.TaxVersion;
 public class TEDBClient implements TEDB {
 
     private static final String DEFAULT_URL = "https://ec.europa.eu/taxation_customs/tedb/rest-api";
-
-private static final Logger log = LoggerFactory.getLogger(TEDBClient.class);
-
+    private static final Logger log = LoggerFactory.getLogger(TEDBClient.class);
     private String url;
 
     public TEDBClient() {
@@ -88,6 +86,7 @@ private static final Logger log = LoggerFactory.getLogger(TEDBClient.class);
                 SearchResult searchResult = gson.fromJson(response.body(), SearchResult.class);
                 return searchResult;
         } catch (JsonSyntaxException e) {
+                e.printStackTrace();
                 String msg = String.format("Bad request. Unable to search taxes for country '%s', tax type '%s' and date '%s'", tedbCountryId, taxType, date);
                 throw new IllegalArgumentException(msg);
         }
@@ -128,6 +127,7 @@ private static final Logger log = LoggerFactory.getLogger(TEDBClient.class);
                 }
                 return taxRate;
         } catch (JsonSyntaxException e) {
+                e.printStackTrace();
                 String msg = String.format("Bad request. Unable to retrive tax rate for tax '%s', version '%s'", taxId, versionDate);
                 throw new IllegalArgumentException(msg);
         }
