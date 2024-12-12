@@ -11,6 +11,8 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.eng.dome.invoicing.tedb.model.Configurations;
 import it.eng.dome.invoicing.tedb.model.SearchResult;
@@ -18,13 +20,13 @@ import it.eng.dome.invoicing.tedb.model.TaxRate;
 
 public class TEDBCachedClient extends TEDBClient {
 
+    private final Logger logger = LoggerFactory.getLogger(TEDBCachedClient.class);
+
     private CacheManager cacheManager;
 
     private Cache<String, Configurations> configCache;
     private Cache<String, SearchResult> searchResultCache;
     private Cache<String, TaxRate> taxRateCache;
-
-//    private TEDB client;
 
     public TEDBCachedClient() {
         super();
@@ -68,6 +70,7 @@ public class TEDBCachedClient extends TEDBClient {
     public Configurations getConfigurations() throws IOException, InterruptedException {
         String key = "unique";
         if (!this.configCache.containsKey(key)) {
+            logger.debug("Cache MISS for configurations.");
             Configurations configs = super.getConfigurations();
             this.configCache.put(key, configs);
         }
@@ -76,8 +79,9 @@ public class TEDBCachedClient extends TEDBClient {
 
     @Override
     public SearchResult searchTaxes(String tedbCountryId, String taxType, Calendar date) throws IOException, InterruptedException {
-        String key = tedbCountryId + taxType + date.get(Calendar.YEAR) + date.get(Calendar.DAY_OF_YEAR);
+        String key = tedbCountryId + "_" +taxType + "_" +date.get(Calendar.YEAR) + "." + date.get(Calendar.DAY_OF_YEAR);
         if (!this.searchResultCache.containsKey(key)) {
+            logger.debug("Cache MISS for " + key);
             SearchResult sr = super.searchTaxes(tedbCountryId, taxType, date);
             this.searchResultCache.put(key, sr);
         }
@@ -86,8 +90,9 @@ public class TEDBCachedClient extends TEDBClient {
 
     @Override
     public TaxRate getTaxRate(String taxId, String versionDate) throws IOException, InterruptedException {
-        String key = taxId + versionDate;
+        String key = taxId + "_" + versionDate;
         if (!this.taxRateCache.containsKey(key)) {
+            logger.debug("Cache MISS for " + key);
             TaxRate sr = super.getTaxRate(taxId, versionDate);
             this.taxRateCache.put(key, sr);
         }

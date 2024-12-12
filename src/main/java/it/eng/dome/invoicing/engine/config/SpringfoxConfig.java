@@ -1,4 +1,4 @@
-package it.eng.dome.invoicing.service.config;
+package it.eng.dome.invoicing.engine.config;
 
 
 import io.swagger.v3.oas.models.OpenAPI;

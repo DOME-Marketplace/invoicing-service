@@ -21,6 +21,7 @@ import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 
 class CountryPattern {
 
+    @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(CountryPattern.class);
 
     private String countryCode;
@@ -124,8 +125,9 @@ class CountryPattern {
         // populate the texts
         leTexts.add(org.getTradingName());
 
-        if(org.getContactMedium()!=null) {
-            for(ContactMedium cm: org.getContactMedium()) {
+        List<ContactMedium> media = org.getContactMedium();
+        if(media!=null) {
+            for(ContactMedium cm: media) {
                 MediumCharacteristic c = cm.getCharacteristic();
                 if(c.getEmailAddress()!=null)
                     domainTexts.add(c.getEmailAddress());
@@ -138,26 +140,30 @@ class CountryPattern {
             }
         }
 
-        if(org.getPartyCharacteristic()!=null) {
-            for(Characteristic c:org.getPartyCharacteristic()) {
+        List<Characteristic> chars = org.getPartyCharacteristic();
+        if(chars!=null) {
+            for(Characteristic c:chars) {
                 if("website".equals(c.getName()))
                     domainTexts.add(c.getValue().toString());
             }
         }
 
-        if(org.getExternalReference()!=null) {
-            for(ExternalReference er:org.getExternalReference()) {
+        List<ExternalReference> externalRefs = org.getExternalReference();
+        if(externalRefs!=null) {
+            for(ExternalReference er:externalRefs) {
                 if("idm_id".equals(er.getExternalReferenceType())) {
                     vatTexts.add(er.getName());
                 }
             }
         }
 
+        /*
         log.debug("Texts to be matched against contry patterns: " + countryTexts);
         log.debug("Texts to be matched against domain patterns: " + domainTexts);
         log.debug("Texts to be matched against LE patterns:     " + leTexts);
         log.debug("Texts to be matched against VAT patterns  :  " + vatTexts);
         log.debug("Texts to be matched against phone patterns:  " + phoneTexts);
+        */
 
         for(Pattern p: this.legalEntityPatterns) {
             for(String text: leTexts) {
