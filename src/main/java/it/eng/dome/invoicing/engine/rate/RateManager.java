@@ -68,7 +68,7 @@ public class RateManager implements InitializingBean {
             logger.warn("unable to find a 'country' characteristic for organization " + org.getId());
             if(this.countryGuesser!=null) {
                 List<GuessResult> guessResult = this.countryGuesser.guessCountry(org);
-                if(guessResult.size()>0) {
+                if(!guessResult.isEmpty()) {
                     countryCode = guessResult.get(0).getCountryCode();
                     logger.warn("using GUESSED countryCode '"+countryCode+"' for organization " + org.getId());
                 }
