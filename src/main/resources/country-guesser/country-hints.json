@@ -1,0 +1,258 @@
+[
+    {
+        "country_code": "AT",
+        "country_names": ["Austria"],
+        "vat_res": ["^VATAT.*", "^ATU.*"],
+        "phone_re": "\\+43.*",
+        "domain_re": ".+\\.at",
+        "legal_entity_res": [".*GmbH$", ".*Ges\\.m\\.b\\.H\\."]
+    },
+    {
+        "country_code": "BE",
+        "country_names": ["Belgium"],
+        "vat_res": [],
+        "phone_re": "\\+32.*",
+        "domain_re": ".+\\.be",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "BG",
+        "country_names": ["Bulgaria"],
+        "vat_res": ["^VATBG.*"],
+        "phone_re": "\\+329.*",
+        "domain_re": ".+\\.bg",
+        "legal_entity_res": [".*EOOD$"]
+    },
+    {
+        "country_code": "HR",
+        "country_names": ["Croatia"],
+        "vat_res": [],
+        "phone_re": "\\+385.*",
+        "domain_re": ".+\\.hr",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "CT",
+        "country_names": ["Cyprus"],
+        "vat_res": [],
+        "phone_re": "\\+357.*",
+        "domain_re": ".+\\.cy",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "CZ",
+        "country_names": ["Czech Republic"],
+        "vat_res": [],
+        "phone_re": "\\+420.*",
+        "domain_re": ".+\\.cz",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "DK",
+        "country_names": ["Denmark"],
+        "vat_res": [],
+        "phone_re": "\\+45.*",
+        "domain_re": ".+\\.dk",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "EE",
+        "country_names": ["Estonia"],
+        "vat_res": [],
+        "phone_re": "\\+372.*",
+        "domain_re": ".+\\.ee",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "FI",
+        "country_names": ["Finland"],
+        "vat_res": [],
+        "phone_re": "\\+358.*",
+        "domain_re": ".+\\.fi",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "FR",
+        "country_names": ["France"],
+        "vat_res": ["^VATFR.*", "^NTRFR.*"],
+        "phone_re": "\\+33.*",
+        "domain_re": ".+\\.fr",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "DE",
+        "country_names": ["Germany"],
+        "vat_res": ["^VATDE.*"],
+        "phone_re": "\\+49.*",
+        "domain_re": ".+\\.de",
+        "legal_entity_res": [".*SE$", ".*gmbh$"]
+    },
+    {
+        "country_code": "EL",
+        "country_names": ["GREECE"],
+        "vat_res": ["^VATEL.*"],
+        "phone_re": "\\+30.*",
+        "domain_re": ".+\\.gr",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "HU",
+        "country_names": ["Hungary"],
+        "vat_res": [],
+        "phone_re": "\\+36.*",
+        "domain_re": ".+\\.hu",
+        "legal_entity_res": [".*Zrt.$"]
+    },
+    {
+        "country_code": "IS",
+        "country_names": ["Iceland"],
+        "vat_res": [],
+        "phone_re": "\\+354.*",
+        "domain_re": ".+\\.is",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "IE",
+        "country_names": ["Ireland"],
+        "vat_res": [],
+        "phone_re": "\\+353.*",
+        "domain_re": ".+\\.ie",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "IT",
+        "country_names": ["Italy", "Italia"],
+        "vat_res": ["^VATIT.*"],
+        "phone_re": "\\+39.*",
+        "domain_re": ".+\\.it",
+        "legal_entity_res": [".*S\\.p\\.A\\.", ".*S\\.r\\.l\\."]
+    },
+    {
+        "country_code": "LV",
+        "country_names": ["Latvia"],
+        "vat_res": [],
+        "phone_re": "\\+371.*",
+        "domain_re": ".+\\.lv",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "LI",
+        "country_names": ["LIECHTENSTEIN"],
+        "vat_res": [],
+        "phone_re": "\\+423.*",
+        "domain_re": ".+\\.li",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "LT",
+        "country_names": ["LITHUANIA"],
+        "vat_res": [],
+        "phone_re": "\\+370.*",
+        "domain_re": ".+\\.lt",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "LU",
+        "country_names": ["Luxembourg"],
+        "vat_res": [],
+        "phone_re": "\\+352.*",
+        "domain_re": ".+\\.lu",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "MT",
+        "country_names": ["Malta"],
+        "vat_res": [],
+        "phone_re": "\\+356.*",
+        "domain_re": ".+\\.mt",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "NL",
+        "country_names": ["Netherlands"],
+        "vat_res": [],
+        "phone_re": "\\+31.*",
+        "domain_re": ".+\\.nl",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "NO",
+        "country_names": ["Norway"],
+        "vat_res": [],
+        "phone_re": "\\+47.*",
+        "domain_re": ".+\\.no",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "PL",
+        "country_names": ["Poland"],
+        "vat_res": ["^VATPL.*"],
+        "phone_re": "\\+48.*",
+        "domain_re": ".+\\.pl",
+        "legal_entity_res": [".*S\\.A\\."]
+    },
+    {
+        "country_code": "PT",
+        "country_names": ["Portugal"],
+        "vat_res": ["^VATPT.*"],
+        "phone_re": "\\+351.*",
+        "domain_re": ".+\\.pt",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "RO",
+        "country_names": ["Romania"],
+        "vat_res": [],
+        "phone_re": "\\+40.*",
+        "domain_re": ".+\\.ro",
+        "legal_entity_res": [".*SRL"]
+    },
+    {
+        "country_code": "RS",
+        "country_names": ["Serbia"],
+        "vat_res": ["^VATRS.*"],
+        "phone_re": "\\+381.*",
+        "domain_re": ".+\\.rs",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "SK",
+        "country_names": ["Slovakia"],
+        "vat_res": [],
+        "phone_re": "\\+421.*",
+        "domain_re": ".+\\.sk",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "SI",
+        "country_names": ["Slovenia"],
+        "vat_res": [],
+        "phone_re": "\\+386.*",
+        "domain_re": ".+\\.si",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "ES",
+        "country_names": ["Spain"],
+        "vat_res": ["^VATES.*"],
+        "phone_re": "\\+34.*",
+        "domain_re": ".+\\.es",
+        "legal_entity_res": [".*S\\.L\\.", ".*S\\.A\\.U\\.", ".*S\\.L\\.U\\.", ".*S\\.A\\.U"]
+    },
+    {
+        "country_code": "SE",
+        "country_names": ["Sweden"],
+        "vat_res": [],
+        "phone_re": "\\+386.*",
+        "domain_re": ".+\\.se",
+        "legal_entity_res": []
+    },
+    {
+        "country_code": "UK",
+        "country_names": ["United Kingdom"],
+        "vat_res": [],
+        "phone_re": "\\+44.*",
+        "domain_re": ".+\\.UK",
+        "legal_entity_res": []
+    }
+]
