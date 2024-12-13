@@ -79,7 +79,7 @@ public class TaxService implements InitializingBean {
         return order;        
     }
 
-    public AppliedCustomerBillingRate[] applyTaxes(AppliedCustomerBillingRate[] bills) throws Exception {
+    public AppliedCustomerBillingRate[] applyTaxes(AppliedCustomerBillingRate... bills) throws Exception {
         for(AppliedCustomerBillingRate bill: bills) {
             this.applyTaxes(bill);
         }
