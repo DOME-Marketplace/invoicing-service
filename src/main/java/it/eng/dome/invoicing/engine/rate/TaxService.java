@@ -131,7 +131,11 @@ public class TaxService implements InitializingBean {
     }
 
     private RelatedParty getBuyer(ProductOrder order) {
-        return this.extractRelatedPartyIdByRole(order, "buyer");
+        // try with both roles 'buyer' and 'customer'
+        RelatedParty out = this.extractRelatedPartyIdByRole(order, "customer");
+        if(out==null)
+            out = this.extractRelatedPartyIdByRole(order, "buyer");
+        return out;
     }
 
     private RelatedParty extractRelatedPartyIdByRole(ProductOrder order, String role) {
