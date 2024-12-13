@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-
 @Component(value = "tmfApiFactory")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public final class TmfApiFactory implements InitializingBean {
@@ -37,7 +36,6 @@ public final class TmfApiFactory implements InitializingBean {
 
 	@Value( "${tmforumapi.tmf666_account_management_path}" )
 	private String tmf666AccountManagementPath;
-
 	
 	public it.eng.dome.tmforum.tmf620.v4.ApiClient getTMF620ProductCatalogApiClient() {
 		final it.eng.dome.tmforum.tmf620.v4.ApiClient apiClient = it.eng.dome.tmforum.tmf620.v4.Configuration.getDefaultApiClient();
@@ -45,7 +43,6 @@ public final class TmfApiFactory implements InitializingBean {
 		log.debug("Invoke Product Catalog API at endpoint: " + apiClient.getBasePath());
 		return apiClient;
 	}
-
 	
 	public it.eng.dome.tmforum.tmf622.v4.ApiClient getTMF622ProductOrderingApiClient() {
 		final it.eng.dome.tmforum.tmf622.v4.ApiClient apiClient = it.eng.dome.tmforum.tmf622.v4.Configuration.getDefaultApiClient();
@@ -62,6 +59,13 @@ public final class TmfApiFactory implements InitializingBean {
 		return apiClient;
 	}
 
+	public it.eng.dome.tmforum.tmf637.v4.ApiClient getTMF637ProductInventoryManagementApiClient() {
+		final it.eng.dome.tmforum.tmf637.v4.ApiClient apiClient = it.eng.dome.tmforum.tmf637.v4.Configuration.getDefaultApiClient();
+		apiClient.setBasePath(tmfEndpoint + "/" + tmf637ProductInventoryPath);
+		log.debug("Invoke Product Inventory Management API at endpoint: " + apiClient.getBasePath());
+		log.debug(apiClient+"");
+		return apiClient;
+	}
 
 	public it.eng.dome.tmforum.tmf678.v4.ApiClient getTMF678CustomerBillApiClient() {
 		final it.eng.dome.tmforum.tmf678.v4.ApiClient apiClient = it.eng.dome.tmforum.tmf678.v4.Configuration.getDefaultApiClient();
@@ -70,7 +74,6 @@ public final class TmfApiFactory implements InitializingBean {
 		return apiClient;
 	}
 
-	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		
@@ -107,5 +110,6 @@ public final class TmfApiFactory implements InitializingBean {
 			path = path.substring(1);
 		}				
 		return path;
-	}	
+	}
+
 }

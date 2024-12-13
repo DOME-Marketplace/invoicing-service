@@ -67,6 +67,12 @@
 			<artifactId>tmf632-v4</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!-- TMF637 Product Inventory Management -->
+		<dependency>
+			<groupId>it.eng.dome.tmforum-sdk</groupId>
+			<artifactId>tmf637-v4</artifactId>
+			<version>1.0.0</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
         <dependency>
             <groupId>org.ehcache</groupId>
