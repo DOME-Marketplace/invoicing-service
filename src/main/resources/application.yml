@@ -1,7 +1,7 @@
 
 # Spring Configuration
 server: 
-  port: 8380
+  port: 8080
 
 # Logging Configuration
 logging:
@@ -15,7 +15,7 @@ logging:
 # Spring Boot Actuator
 management:
   server:
-    port: 9003
+    port: 9000
   endpoints:
     enabled-by-default: false
     web:
