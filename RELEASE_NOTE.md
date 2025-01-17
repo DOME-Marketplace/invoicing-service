@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>0.0.4</code> :calendar: 17/01/2025
+**Improvements**
+* Add `apiProxy` settings via **environment variables**. Set TMF_ENVOY to `true`, TMF_NAMESPACE, TMF_POSTFIX, and TMF_PORT to apply it.
+
 ### <code>0.0.3</code> :calendar: 13/12/2024
 **Feature**
 * Tax calculation on **AppliedCustomerBillingRate[]** with path 'invoicing/applyTaxes'

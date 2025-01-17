@@ -13,7 +13,7 @@
 
     <groupId>it.eng.dome.invoicing</groupId>
     <artifactId>service</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>Invoicing Service</name>
     <description>Invoicing Service</description>
 
@@ -43,25 +43,21 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
+        
+        <!-- TMForum SDK dependencies -->
+        <!-- TMF620 Catalog -->
+		<dependency>
+			<groupId>it.eng.dome.tmforum-sdk</groupId>
+			<artifactId>tmf620-v4</artifactId>
+			<version>1.0.0</version>
+		</dependency>
         <!-- TMF622 Ordering -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf622-v4</artifactId>
             <version>1.0.0</version>
         </dependency>
-		<!-- TMF678 Customer Bill -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf678-v4</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<!-- TMF620 Catalog -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf620-v4</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<!-- TMF632 Party Management -->
+        <!-- TMF632 Party Management -->
 		<dependency>
 			<groupId>it.eng.dome.tmforum-sdk</groupId>
 			<artifactId>tmf632-v4</artifactId>
@@ -73,6 +69,13 @@
 			<artifactId>tmf637-v4</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!-- TMF678 Customer Bill -->
+		<dependency>
+			<groupId>it.eng.dome.tmforum-sdk</groupId>
+			<artifactId>tmf678-v4</artifactId>
+			<version>1.0.0</version>
+		</dependency>		
+		
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
         <dependency>
             <groupId>org.ehcache</groupId>
