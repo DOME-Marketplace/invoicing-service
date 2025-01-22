@@ -147,7 +147,7 @@ public class TaxService implements InitializingBean {
         return Calendar.getInstance();
     }
 
-    private Calendar toCalendar(OffsetDateTime odt) {
+    private static Calendar toCalendar(OffsetDateTime odt) {
         Calendar c = Calendar.getInstance();
         c.set(odt.getYear(), odt.getMonth().getValue(), odt.getDayOfMonth());
         return c;
@@ -161,11 +161,6 @@ public class TaxService implements InitializingBean {
     }
 
     /**
-     * @deprecated
-     * @param bill
-     * @return
-     * @throws Exception
-     */
     private List<RelatedParty> retrieveRelatedPartiesOld(AppliedCustomerBillingRate bill) throws Exception {
         // retrieve the product
         ProductRef pref = bill.getProduct();
@@ -181,6 +176,7 @@ public class TaxService implements InitializingBean {
             throw new NoSuchElementException("No product referenced in the AppliedCustomerBillingRate " + bill.getId());            
         }
     }
+     */
 
     private RelatedParty convert(it.eng.dome.tmforum.tmf637.v4.model.RelatedParty inParty) throws IOException {
         return RelatedParty.fromJson(inParty.toJson());
