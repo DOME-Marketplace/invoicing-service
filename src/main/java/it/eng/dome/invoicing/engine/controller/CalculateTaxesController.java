@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.invoicing.engine.rate.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
+import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.JSON;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 
@@ -32,12 +33,13 @@ public class CalculateTaxesController {
     public ResponseEntity<String> applyTaxes(@RequestBody String billsJson) throws Throwable {
 		logger.info("Received request for applying taxes to a bill");
 		Assert.state(!StringUtils.isBlank(billsJson), "Missing the instance of AppliedCustomerBillRate in the request body");
-		
 		try {
 			// 1) parse request body to Bills
+			// FIXME: replace the following with deserialization of the DTO, extract bills and product.
 			AppliedCustomerBillingRate[] bills = JSON.getGson().fromJson(billsJson, AppliedCustomerBillingRate[].class);
+			Product product = null;
 			// 2) calculate the taxes
-			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(bills);
+			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
 			// 3) return updated AppliedCustomerBillingRate
 			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
 		} catch (Exception e) {
@@ -45,7 +47,9 @@ public class CalculateTaxesController {
 			// Java exception is converted into HTTP status code
 			throw new Exception(e);
 		}
+		
 	}
+
 
 	@RequestMapping(value = "/previewTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> previewTaxes(@RequestBody String orderJson) throws Throwable {
