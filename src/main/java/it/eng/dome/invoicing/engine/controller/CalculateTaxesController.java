@@ -1,5 +1,7 @@
 package it.eng.dome.invoicing.engine.controller;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.invoicing.engine.rate.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -29,7 +32,9 @@ public class CalculateTaxesController {
 	@Autowired
 	protected TaxService taxService;
 	
-	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+
+	//TODO: remove
+	/*@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> applyTaxes(@RequestBody String billsJson) throws Throwable {
 		logger.info("Received request for applying taxes to a bill");
 		Assert.state(!StringUtils.isBlank(billsJson), "Missing the instance of AppliedCustomerBillRate in the request body");
@@ -38,6 +43,33 @@ public class CalculateTaxesController {
 			// FIXME: replace the following with deserialization of the DTO, extract bills and product.
 			AppliedCustomerBillingRate[] bills = JSON.getGson().fromJson(billsJson, AppliedCustomerBillingRate[].class);
 			Product product = null;
+			// 2) calculate the taxes
+			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
+			// 3) return updated AppliedCustomerBillingRate
+			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			// Java exception is converted into HTTP status code
+			throw new Exception(e);
+		}
+		
+	}*/
+	
+	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) throws Throwable {
+		logger.info("Received request for applying taxes to a bill");
+		
+		AppliedCustomerBillingRate[] bills;
+		Product product;
+		
+		try {
+			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
+			product = dto.getProduct();
+			Assert.state(!Objects.isNull(product),  "Missing the instance of Product in the ApplyTaxesRequestDTO");
+			
+			bills=(AppliedCustomerBillingRate[]) dto.getAppliedCustomerBillingRateList().toArray();
+			Assert.state(!Objects.isNull(bills),  "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
+			
 			// 2) calculate the taxes
 			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
 			// 3) return updated AppliedCustomerBillingRate

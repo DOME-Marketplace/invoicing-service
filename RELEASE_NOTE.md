@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>0.0.5</code> :calendar: 27/01/2025
+**Improvements**
+* Tax calculation on **AppliedCustomerBillingRate[]** and **Product** with path 'invoicing/applyTaxes' using the **ApplyTaxesRequestDTO** class.
+
 ### <code>0.0.4</code> :calendar: 17/01/2025
 **Improvements**
 * Configure `apiProxy` via `TMF_ENDPOINT` and `TMF_ENVOY` **environment variables**. With `TMF_ENVOY:true` the `TMF_ENDPOINT` is a unique path (proxy) accessible to any TMForum services. With `TMF_ENVOY:false` you have to set also `TMF_NAMESPACE`, `TMF_POSTFIX`, and `TMF_PORT` to access specific TMForum API services.
