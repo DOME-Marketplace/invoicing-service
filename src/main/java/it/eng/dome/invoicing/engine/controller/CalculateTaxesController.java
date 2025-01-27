@@ -67,10 +67,10 @@ public class CalculateTaxesController {
 			product = dto.getProduct();
 			Assert.state(!Objects.isNull(product),  "Missing the instance of Product in the ApplyTaxesRequestDTO");
 			
-			bills=(AppliedCustomerBillingRate[]) dto.getAppliedCustomerBillingRateList().toArray();
+			bills=(AppliedCustomerBillingRate[]) dto.getAppliedCustomerBillingRate().toArray();
 			Assert.state(!Objects.isNull(bills),  "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
 			
-			// 2) calculate the taxes
+	        // 2) calculate the taxes
 			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
 			// 3) return updated AppliedCustomerBillingRate
 			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
