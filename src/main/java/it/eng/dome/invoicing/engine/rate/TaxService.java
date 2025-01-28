@@ -79,17 +79,18 @@ public class TaxService implements InitializingBean {
         return order;        
     }
 
-    public AppliedCustomerBillingRate[] applyTaxes(AppliedCustomerBillingRate... bills) throws Exception {
+    public AppliedCustomerBillingRate[] applyTaxes(Product product, AppliedCustomerBillingRate... bills) throws Exception {
         for(AppliedCustomerBillingRate bill: bills) {
-            this.applyTaxes(bill);
+            this.applyTaxes(product, bill);
         }
         return bills;
     }
+   
 
-    private AppliedCustomerBillingRate applyTaxes(AppliedCustomerBillingRate bill) throws Exception {
-
+    private AppliedCustomerBillingRate applyTaxes(Product product, AppliedCustomerBillingRate bill) throws Exception {
         // retrieve the involved parties
-        List<RelatedParty> involvedParties = this.retrieveRelatedParties(bill);
+//        List<RelatedParty> involvedParties = this.retrieveRelatedParties(bill, prodcut);
+        List<RelatedParty> involvedParties = this.retrieveRelatedParties(product);
         RelatedParty buyer = this.getBuyer(involvedParties);
         RelatedParty seller = this.getSeller(involvedParties);
 
@@ -99,7 +100,7 @@ public class TaxService implements InitializingBean {
         // retrieve the VAT rate
         float rate = this.rateManager.getVATRateFor(buyer, seller, billDate).floatValue();
         logger.info("retrieved rate is " + rate);
-        
+
         // retrieving the taxExcludedAmount
         it.eng.dome.tmforum.tmf678.v4.model.Money taxExcluded = bill.getTaxExcludedAmount();
 
@@ -146,13 +147,21 @@ public class TaxService implements InitializingBean {
         return Calendar.getInstance();
     }
 
-    private Calendar toCalendar(OffsetDateTime odt) {
+    private static Calendar toCalendar(OffsetDateTime odt) {
         Calendar c = Calendar.getInstance();
         c.set(odt.getYear(), odt.getMonth().getValue(), odt.getDayOfMonth());
         return c;
     }
 
-    private List<RelatedParty> retrieveRelatedParties(AppliedCustomerBillingRate bill) throws Exception {
+    private List<RelatedParty> retrieveRelatedParties(Product product) throws Exception {
+        List<it.eng.dome.tmforum.tmf637.v4.model.RelatedParty> parties = product.getRelatedParty();
+        if(parties!=null)
+            return this.convert(parties);
+        return new ArrayList<RelatedParty>();
+    }
+
+    /**
+    private List<RelatedParty> retrieveRelatedPartiesOld(AppliedCustomerBillingRate bill) throws Exception {
         // retrieve the product
         ProductRef pref = bill.getProduct();
         if(pref!=null) {
@@ -167,6 +176,7 @@ public class TaxService implements InitializingBean {
             throw new NoSuchElementException("No product referenced in the AppliedCustomerBillingRate " + bill.getId());            
         }
     }
+     */
 
     private RelatedParty convert(it.eng.dome.tmforum.tmf637.v4.model.RelatedParty inParty) throws IOException {
         return RelatedParty.fromJson(inParty.toJson());

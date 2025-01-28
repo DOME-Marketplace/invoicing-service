@@ -13,7 +13,7 @@
 
     <groupId>it.eng.dome.invoicing</groupId>
     <artifactId>service</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <name>Invoicing Service</name>
     <description>Invoicing Service</description>
 
@@ -75,7 +75,12 @@
 			<artifactId>tmf678-v4</artifactId>
 			<version>1.0.0</version>
 		</dependency>		
-		
+		<!-- Brokerage Utils dependencies -->
+		<dependency>
+			<groupId>it.eng.dome.brokerage</groupId>
+			<artifactId>brokerage-utils</artifactId>
+			<version>[0.0, 1.0)</version>
+		</dependency>		
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
         <dependency>
             <groupId>org.ehcache</groupId>
