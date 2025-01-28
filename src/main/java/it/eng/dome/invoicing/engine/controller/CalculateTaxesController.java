@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.invoicing.engine.rate.TaxService;
@@ -56,22 +60,26 @@ public class CalculateTaxesController {
 	}*/
 	
 	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) throws Throwable {
+    public ResponseEntity<String> applyTaxes(@RequestBody String applyTaxesRequestDTO) throws Throwable {
 		logger.info("Received request for applying taxes to a bill");
-		
+		logger.debug(applyTaxesRequestDTO);
+		ApplyTaxesRequestDTO dto = JSON.deserialize(toLowerCaseStatus(applyTaxesRequestDTO), ApplyTaxesRequestDTO.class);
+	
+		logger.info("applyTaxesRequestDTO: {}", applyTaxesRequestDTO);
 		AppliedCustomerBillingRate[] bills;
 		Product product;
-		
+
 		try {
 			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-			product = dto.getProduct();
-			Assert.state(!Objects.isNull(product),  "Missing the instance of Product in the ApplyTaxesRequestDTO");
-			
-			bills=(AppliedCustomerBillingRate[]) dto.getAppliedCustomerBillingRate().toArray();
-			Assert.state(!Objects.isNull(bills),  "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
+			product = dto.getProduct();	
+			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
+
+			bills = dto.getAppliedCustomerBillingRate().toArray(new AppliedCustomerBillingRate[0]);
+			Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
 			
 	        // 2) calculate the taxes
 			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
+			
 			// 3) return updated AppliedCustomerBillingRate
 			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
 		} catch (Exception e) {
@@ -99,6 +107,24 @@ public class CalculateTaxesController {
 			logger.error(e.getMessage(), e);
 			// Java exception is converted into HTTP status code
 			throw new Exception(e);
+		}
+	}
+
+	//TODO workaround to set the status value in lowercase
+	private String toLowerCaseStatus(String json) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String lower = json;
+		 try {
+			 ObjectNode rootNode = (ObjectNode) objectMapper.readTree(json);
+			 JsonNode statusNode = rootNode.at("/product/status");
+			 if (!statusNode.isMissingNode()) {
+				 String status = statusNode.asText();
+				 ((ObjectNode) rootNode.at("/product")).put("status", status.toLowerCase());
+			 }
+			 return objectMapper.writeValueAsString(rootNode);
+
+		} catch (Exception e) {			
+			return lower;
 		}
 	}
 
