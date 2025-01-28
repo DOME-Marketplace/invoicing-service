@@ -36,28 +36,6 @@ public class CalculateTaxesController {
 	@Autowired
 	protected TaxService taxService;
 	
-
-	//TODO: remove
-	/*@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> applyTaxes(@RequestBody String billsJson) throws Throwable {
-		logger.info("Received request for applying taxes to a bill");
-		Assert.state(!StringUtils.isBlank(billsJson), "Missing the instance of AppliedCustomerBillRate in the request body");
-		try {
-			// 1) parse request body to Bills
-			// FIXME: replace the following with deserialization of the DTO, extract bills and product.
-			AppliedCustomerBillingRate[] bills = JSON.getGson().fromJson(billsJson, AppliedCustomerBillingRate[].class);
-			Product product = null;
-			// 2) calculate the taxes
-			AppliedCustomerBillingRate[] billsWithTaxes = taxService.applyTaxes(product, bills);
-			// 3) return updated AppliedCustomerBillingRate
-			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			// Java exception is converted into HTTP status code
-			throw new Exception(e);
-		}
-		
-	}*/
 	
 	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> applyTaxes(@RequestBody String applyTaxesRequestDTO) throws Throwable {
@@ -89,8 +67,8 @@ public class CalculateTaxesController {
 		}
 		
 	}
-
-
+	
+	
 	@RequestMapping(value = "/previewTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> previewTaxes(@RequestBody String orderJson) throws Throwable {
 		logger.info("Received request for applying taxes for previewing taxes");
