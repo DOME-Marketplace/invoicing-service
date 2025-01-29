@@ -1,7 +1,9 @@
 
 # Spring Configuration
 server: 
-  port: 8080
+  port: 8380
+  servlet:
+    context-path:  ${BILLING_PREFIX:/}
 
 # Logging Configuration
 logging:
@@ -15,7 +17,7 @@ logging:
 # Spring Boot Actuator
 management:
   server:
-    port: 9000
+    port: 9003
   endpoints:
     enabled-by-default: false
     web:
