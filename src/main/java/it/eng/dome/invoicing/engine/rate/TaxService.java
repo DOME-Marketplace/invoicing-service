@@ -5,8 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -28,7 +26,6 @@ import it.eng.dome.tmforum.tmf637.v4.api.ProductApi;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedBillingTaxRate;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
-import it.eng.dome.tmforum.tmf678.v4.model.ProductRef;
 import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
 
 @Component(value = "taxService")
