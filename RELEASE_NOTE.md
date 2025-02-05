@@ -2,6 +2,16 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>0.0.6</code> :calendar: 31/01/2025
+**Improvements**
+* Refactoring of `InfoInvoicingController`.
+* Usage of the `BILLING_PREFIX` in the `application.yaml` file.
+
+**BugFixing**
+* Set `org.apache.coyote.http11: INFO` to avoid the `Error parsing HTTP request header`.
+* Set pattern console to `%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n`.
+
+
 ### <code>0.0.5</code> :calendar: 27/01/2025
 **Improvements**
 * Tax calculation on **AppliedCustomerBillingRate[]** and **Product** with path 'invoicing/applyTaxes' using the **ApplyTaxesRequestDTO** class.
