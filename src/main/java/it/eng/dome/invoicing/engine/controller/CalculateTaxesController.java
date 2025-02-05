@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +38,7 @@ public class CalculateTaxesController {
 	protected TaxService taxService;
 	
 	
-	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> applyTaxes(@RequestBody String applyTaxesRequestDTO) throws Throwable {
 		logger.info("Received request for applying taxes to a bill");
 		logger.debug(applyTaxesRequestDTO);
@@ -69,7 +70,7 @@ public class CalculateTaxesController {
 	}
 	
 	
-	@RequestMapping(value = "/previewTaxes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/previewTaxes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> previewTaxes(@RequestBody String orderJson) throws Throwable {
 		logger.info("Received request for applying taxes for previewing taxes");
 		Assert.state(!StringUtils.isBlank(orderJson), "Missing the instance of ProductOrder in the request body");
