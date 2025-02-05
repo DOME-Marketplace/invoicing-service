@@ -34,6 +34,7 @@ public class RateManager implements InitializingBean {
     @Autowired
     // Factory for TMF APIss
     private TmfApiFactory tmfApiFactory;
+    
     // TMForum API to retrieve organisations
     private OrganizationApi orgApi;
 
