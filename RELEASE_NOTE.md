@@ -2,7 +2,7 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
-### <code>0.0.6</code> :calendar: 31/01/2025
+### <code>0.0.6</code> :calendar: 05/02/2025
 **Improvements**
 * Refactoring of `InfoInvoicingController`.
 * Usage of the `BILLING_PREFIX` in the `application.yaml` file.
