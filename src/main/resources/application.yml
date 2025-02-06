@@ -1,15 +1,17 @@
 
 # Spring Configuration
 server: 
-  port: 8080
+  port: 8380
   servlet:
     context-path:  ${BILLING_PREFIX:/}
 
 # Logging Configuration
 logging:
+#  file:
+#    name: application.log
   level:
     it.eng.dome: ${LOG_LEVEL:DEBUG}
-    org.apache.coyote.http11: INFO
+    org.apache.coyote.http11: ERROR
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n" 
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -17,7 +19,7 @@ logging:
 # Spring Boot Actuator
 management:
   server:
-    port: 9000
+    port: 9003
   endpoints:
     enabled-by-default: false
     web:

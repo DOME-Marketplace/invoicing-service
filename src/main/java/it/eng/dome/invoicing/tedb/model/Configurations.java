@@ -1,10 +1,13 @@
 package it.eng.dome.invoicing.tedb.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Configurations {
+public class Configurations implements Serializable {
 
-    public String contactMailAddress;
+	private static final long serialVersionUID = -3649978020730136553L;
+
+	public String contactMailAddress;
     public String trackerUrl;
     public List<Country> nonCompliantCountries;
     public List<Country> countries;

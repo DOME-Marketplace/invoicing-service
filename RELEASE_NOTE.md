@@ -2,13 +2,18 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>0.0.7</code> :calendar: 06/02/2025
+**BugFixing**
+* Set `org.apache.coyote.http11: ERROR` to avoid the `Error parsing HTTP request header` info log.
+* Implement **Serializable** interfaces for `Configurations`, `SearchResult`, and `TaxRate` classes in the `it.eng.dome.invoicing.tedb.model` package.
+
+
 ### <code>0.0.6</code> :calendar: 05/02/2025
 **Improvements**
 * Refactoring of `InfoInvoicingController`.
 * Usage of the `BILLING_PREFIX` in the `application.yaml` file.
 
 **BugFixing**
-* Set `org.apache.coyote.http11: INFO` to avoid the `Error parsing HTTP request header`.
 * Set pattern console to `%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n`.
 
 
