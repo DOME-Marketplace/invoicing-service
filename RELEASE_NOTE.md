@@ -4,7 +4,7 @@
 
 ### <code>0.0.7</code> :calendar: 10/02/2025
 **Improvements**
-* Add `StartupListener` listener to display the current version of *Invoicing Service*.
+* Add `StartupListener` listener to log (display) the current version of *Invoicing Service* at startup.
 
 **BugFixing**
 * Set `org.apache.coyote.http11: ERROR` to avoid the `Error parsing HTTP request header` info log.
