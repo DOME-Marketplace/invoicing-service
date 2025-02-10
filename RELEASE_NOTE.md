@@ -2,7 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
-### <code>0.0.7</code> :calendar: 06/02/2025
+### <code>0.0.7</code> :calendar: 10/02/2025
+**Improvements**
+* Add `StartupListener` listener to display the current version of *Invoicing Service*.
+
 **BugFixing**
 * Set `org.apache.coyote.http11: ERROR` to avoid the `Error parsing HTTP request header` info log.
 * Implement **Serializable** interfaces for `Configurations`, `SearchResult`, and `TaxRate` classes in the `it.eng.dome.invoicing.tedb.model` package.
