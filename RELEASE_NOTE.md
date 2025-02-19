@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>0.0.8</code> :calendar: 19/02/2025
+**BugFixing**
+* Bug Fixing to manage null pointer exception in the TaxService methods.
+
+
 ### <code>0.0.7</code> :calendar: 10/02/2025
 **Improvements**
 * Add `StartupListener` listener to log (display) the current version of *Invoicing Service* at startup.
