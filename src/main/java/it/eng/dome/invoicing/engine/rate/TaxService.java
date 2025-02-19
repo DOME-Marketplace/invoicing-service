@@ -165,7 +165,8 @@ public class TaxService {
 		List<OrderPrice> itemTotalPrices = item.getItemTotalPrice();
 		if (itemTotalPrices != null) {
 			for (OrderPrice op : itemTotalPrices) {
-				this.applyTax(op, taxRate);
+				if(op.getPrice()!=null)
+					this.applyTax(op, taxRate);
 			}
 		}
 		return item;
