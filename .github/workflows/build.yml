@@ -32,7 +32,7 @@ jobs:
                   <mirror>
                       <id>nexus</id>
                       <mirrorOf>external:*</mirrorOf>
-                      <url>${{ vars.NEXUS_URL }}/nexus/content/groups/alm-eng-esl-mirror/
+                      <url>${{ vars.NEXUS_URL }}/content/groups/alm-eng-esl-mirror/
                       </url>
                   </mirror>
               </mirrors>
@@ -59,7 +59,7 @@ jobs:
                       <repositories>
                           <repository>
                               <id>almesl-snapshots</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/repositories/snapshots/
+                              <url>${{ vars.NEXUS_URL }}/content/repositories/snapshots/
                               </url>
                               <releases>
                                   <enabled>false</enabled>
@@ -70,7 +70,7 @@ jobs:
                           </repository>
                           <repository>
                               <id>almesl-releases</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/repositories/releases/
+                              <url>${{ vars.NEXUS_URL }}/content/repositories/releases/
                               </url>
                               <releases>
                                   <enabled>true</enabled>
@@ -83,7 +83,7 @@ jobs:
                       <pluginRepositories>
                           <pluginRepository>
                               <id>nexus</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/groups/alm-eng-esl-mirror/</url>
+                              <url>${{ vars.NEXUS_URL }}/content/groups/alm-eng-esl-mirror/</url>
                               <releases>
                                   <enabled>true</enabled>
                               </releases>
@@ -132,7 +132,7 @@ jobs:
                   <mirror>
                       <id>nexus</id>
                       <mirrorOf>external:*</mirrorOf>
-                      <url>${{ vars.NEXUS_URL }}/nexus/content/groups/alm-eng-esl-mirror/
+                      <url>${{ vars.NEXUS_URL }}/content/groups/alm-eng-esl-mirror/
                       </url>
                   </mirror>
               </mirrors>
@@ -159,7 +159,7 @@ jobs:
                       <repositories>
                           <repository>
                               <id>almesl-snapshots</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/repositories/snapshots/
+                              <url>${{ vars.NEXUS_URL }}/content/repositories/snapshots/
                               </url>
                               <releases>
                                   <enabled>false</enabled>
@@ -170,7 +170,7 @@ jobs:
                           </repository>
                           <repository>
                               <id>almesl-releases</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/repositories/releases/
+                              <url>${{ vars.NEXUS_URL }}/content/repositories/releases/
                               </url>
                               <releases>
                                   <enabled>true</enabled>
@@ -183,7 +183,7 @@ jobs:
                       <pluginRepositories>
                           <pluginRepository>
                               <id>nexus</id>
-                              <url>${{ vars.NEXUS_URL }}/nexus/content/groups/alm-eng-esl-mirror/</url>
+                              <url>${{ vars.NEXUS_URL }}/content/groups/alm-eng-esl-mirror/</url>
                               <releases>
                                   <enabled>true</enabled>
                               </releases>
