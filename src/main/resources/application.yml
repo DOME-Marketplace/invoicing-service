@@ -37,7 +37,7 @@ management:
       enabled: true	
 
 tmforumapi:
-  tmf_endpoint: ${TMF_ENDPOINT:https://dome-dev.eng.it}
+  tmf_endpoint: ${TMF_ENDPOINT:http://tm-forum-api}
   
   # tmf_envoy = false => use specific path for any tmforum software | tmf_envoy = true => use TMF_ENDPOINT as unique path (proxy) 
   tmf_envoy:  ${TMF_ENVOY:true}
