@@ -2,6 +2,12 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+
+### <code>0.1.0</code> :calendar: 31/03/2025
+**Improvements**
+* Usage of `2.0.0` version of `Brokerage Utils`.
+
+
 ### <code>0.0.9</code> :calendar: 07/03/2025
 **BugFixing**
 * Usage of `2.0.0` version of `TMF Reference` to avoid validation: commented all `validateJsonElement` methods.
