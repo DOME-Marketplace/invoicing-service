@@ -2,9 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
-### <code>1.2.0</code> :calendar: 26/05/2025
+### <code>1.2.0</code> :calendar: 03/06/2025
 **Improvements**
 * Set of `[2.1.0, 2.2.0)` version of `Brokerage Utils`.
+* Update paths for TMForum internal services.
 
 
 ### <code>0.1.0</code> :calendar: 31/03/2025

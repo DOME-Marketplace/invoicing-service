@@ -82,7 +82,7 @@ public final class TmfApiFactory implements InitializingBean {
 			apiClient.setBasePath(tmfEndpoint + "/" + tmf632PartyManagementPath);
 		}else {
 			// use direct access on specific TMForum APIs software	
-			apiClient.setBasePath(tmfEndpoint + TMF_ENDPOINT_CONCAT_PATH + "party-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort);		
+			apiClient.setBasePath(tmfEndpoint + TMF_ENDPOINT_CONCAT_PATH + "party-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort + "/" + tmf632PartyManagementPath);		
 		}
 		log.debug("Invoke Party Management API at endpoint: " + apiClient.getBasePath());
 		return apiClient;
