@@ -2,6 +2,17 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.2.0</code> :calendar: 09/06/2025
+**Improvements**
+* Set of `[2.1.0, 2.2.0)` version of `Brokerage Utils`.
+* Update paths for TMForum internal services and `basePath` for building TMForum API URLs with or without **envoy** usage.
+
+
+### <code>0.1.0</code> :calendar: 31/03/2025
+**Improvements**
+* Update of `2.0.0` version of `Brokerage Utils`.
+
+
 ### <code>0.0.9</code> :calendar: 07/03/2025
 **BugFixing**
 * Usage of `2.0.0` version of `TMF Reference` to avoid validation: commented all `validateJsonElement` methods.

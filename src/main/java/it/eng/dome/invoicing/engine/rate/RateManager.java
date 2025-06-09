@@ -11,13 +11,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import it.eng.dome.brokerage.api.OrganizationApis;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.invoicing.util.countryguesser.CountryGuesser;
 import it.eng.dome.invoicing.util.countryguesser.GuessResult;
 import it.eng.dome.tmforum.tmf622.v4.model.RelatedParty;
-import it.eng.dome.tmforum.tmf632.v4.api.OrganizationApi;
 import it.eng.dome.tmforum.tmf632.v4.model.Characteristic;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 
@@ -34,17 +34,16 @@ public class RateManager implements InitializingBean {
     @Autowired
     // Factory for TMF APIss
     private TmfApiFactory tmfApiFactory;
-    
-    // TMForum API to retrieve organisations
-    private OrganizationApi orgApi;
 
-    // A CountryGuesser to be used when a country is not available in the organisation
+    // A CountryGuesser to be used when a country is not available in the organization
     private CountryGuesser countryGuesser;
+    
+    // TMForum API to retrieve organizations
+    private OrganizationApis organizationApi;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        final it.eng.dome.tmforum.tmf632.v4.ApiClient orgApiClient = tmfApiFactory.getTMF632PartyManagementApiClient();
-        orgApi = new OrganizationApi(orgApiClient);
+        organizationApi = new OrganizationApis(tmfApiFactory.getTMF632PartyManagementApiClient());
     }
 
     public RateManager() {
@@ -63,7 +62,7 @@ public class RateManager implements InitializingBean {
     }
 
     private String getCountryCodeFor(RelatedParty party) throws Exception {
-        Organization org = orgApi.retrieveOrganization(party.getId(), null);
+        Organization org = organizationApi.getOrganization(party.getId(), null);
         String countryCode = this.getCountryFromCharacteristic(org);
         if(countryCode==null) {
             logger.warn("unable to find a 'country' characteristic for organization " + org.getId());
@@ -78,7 +77,6 @@ public class RateManager implements InitializingBean {
         return countryCode;
     }
 
-    @SuppressWarnings("null")
     private String getCountryFromCharacteristic(Organization org) {
         if(org.getPartyCharacteristic()!=null)
             for(Characteristic c:org.getPartyCharacteristic()) {
