@@ -2,9 +2,13 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
-### <code>1.3.0</code> :calendar: 24/07/2025
+### <code>1.2.2</code> :calendar: 24/07/2025
 **Improvements**
 * Improvement of exception management. 
+
+### <code>1.2.1</code> :calendar: 15/07/2025
+**Improvements**
+* Display `ENV VARs` in the Listener at beginning.
 
 ### <code>1.2.0</code> :calendar: 09/06/2025
 **Improvements**
