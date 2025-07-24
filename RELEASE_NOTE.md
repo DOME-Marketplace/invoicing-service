@@ -4,7 +4,11 @@
 
 ### <code>1.2.2</code> :calendar: 24/07/2025
 **Improvements**
-* Improvement of exception management. 
+* Generate automatic `REST_APIs.md` file from **Swagger APIs** using the `generate-rest-apis` profile.
+
+**BugFixing**
+* Improvement of **exception** management. 
+
 
 ### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
@@ -42,7 +46,6 @@
 
 ### <code>0.0.6</code> :calendar: 05/02/2025
 **Improvements**
-* Refactoring of `InfoInvoicingController`.
 * Usage of the `BILLING_PREFIX` in the `application.yaml` file.
 
 **BugFixing**
