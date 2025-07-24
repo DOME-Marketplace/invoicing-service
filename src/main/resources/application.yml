@@ -50,3 +50,5 @@ tmforumapi:
   # TMF_ENVOY=true - internal paths used with envoy = true
   tmf632_party_management_path: tmf-api/party/v4
   
+markdown_generation:
+  api_docs: true

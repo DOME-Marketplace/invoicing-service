@@ -58,9 +58,8 @@ public class TaxService {
 		return order;
 	}
 
-	public AppliedCustomerBillingRate[] applyTaxes(Product product, AppliedCustomerBillingRate... bills)
-			throws Exception {
-		for (AppliedCustomerBillingRate bill : bills) {
+	public AppliedCustomerBillingRate[] applyTaxes(Product product, AppliedCustomerBillingRate... bills) throws Exception {
+		for (AppliedCustomerBillingRate bill:bills) {
 			this.applyTaxes(product, bill);
 		}
 		return bills;
@@ -77,7 +76,7 @@ public class TaxService {
 
 		// retrieve the VAT rate
 		float rate = this.rateManager.getVATRateFor(buyer, seller, billDate).floatValue();
-		logger.info("retrieved rate is " + rate);
+		logger.info("Retrieved rate is " + rate);
 
 		// retrieving the taxExcludedAmount
 		it.eng.dome.tmforum.tmf678.v4.model.Money taxExcluded = bill.getTaxExcludedAmount();
@@ -93,8 +92,7 @@ public class TaxService {
 		return bill;
 	}
 
-	private it.eng.dome.tmforum.tmf678.v4.model.Money addTaxes(it.eng.dome.tmforum.tmf678.v4.model.Money inMoney,
-			List<AppliedBillingTaxRate> taxes) {
+	private it.eng.dome.tmforum.tmf678.v4.model.Money addTaxes(it.eng.dome.tmforum.tmf678.v4.model.Money inMoney,List<AppliedBillingTaxRate> taxes) {
 		it.eng.dome.tmforum.tmf678.v4.model.Money outMoney = new it.eng.dome.tmforum.tmf678.v4.model.Money();
 		outMoney.setUnit(inMoney.getUnit());
 		outMoney.setValue(inMoney.getValue());

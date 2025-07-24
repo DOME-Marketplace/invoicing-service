@@ -1,0 +1,79 @@
+{
+   "product":{
+      "id":"urn:ngsi-ld:product:435a0aef-e305-40c0-8017-53a4d445a312",
+      "href":"urn:ngsi-ld:product:435a0aef-e305-40c0-8017-53a4d445a312",
+      "description":"A product to test billing with productOfferingPrice.",
+      "isBundle":false,
+      "name":"Product Billing with productOfferingPrice",
+      "orderDate":"2024-12-17T13:14:33.213Z",
+      "startDate":"2024-12-17T13:14:33.213Z",
+      "billingAccount":{
+         "id":"urn:ngsi-ld:billing-account:3dc56c89-8acc-4600-b4aa-21f4c3eb7497",
+         "name":"My Billing Account"
+      },
+      "productOffering":{
+         "id":"urn:ngsi-ld:product-offering:3817723f-3886-4667-a8c7-52cbb765b84e",
+         "href":"https://dome-dev.eng.it/tmf-api/productCatalogManagement/v4/productOffering/urn:ngsi-ld:product-offering:3817723f-3886-4667-a8c7-52cbb765b84e",
+         "name":"test without error"
+      },
+      "productPrice":[
+         {
+            "priceType":"recurring",
+            "price":{
+               "percentage":1.0,
+               "dutyFreeAmount":{
+                  "unit":"EUR",
+                  "value":24.0
+               }
+            },
+            "productOfferingPrice":{
+               "id":"urn:ngsi-ld:product-offering-price:47915f9d-e132-4d29-82db-28c3e985c211",
+               "href":"https://dome-dev.eng.it/tmf-api/productCatalogManagement/v4/productOfferingPrice/urn:ngsi-ld:product-offering-price:47915f9d-e132-4d29-82db-28c3e985c211"
+            }
+         }
+      ],
+      "relatedParty":[
+         {
+            "id":"urn:ngsi-ld:organization:abf1bff2-866d-4098-9a22-87a2c6cb6cbd",
+            "href":"urn:ngsi-ld:organization:abf1bff2-866d-4098-9a22-87a2c6cb6cbd",
+            "name":"Digitanimal S.L.",
+            "role":"Seller",
+            "@type":"RelatedParty",
+            "@referredType":"Individual"
+         },
+         {
+            "id":"urn:ngsi-ld:organization:38817de3-8c3e-4141-a344-86ffd915cc3b",
+            "href":"urn:ngsi-ld:organization:38817de3-8c3e-4141-a344-86ffd915cc3b",
+            "name":"DHUB, Engineering D.HUB S.p.A.",
+            "role":"Customer",
+            "@type":"RelatedParty",
+            "@referredType":"Individual"
+         }
+      ],
+      "status":"ACTIVE"
+   },
+   "appliedCustomerBillingRate":[
+      {
+         "id":"bill-product:435a0aef-e305-40c0-8017-53a4d445a312",
+         "date":"2025-01-27T21:45:35.2177666+01:00",
+         "description":"Bill for product with ID: urn:ngsi-ld:product:435a0aef-e305-40c0-8017-53a4d445a312 TimePeriod 2024-12-17T13:14:33.213Z/2024-12-31T13:14:33.213Z",
+         "isBilled":false,
+         "name":"Bill for product with ID: urn:ngsi-ld:product:435a0aef-e305-40c0-8017-53a4d445a312",
+         "billingAccount":{
+            "id":"urn:ngsi-ld:billing-account:3dc56c89-8acc-4600-b4aa-21f4c3eb7497",
+            "name":"My Billing Account"
+         },
+         "periodCoverage":{
+            "endDateTime":"2024-12-31T13:14:33.213Z",
+            "startDateTime":"2024-12-17T13:14:33.213Z"
+         },
+         "product":{
+            "id":"urn:ngsi-ld:product:435a0aef-e305-40c0-8017-53a4d445a312"
+         },
+         "taxExcludedAmount":{
+            "unit":"EUR",
+            "value":24.0
+         }
+      }
+   ]
+}

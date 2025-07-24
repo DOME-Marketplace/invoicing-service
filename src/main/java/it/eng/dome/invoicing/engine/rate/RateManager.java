@@ -64,13 +64,13 @@ public class RateManager implements InitializingBean {
     private String getCountryCodeFor(RelatedParty party) throws Exception {
         Organization org = organizationApi.getOrganization(party.getId(), null);
         String countryCode = this.getCountryFromCharacteristic(org);
-        if(countryCode==null) {
-            logger.warn("unable to find a 'country' characteristic for organization " + org.getId());
-            if(this.countryGuesser!=null) {
+        if(countryCode == null) {
+            logger.warn("Unable to find a 'country' characteristic for organization: {}", org.getId());
+            if(this.countryGuesser != null) {
                 List<GuessResult> guessResult = this.countryGuesser.guessCountry(org);
                 if(!guessResult.isEmpty()) {
                     countryCode = guessResult.get(0).getCountryCode();
-                    logger.warn("using GUESSED countryCode '"+countryCode+"' for organization " + org.getId());
+                    logger.warn("Using GUESSED countryCode '{}' for organization: {}", countryCode, org.getId());
                 }
             }
         }
@@ -78,7 +78,7 @@ public class RateManager implements InitializingBean {
     }
 
     private String getCountryFromCharacteristic(Organization org) {
-        if(org.getPartyCharacteristic()!=null)
+        if(org.getPartyCharacteristic() != null)
             for(Characteristic c:org.getPartyCharacteristic()) {
                 if("country".equalsIgnoreCase(c.getName()))
                     return c.getValue().toString();

@@ -41,10 +41,10 @@ public class CalculateTaxesController {
 	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> applyTaxes(@RequestBody String applyTaxesRequestDTO) throws Throwable {
 		logger.info("Received request for applying taxes to a bill");
-		logger.debug(applyTaxesRequestDTO);
+		// logger.debug(applyTaxesRequestDTO);
 		ApplyTaxesRequestDTO dto = JSON.deserialize(toLowerCaseStatus(applyTaxesRequestDTO), ApplyTaxesRequestDTO.class);
 	
-		logger.info("applyTaxesRequestDTO: {}", applyTaxesRequestDTO);
+		// logger.info("applyTaxesRequestDTO: {}", applyTaxesRequestDTO);
 		AppliedCustomerBillingRate[] bills;
 		Product product;
 
@@ -62,7 +62,7 @@ public class CalculateTaxesController {
 			// 3) return updated AppliedCustomerBillingRate
 			return new ResponseEntity<String>(JSON.getGson().toJson(billsWithTaxes), HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			logger.error("Error: {}", e.getMessage());
 			// Java exception is converted into HTTP status code
 			throw new Exception(e);
 		}
@@ -83,7 +83,7 @@ public class CalculateTaxesController {
 			// 3) return updated ProductOrder
 			return new ResponseEntity<String>(orderWithTaxes.toJson(), HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			logger.error("Error: {}", e.getMessage());
 			// Java exception is converted into HTTP status code
 			throw new Exception(e);
 		}
