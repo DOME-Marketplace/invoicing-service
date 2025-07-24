@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.3.0</code> :calendar: 24/07/2025
+**Improvements**
+* Improvement of exception management. 
+
 ### <code>1.2.0</code> :calendar: 09/06/2025
 **Improvements**
 * Set of `[2.1.0, 2.2.0)` version of `Brokerage Utils`.
