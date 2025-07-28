@@ -54,15 +54,15 @@ public final class TmfApiFactory implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		
-		log.info("Billing Engine is using the following AccessNode endpoint: " + tmfEndpoint);	
+		log.info("Invoicing Service is using the following AccessNode endpoint: " + tmfEndpoint);	
 		if (tmfEnvoy) {
 			log.info("You set the apiProxy for TMForum endpoint. No tmf_port {} can be applied", tmfPort);	
 		} else {
 			log.info("No apiProxy set for TMForum APIs. You have to access on specific software via paths at tmf_port {}", tmfPort);	
 		}
 		
-		Assert.state(!StringUtils.isBlank(tmfEndpoint), "Billing Engine not properly configured. tmf620_catalog_base property has no value.");
-		Assert.state(!StringUtils.isBlank(tmf632PartyManagementPath), "Billing Engine not properly configured. tmf632_party_management_path property has no value.");
+		Assert.state(!StringUtils.isBlank(tmfEndpoint), "Invoicing Service not properly configured. tmf620_catalog_base property has no value.");
+		Assert.state(!StringUtils.isBlank(tmf632PartyManagementPath), "Invoicing Service not properly configured. tmf632_party_management_path property has no value.");
 
 			
 		if (tmfEndpoint.endsWith("/")) {

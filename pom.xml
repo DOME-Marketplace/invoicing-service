@@ -13,7 +13,7 @@
 
     <groupId>it.eng.dome.invoicing</groupId>
     <artifactId>service</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <name>Invoicing Service</name>
     <description>Invoicing Service</description>
 
@@ -155,5 +155,17 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+	    <profile>
+	        <id>generate-rest-apis</id>
+	        <activation>
+	            <activeByDefault>false</activeByDefault>
+	        </activation>
+	        <properties>
+	            <spring-boot.run.arguments>--rest_api_docs.generate_md=true</spring-boot.run.arguments>
+	        </properties>
+	    </profile>
+	</profiles>
 
 </project>

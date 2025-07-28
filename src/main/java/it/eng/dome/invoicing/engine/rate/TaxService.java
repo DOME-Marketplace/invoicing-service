@@ -12,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import it.eng.dome.invoicing.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.Price;
@@ -235,29 +236,41 @@ public class TaxService {
 		return out;
 	}
 
-	private RelatedParty getSeller(ProductOrder order) {
-		return this.extractRelatedPartyIdByRole(order, "seller");
+	private RelatedParty getSeller(ProductOrder order)  throws Exception {
+		RelatedParty out=this.extractRelatedPartyIdByRole(order, "seller");
+		if(out==null) 
+			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+		return out;
+		//return this.extractRelatedPartyIdByRole(order, "seller");
 	}
 
-	private RelatedParty getSeller(List<RelatedParty> parties) {
-		return this.extractRelatedPartyIdByRole(parties, "seller");
+	private RelatedParty getSeller(List<RelatedParty> parties) throws Exception {
+		RelatedParty out=this.extractRelatedPartyIdByRole(parties, "seller");
+		if(out==null) 
+			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+		return out;
+		//return this.extractRelatedPartyIdByRole(parties, "seller");
 	}
 
-	private RelatedParty getBuyer(ProductOrder order) {
+	private RelatedParty getBuyer(ProductOrder order) throws Exception{
 		// try with both roles 'buyer' and 'customer'
 		RelatedParty out = this.extractRelatedPartyIdByRole(order, "customer");
 		if (out == null) {
 			out = this.extractRelatedPartyIdByRole(order, "buyer");
 		}
+		if(out==null)
+			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 
-	private RelatedParty getBuyer(List<RelatedParty> parties) {
+	private RelatedParty getBuyer(List<RelatedParty> parties) throws Exception {
 		// try with both roles 'buyer' and 'customer'
 		RelatedParty out = this.extractRelatedPartyIdByRole(parties, "customer");
 		if (out == null) {
 			out = this.extractRelatedPartyIdByRole(parties, "buyer");
 		}
+		if(out==null)
+			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 
