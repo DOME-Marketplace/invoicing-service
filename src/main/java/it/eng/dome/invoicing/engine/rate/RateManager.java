@@ -85,7 +85,7 @@ public class RateManager implements InitializingBean {
     private String getCountryFromCharacteristic(Organization org) {
         if(org.getPartyCharacteristic() != null)
             for(Characteristic c:org.getPartyCharacteristic()) {
-                if("country".equalsIgnoreCase(c.getName()))
+                if("country".equalsIgnoreCase(c.getName()) && c.getValue()!=null)
                     return c.getValue().toString();
             }
         return null;

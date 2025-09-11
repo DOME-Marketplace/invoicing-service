@@ -143,7 +143,7 @@ class CountryPattern {
         List<Characteristic> chars = org.getPartyCharacteristic();
         if(chars!=null) {
             for(Characteristic c:chars) {
-                if("website".equals(c.getName()))
+                if("website".equals(c.getName()) && c.getValue()!=null)
                     domainTexts.add(c.getValue().toString());
             }
         }
