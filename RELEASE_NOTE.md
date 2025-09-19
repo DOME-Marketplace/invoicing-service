@@ -4,7 +4,8 @@
 
 ### <code>1.2.3</code> :calendar: 16/09/2025
 **BugFixing**
-* Bug Fixing to retrieve relatedParty.
+* Bug Fixing to retrieve `relatedParty`.
+
 
 ### <code>1.2.2</code> :calendar: 24/07/2025
 **Improvements**
@@ -17,6 +18,7 @@
 ### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
 * Display `ENV VARs` in the Listener at beginning.
+
 
 ### <code>1.2.0</code> :calendar: 09/06/2025
 **Improvements**
