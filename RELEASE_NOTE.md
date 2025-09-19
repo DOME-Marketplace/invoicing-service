@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.2.3</code> :calendar: 16/09/2025
+**BugFixing**
+* Bug Fixing to retrieve `relatedParty`.
+
+
 ### <code>1.2.2</code> :calendar: 24/07/2025
 **Improvements**
 * Generate automatic `REST_APIs.md` file from **Swagger APIs** using the `generate-rest-apis` profile.
@@ -13,6 +18,7 @@
 ### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
 * Display `ENV VARs` in the Listener at beginning.
+
 
 ### <code>1.2.0</code> :calendar: 09/06/2025
 **Improvements**

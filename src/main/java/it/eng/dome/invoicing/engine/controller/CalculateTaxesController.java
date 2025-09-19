@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,8 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.eng.dome.brokerage.api.ProductApis;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.invoicing.engine.rate.TaxService;
+import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.JSON;
@@ -30,12 +33,22 @@ import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 @RestController
 @RequestMapping("/invoicing")
 @Tag(name = "Calculate Taxes Controller", description = "APIs to calculate the taxes for the ProductOrder")
-public class CalculateTaxesController {
+public class CalculateTaxesController implements InitializingBean{
 	
 	protected static final Logger logger = LoggerFactory.getLogger(CalculateTaxesController.class);
 
 	@Autowired
 	protected TaxService taxService;
+	
+	@Autowired
+	private TmfApiFactory tmfApiFactory;
+	
+	private ProductApis producApis;
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		producApis = new ProductApis(tmfApiFactory.getTMF637ProductInventoryApiClient());
+	}
 	
 	
 	@RequestMapping(value = "/applyTaxes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +62,8 @@ public class CalculateTaxesController {
 
 		try {
 			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-			product = dto.getProduct();	
+			//product = dto.getProduct();	
+			product = producApis.getProduct(dto.getProduct().getId(),null);
 			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
 			bills = dto.getAppliedCustomerBillingRate().toArray(new AppliedCustomerBillingRate[0]);

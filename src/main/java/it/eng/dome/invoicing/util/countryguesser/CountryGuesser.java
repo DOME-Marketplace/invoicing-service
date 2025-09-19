@@ -2,9 +2,10 @@
 package it.eng.dome.invoicing.util.countryguesser;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class CountryGuesser {
 
         List<CountryPattern> out = new ArrayList<>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         String ls = System.getProperty("line.separator");
