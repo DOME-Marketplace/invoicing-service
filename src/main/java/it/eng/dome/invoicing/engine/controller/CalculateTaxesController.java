@@ -63,7 +63,8 @@ public class CalculateTaxesController implements InitializingBean{
 		try {
 			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
 			//product = dto.getProduct();	
-			product = producApis.getProduct(dto.getProduct().getId(),null);
+			logger.debug("Trying to get product with Id: {}",  dto.getProduct().getId());
+			product = producApis.getProduct(dto.getProduct().getId(), null);			
 			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
 			bills = dto.getAppliedCustomerBillingRate().toArray(new AppliedCustomerBillingRate[0]);
