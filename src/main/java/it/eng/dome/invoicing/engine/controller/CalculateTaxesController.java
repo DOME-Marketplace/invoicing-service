@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.api.ProductApis;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
-import it.eng.dome.invoicing.engine.rate.TaxService;
+import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;

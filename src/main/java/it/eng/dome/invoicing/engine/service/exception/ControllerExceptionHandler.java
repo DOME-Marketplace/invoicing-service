@@ -1,4 +1,4 @@
-package it.eng.dome.invoicing.service.exception;
+package it.eng.dome.invoicing.engine.service.exception;
 
 
 import org.springframework.core.Ordered;

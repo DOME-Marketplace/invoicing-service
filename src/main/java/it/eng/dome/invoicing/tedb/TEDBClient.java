@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,7 @@ import it.eng.dome.invoicing.tedb.model.SearchResult;
 import it.eng.dome.invoicing.tedb.model.TaxRate;
 import it.eng.dome.invoicing.tedb.model.TaxVersion;
 
+@Component
 public class TEDBClient implements TEDB {
 
     private static final String DEFAULT_URL = "https://ec.europa.eu/taxation_customs/tedb/rest-api";

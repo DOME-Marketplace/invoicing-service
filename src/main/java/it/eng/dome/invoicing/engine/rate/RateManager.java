@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.api.OrganizationApis;
+import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
-import it.eng.dome.invoicing.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.invoicing.util.countryguesser.CountryGuesser;

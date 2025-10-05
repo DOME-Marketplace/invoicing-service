@@ -19,7 +19,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import it.eng.dome.invoicing.engine.model.InfoInvoicing;
+import it.eng.dome.invoicing.observability.info.Info;
 
 @Component
 public class StartupListener implements ApplicationListener<ApplicationReadyEvent> {
@@ -50,7 +50,7 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 
 		logger.info("Listener GET call to {}", url);
 		try {
-			InfoInvoicing response = restTemplate.getForObject(url, InfoInvoicing.class);
+			Info response = restTemplate.getForObject(url, Info.class);
 			logger.info("Started the {} version: {} ", response.getName(), response.getVersion());
 
 		} catch (Exception e) {
