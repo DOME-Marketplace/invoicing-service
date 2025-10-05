@@ -60,7 +60,7 @@ public class TaxService {
 		return order;
 	}
 
-	public AppliedCustomerBillingRate[] applyTaxes(Product product, AppliedCustomerBillingRate... bills)
+	public List<AppliedCustomerBillingRate> applyTaxes(Product product, List<AppliedCustomerBillingRate> bills)
 			throws Exception {
 		for (AppliedCustomerBillingRate bill : bills) {
 			this.applyTaxes(product, bill);
@@ -69,6 +69,7 @@ public class TaxService {
 	}
 
 	private AppliedCustomerBillingRate applyTaxes(Product product, AppliedCustomerBillingRate bill) throws Exception {
+
 		// retrieve the involved parties
 		List<RelatedParty> involvedParties = this.retrieveRelatedParties(product);
 		RelatedParty buyer = this.getBuyer(involvedParties);
