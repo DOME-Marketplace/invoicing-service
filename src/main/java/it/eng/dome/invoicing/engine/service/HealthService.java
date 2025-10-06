@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import it.eng.dome.tmforum.tmf632.v4.api.OrganizationApi;
 
 @Service
 public class HealthService extends AbstractHealthService {
+
+    private final Logger logger = LoggerFactory.getLogger(HealthService.class);
 
     @Autowired
     private TmfApiFactory tmfApiFactory;
@@ -92,7 +96,8 @@ public class HealthService extends AbstractHealthService {
             connectivity.setStatus(HealthStatus.PASS);
         }
         catch(Exception e) {
-            e.printStackTrace();
+			logger.error(e.getMessage());
+			logger.error(e.getStackTrace().toString());
             connectivity.setStatus(HealthStatus.FAIL);
             connectivity.setOutput(e.toString());
         }
@@ -133,6 +138,7 @@ public class HealthService extends AbstractHealthService {
         for(Check c: hlt.getChecks("self", null)) {
             switch(c.getStatus()) {
                 case UNKNOWN:
+                    notes.add("Revenue Invoicing Service is UNKNOWN. It might not behave as expected.");
                     break;
                 case PASS:
                     break;
@@ -142,6 +148,8 @@ public class HealthService extends AbstractHealthService {
                 case FAIL:
                     notes.add("Revenue Invoicing Service has some major internal troubles");
                     break;
+                default:
+                    notes.add("The Invoicing Service reported an unknown status: " + c.getStatus());
             }
         }
 

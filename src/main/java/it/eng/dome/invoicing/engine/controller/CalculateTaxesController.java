@@ -92,7 +92,8 @@ public class CalculateTaxesController implements InitializingBean{
             return ResponseEntity.ok(billsWithTaxes);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
+			logger.error(e.getStackTrace().toString());
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
