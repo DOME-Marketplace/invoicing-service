@@ -6,19 +6,21 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.eng.dome.brokerage.observability.AbstractHealthService;
+import it.eng.dome.brokerage.observability.health.Check;
+import it.eng.dome.brokerage.observability.health.Health;
+import it.eng.dome.brokerage.observability.health.HealthStatus;
+import it.eng.dome.brokerage.observability.info.Info;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
-import it.eng.dome.invoicing.observability.AbstractHealthService;
-import it.eng.dome.invoicing.observability.health.Check;
-import it.eng.dome.invoicing.observability.health.Health;
-import it.eng.dome.invoicing.observability.health.HealthStatus;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.tmforum.tmf632.v4.api.OrganizationApi;
 
 @Service
-public class HealthService extends AbstractHealthService {
+public class HealthService extends AbstractHealthService implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(HealthService.class);
 
@@ -32,14 +34,24 @@ public class HealthService extends AbstractHealthService {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
-        // create an API for each of the used TMF APIs ... or just one?
+    	logger.info("Initializing of HealthService");
         this.orgApi = new OrganizationApi(tmfApiFactory.getTMF632PartyManagementApiClient());
     }
+    
+    @Override
+    public Info getInfo() {
+    	
+    	Info info = super.getInfo();
+    	logger.debug("Response: {}", toJson(info));
+    	
+    	return info;
+    }
 
+    @Override
     public Health getHealth() {
+    	    	
         Health h = new Health();
-        h.setDescription("Health for the Revenue Sharing Service");
+        h.setDescription("Health for the Invoicing Service");
 
         h.elevateStatus(HealthStatus.PASS);
 
@@ -49,16 +61,19 @@ public class HealthService extends AbstractHealthService {
         }
 
         // check the TMF APIs
-        for(Check c: this.getTMFChecks())
+        for(Check c: this.getTMFChecks()) {
             h.addCheck(c);
+        }
 
         // Status of its dependencies. In case of FAIL or WARN set it to WARN
         for(Check c: h.getAllChecks()) {
             h.elevateStatus(c.getStatus());
         }
-        // ... but not to FAIL (which means a failure in the Revenue itself)
-        if(HealthStatus.FAIL.equals(h.getStatus()))
+        
+        // ... but not to FAIL (which means a failure in the Invoicing itself)
+        if(HealthStatus.FAIL.equals(h.getStatus())) {
             h.setStatus(HealthStatus.WARN);
+        }
 
         // now look at the internal status (may lead to PASS, WARN or FAIL)
         for(Check c: this.getChecksOnSelf()) {
@@ -68,6 +83,8 @@ public class HealthService extends AbstractHealthService {
 
         // add some notes
         h.setNotes(this.buildNotes(h));
+        
+        logger.debug("Response: {}", toJson(h));
 
         return h;
     }
@@ -131,38 +148,38 @@ public class HealthService extends AbstractHealthService {
         return out;
     }
 
-    private List<String> buildNotes(Health hlt) {
-        List<String> notes = new ArrayList<>();
+	private List<String> buildNotes(Health hlt) {
+		List<String> notes = new ArrayList<>();
 
-        // first, some notes about the Service itself
-        for(Check c: hlt.getChecks("self", null)) {
-            switch(c.getStatus()) {
-                case UNKNOWN:
-                    notes.add("Revenue Invoicing Service is UNKNOWN. It might not behave as expected.");
-                    break;
-                case PASS:
-                    break;
-                case WARN:
-                    notes.add("Revenue Invoicing Service has some internal troubles degrading its behaviour/performance");
-                    break;
-                case FAIL:
-                    notes.add("Revenue Invoicing Service has some major internal troubles");
-                    break;
-                default:
-                    notes.add("The Invoicing Service reported an unknown status: " + c.getStatus());
-            }
-        }
+		// first, some notes about the Service itself
+		for (Check c : hlt.getChecks("self", null)) {
+			switch (c.getStatus()) {
+			case UNKNOWN:
+				notes.add("Invoicing Service is UNKNOWN. It might not behave as expected.");
+				break;
+			case PASS:
+				break;
+			case WARN:
+				notes.add("Invoicing Service has some internal troubles degrading its behaviour/performance");
+				break;
+			case FAIL:
+				notes.add("Invoicing Service has some major internal troubles");
+				break;
+			default:
+				notes.add("The Invoicing Service reported an unknown status: " + c.getStatus());
+			}
+		}
 
-        // Then, some notes on its dependencies
-        for(Check c: hlt.getChecks("tedb-service", null))
-            if(c.getStatus().getSeverity()>HealthStatus.PASS.getSeverity())
-                notes.add("Revenue Invoicing Service can't behave correctly because the TEDB Service is degraded or failing");
-        for(Check c: hlt.getChecks("tmf-api", null))
-            if(c.getStatus().getSeverity()>HealthStatus.PASS.getSeverity())
-                notes.add("Revenue Sharing Service can't behave correctly because the TMF APIs are degraded or failing");
+		// Then, some notes on its dependencies
+		for (Check c : hlt.getChecks("tedb-service", null))
+			if (c.getStatus().getSeverity() > HealthStatus.PASS.getSeverity())
+				notes.add("Invoicing Service can't behave correctly because the TEDB Service is degraded or failing");
+		for (Check c : hlt.getChecks("tmf-api", null))
+			if (c.getStatus().getSeverity() > HealthStatus.PASS.getSeverity())
+				notes.add("Invoicing Service can't behave correctly because the TMF APIs are degraded or failing");
 
-        return notes;
-    }
+		return notes;
+	}
 
 }
 

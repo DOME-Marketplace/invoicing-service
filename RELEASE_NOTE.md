@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.2.4</code> :calendar: 06/10/2025
+**Improvements**
+* Usage of `AbstractHealthService` class from `Brokerage Utils` to manage **getInfo()** and **getHealth()** features.
+
+
 ### <code>1.2.3</code> :calendar: 16/09/2025
 **BugFixing**
 * Bug Fixing to retrieve `relatedParty`.

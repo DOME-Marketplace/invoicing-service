@@ -19,7 +19,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import it.eng.dome.invoicing.observability.info.Info;
+import it.eng.dome.brokerage.observability.info.Info;
 
 @Component
 public class StartupListener implements ApplicationListener<ApplicationReadyEvent> {

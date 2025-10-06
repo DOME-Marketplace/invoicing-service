@@ -25,7 +25,6 @@ import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
-import it.eng.dome.tmforum.tmf678.v4.JSON;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import jakarta.ws.rs.core.MediaType;
 
