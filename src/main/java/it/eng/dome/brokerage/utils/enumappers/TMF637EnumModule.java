@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import it.eng.dome.tmforum.tmf637.v4.model.ProductStatusType;
 
-class ProductStatusTypeDeserializer extends StdDeserializer<ProductStatusType> {
+class TMF637ProductStatusTypeDeserializer extends StdDeserializer<ProductStatusType> {
 
-	public ProductStatusTypeDeserializer() {
+	public TMF637ProductStatusTypeDeserializer() {
 		super(ProductStatusType.class);
 	}
 
@@ -26,9 +26,9 @@ class ProductStatusTypeDeserializer extends StdDeserializer<ProductStatusType> {
 
 }
 
-class ProductStatusTypeSerializer extends StdSerializer<ProductStatusType> {
+class TMF637ProductStatusTypeSerializer extends StdSerializer<ProductStatusType> {
 
-	public ProductStatusTypeSerializer() {
+	public TMF637ProductStatusTypeSerializer() {
 		super(ProductStatusType.class);
 	}
 
@@ -42,8 +42,8 @@ public class TMF637EnumModule extends SimpleModule {
 
     public TMF637EnumModule() {
         super(TMF637EnumModule.class.getName());
-		this.addDeserializer(ProductStatusType.class, new ProductStatusTypeDeserializer());
-		this.addSerializer(ProductStatusType.class, new ProductStatusTypeSerializer());
+		this.addDeserializer(ProductStatusType.class, new TMF637ProductStatusTypeDeserializer());
+		this.addSerializer(ProductStatusType.class, new TMF637ProductStatusTypeSerializer());
     }
 
 }

@@ -14,14 +14,16 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderItemActionType;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrderItemStateType;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrderStateType;
+import it.eng.dome.tmforum.tmf622.v4.model.ProductStatusType;
+import it.eng.dome.tmforum.tmf622.v4.model.TaskStateType;
 
 /**
  * PRODUCT ORDER STATE
  */
 
-class ProductOrderStateTypeDeserializer extends StdDeserializer<ProductOrderStateType> {
+class TMF622ProductOrderStateTypeDeserializer extends StdDeserializer<ProductOrderStateType> {
 
-	public ProductOrderStateTypeDeserializer() {
+	public TMF622ProductOrderStateTypeDeserializer() {
 		super(ProductOrderStateType.class);
 	}
 
@@ -32,9 +34,9 @@ class ProductOrderStateTypeDeserializer extends StdDeserializer<ProductOrderStat
 
 }
 
-class ProductOrderStateTypeSerializer extends StdSerializer<ProductOrderStateType> {
+class TMF622ProductOrderStateTypeSerializer extends StdSerializer<ProductOrderStateType> {
 
-	public ProductOrderStateTypeSerializer() {
+	public TMF622ProductOrderStateTypeSerializer() {
 		super(ProductOrderStateType.class);
 	}
 
@@ -48,9 +50,9 @@ class ProductOrderStateTypeSerializer extends StdSerializer<ProductOrderStateTyp
  * PRODUCT ORDER ITEM STATE
  */
 
-class ProductOrderItemStateTypeSerializer extends StdSerializer<ProductOrderItemStateType> {
+class TMF622ProductOrderItemStateTypeSerializer extends StdSerializer<ProductOrderItemStateType> {
 
-	public ProductOrderItemStateTypeSerializer() {
+	public TMF622ProductOrderItemStateTypeSerializer() {
 		super(ProductOrderItemStateType.class);
 	}
 
@@ -60,9 +62,9 @@ class ProductOrderItemStateTypeSerializer extends StdSerializer<ProductOrderItem
 	}
 }
 
-class ProductOrderItemStateTypeDeserializer extends StdDeserializer<ProductOrderItemStateType> {
+class TMF622ProductOrderItemStateTypeDeserializer extends StdDeserializer<ProductOrderItemStateType> {
 
-	public ProductOrderItemStateTypeDeserializer() {
+	public TMF622ProductOrderItemStateTypeDeserializer() {
 		super(ProductOrderItemStateType.class);
 	}
 
@@ -77,9 +79,9 @@ class ProductOrderItemStateTypeDeserializer extends StdDeserializer<ProductOrder
  * ORDER ITEM ACTION
  */
 
- class OrderItemActionTypeDeserializer extends StdDeserializer<OrderItemActionType> {
+ class TMF622OrderItemActionTypeDeserializer extends StdDeserializer<OrderItemActionType> {
 
-	public OrderItemActionTypeDeserializer() {
+	public TMF622OrderItemActionTypeDeserializer() {
 		super(OrderItemActionType.class);
 	}
 
@@ -90,14 +92,72 @@ class ProductOrderItemStateTypeDeserializer extends StdDeserializer<ProductOrder
 
 }
 
-class OrderItemActionTypeSerializer extends StdSerializer<OrderItemActionType> {
+class TMF622OrderItemActionTypeSerializer extends StdSerializer<OrderItemActionType> {
 
-	public OrderItemActionTypeSerializer() {
+	public TMF622OrderItemActionTypeSerializer() {
 		super(OrderItemActionType.class);
 	}
 
 	@Override
 	public void serialize(OrderItemActionType value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+		jgen.writeString(value.getValue());
+	}
+}
+
+/**
+ * PRODUCT STATUS
+ */
+
+ class TMF622ProductStatusTypeDeserializer extends StdDeserializer<ProductStatusType> {
+
+	public TMF622ProductStatusTypeDeserializer() {
+		super(ProductStatusType.class);
+	}
+
+	@Override
+	public ProductStatusType deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		return ProductStatusType.fromValue(jp.getText());
+	}
+
+}
+
+class TMF622ProductStatusTypeSerializer extends StdSerializer<ProductStatusType> {
+
+	public TMF622ProductStatusTypeSerializer() {
+		super(ProductStatusType.class);
+	}
+
+	@Override
+	public void serialize(ProductStatusType value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+		jgen.writeString(value.getValue());
+	}
+}
+
+/**
+ * TASK STATE
+ */
+
+ class TMF622TaskStateTypeDeserializer extends StdDeserializer<TaskStateType> {
+
+	public TMF622TaskStateTypeDeserializer() {
+		super(TaskStateType.class);
+	}
+
+	@Override
+	public TaskStateType deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		return TaskStateType.fromValue(jp.getText());
+	}
+
+}
+
+class TMF622TaskStateTypeSerializer extends StdSerializer<TaskStateType> {
+
+	public TMF622TaskStateTypeSerializer() {
+		super(TaskStateType.class);
+	}
+
+	@Override
+	public void serialize(TaskStateType value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
 		jgen.writeString(value.getValue());
 	}
 }
@@ -108,14 +168,20 @@ public class TMF622EnumModule extends SimpleModule {
 
         super(TMF622EnumModule.class.getName());
 
-		this.addDeserializer(ProductOrderStateType.class, new ProductOrderStateTypeDeserializer());
-		this.addSerializer(ProductOrderStateType.class, new ProductOrderStateTypeSerializer());
+		this.addDeserializer(ProductOrderStateType.class, new TMF622ProductOrderStateTypeDeserializer());
+		this.addSerializer(ProductOrderStateType.class, new TMF622ProductOrderStateTypeSerializer());
 
-		this.addDeserializer(ProductOrderItemStateType.class, new ProductOrderItemStateTypeDeserializer());
-		this.addSerializer(ProductOrderItemStateType.class, new ProductOrderItemStateTypeSerializer());
+		this.addDeserializer(ProductOrderItemStateType.class, new TMF622ProductOrderItemStateTypeDeserializer());
+		this.addSerializer(ProductOrderItemStateType.class, new TMF622ProductOrderItemStateTypeSerializer());
 
-		this.addDeserializer(OrderItemActionType.class, new OrderItemActionTypeDeserializer());
-		this.addSerializer(OrderItemActionType.class, new OrderItemActionTypeSerializer());
+		this.addDeserializer(OrderItemActionType.class, new TMF622OrderItemActionTypeDeserializer());
+		this.addSerializer(OrderItemActionType.class, new TMF622OrderItemActionTypeSerializer());
+
+		this.addDeserializer(ProductStatusType.class, new TMF622ProductStatusTypeDeserializer());
+		this.addSerializer(ProductStatusType.class, new TMF622ProductStatusTypeSerializer());
+
+		this.addDeserializer(TaskStateType.class, new TMF622TaskStateTypeDeserializer());
+		this.addSerializer(TaskStateType.class, new TMF622TaskStateTypeSerializer());
 
     }
 
