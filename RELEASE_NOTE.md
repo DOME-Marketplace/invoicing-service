@@ -5,6 +5,7 @@
 ### <code>1.2.4</code> :calendar: 06/10/2025
 **Improvements**
 * Usage of `AbstractHealthService` class from `Brokerage Utils` to manage **getInfo()** and **getHealth()** features.
+* Add `TMF622EnumModule` and `TMF637EnumModule` classes in the **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
 
 
 ### <code>1.2.3</code> :calendar: 16/09/2025
