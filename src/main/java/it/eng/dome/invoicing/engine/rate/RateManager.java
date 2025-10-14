@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.eng.dome.brokerage.api.OrganizationApis;
+import it.eng.dome.brokerage.api.APIPartyApis;
 import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
@@ -40,11 +40,11 @@ public class RateManager implements InitializingBean {
     private CountryGuesser countryGuesser;
     
     // TMForum API to retrieve organizations
-    private OrganizationApis organizationApi;
+    private APIPartyApis apiPartyApis;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        organizationApi = new OrganizationApis(tmfApiFactory.getTMF632PartyManagementApiClient());
+    	apiPartyApis = new APIPartyApis(tmfApiFactory.getTMF632PartyManagementApiClient());
     }
 
     public RateManager() {
@@ -63,7 +63,7 @@ public class RateManager implements InitializingBean {
     }
 
     private String getCountryCodeFor(RelatedParty party) throws Exception {
-        Organization org = organizationApi.getOrganization(party.getId(), null);
+        Organization org = apiPartyApis.getOrganization(party.getId(), null);
         if(org == null) {
         	logger.warn("Cannot found the organization: {}", party.getId());
         	throw new InvoicingBadRelatedPartyException(String.format("Error! The organization with id %s doesn't exist!", party.getId()));

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.eng.dome.brokerage.api.ProductApis;
+import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
@@ -68,11 +68,11 @@ public class CalculateTaxesController implements InitializingBean{
 	@Autowired
 	private TmfApiFactory tmfApiFactory;
 	
-	private ProductApis producApis;
+	private ProductInventoryApis producInventoryApis;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.producApis = new ProductApis(tmfApiFactory.getTMF637ProductInventoryApiClient());
+		this.producInventoryApis = new ProductInventoryApis(tmfApiFactory.getTMF637ProductInventoryApiClient());
 	}
 
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
@@ -80,7 +80,7 @@ public class CalculateTaxesController implements InitializingBean{
 		try {
 
 			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-			Product product = producApis.getProduct(dto.getProduct().getId(), null);			
+			Product product = producInventoryApis.getProduct(dto.getProduct().getId(), null);			
 			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
 			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();

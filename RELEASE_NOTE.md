@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.2.5</code> :calendar: 14/10/2025
+**Improvements**
+* Usage of the new `Brokerage Utils` version: `2.2.0`.
+
+
 ### <code>1.2.4</code> :calendar: 06/10/2025
 **Improvements**
 * Usage of `AbstractHealthService` class from `Brokerage Utils` to manage **getInfo()** and **getHealth()** features.
