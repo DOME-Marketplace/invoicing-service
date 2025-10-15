@@ -5,6 +5,7 @@
 ### <code>1.2.5</code> :calendar: 14/10/2025
 **Improvements**
 * Usage of the new `Brokerage Utils` version: `2.2.0`.
+* Add `TmfApiConfig` class to avoid loading the **ProductInventoryApis** and **APIPartyApis** objects every time they are used in service classes.
 
 
 ### <code>1.2.4</code> :calendar: 06/10/2025

@@ -7,13 +7,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
 import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
-import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.invoicing.util.countryguesser.CountryGuesser;
@@ -23,8 +20,7 @@ import it.eng.dome.tmforum.tmf632.v4.model.Characteristic;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 
 @Component(value = "RateManager")
-//@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RateManager implements InitializingBean {
+public class RateManager {
 
     // A logger for this class
     private final Logger logger = LoggerFactory.getLogger(RateManager.class);
@@ -32,22 +28,14 @@ public class RateManager implements InitializingBean {
     // static so that we can reuse the cache across RateManager instances
     private static final TEDBClient tedbclient = new TEDBCachedClient();
 
-    @Autowired
-    // Factory for TMF APIss
-    private TmfApiFactory tmfApiFactory;
-
     // A CountryGuesser to be used when a country is not available in the organization
     private CountryGuesser countryGuesser;
     
     // TMForum API to retrieve organizations
     private APIPartyApis apiPartyApis;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-    	apiPartyApis = new APIPartyApis(tmfApiFactory.getTMF632PartyManagementApiClient());
-    }
-
-    public RateManager() {
+    public RateManager(APIPartyApis apiPartyApis) {
+    	this.apiPartyApis = apiPartyApis;
         try {
             logger.info("Instantiating a CountryGuesser");
             this.countryGuesser = new CountryGuesser();
@@ -56,6 +44,7 @@ public class RateManager implements InitializingBean {
         }
     }
 
+    
     public Number getVATRateFor(RelatedParty buyer, RelatedParty seller, Calendar date) throws Exception {
         String sellerCountryCode = this.getCountryCodeFor(seller);
         String buyerCountryCode = this.getCountryCodeFor(buyer);
