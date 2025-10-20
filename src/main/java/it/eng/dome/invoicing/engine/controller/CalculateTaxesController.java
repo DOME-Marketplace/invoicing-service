@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.eng.dome.brokerage.api.ProductApis;
+import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.invoicing.engine.service.TaxService;
-import it.eng.dome.invoicing.engine.tmf.TmfApiFactory;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
@@ -58,29 +56,26 @@ class LocalApplyTaxesRequestDTO {
 @RestController
 @RequestMapping("/invoicing")
 @Tag(name = "Calculate Taxes Controller", description = "APIs to calculate the taxes for the ProductOrder")
-public class CalculateTaxesController implements InitializingBean{
+public class CalculateTaxesController {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(CalculateTaxesController.class);
 
 	@Autowired
 	protected TaxService taxService;
 	
-	@Autowired
-	private TmfApiFactory tmfApiFactory;
+	private ProductInventoryApis producInventoryApis;
 	
-	private ProductApis producApis;
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		this.producApis = new ProductApis(tmfApiFactory.getTMF637ProductInventoryApiClient());
+	public CalculateTaxesController(ProductInventoryApis producInventoryApis) {
+		this.producInventoryApis = producInventoryApis;
 	}
+
 
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<AppliedCustomerBillingRate>> applyTaxes(@RequestBody LocalApplyTaxesRequestDTO dto) {
 		try {
 
 			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-			Product product = producApis.getProduct(dto.getProduct().getId(), null);			
+			Product product = producInventoryApis.getProduct(dto.getProduct().getId(), null);			
 			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
 			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
