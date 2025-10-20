@@ -1,6 +1,6 @@
 # Invoicing Service
 
-**Version:** 1.2.3  
+**Version:** 1.2.4  
 **Description:** Swagger REST APIs for the invoicing-service software  
 
 
@@ -16,4 +16,5 @@
 | Verb | Path | Task |
 |------|------|------|
 | GET | `/invoicing/info` | getInfo |
+| GET | `/invoicing/health` | getHealth |
 

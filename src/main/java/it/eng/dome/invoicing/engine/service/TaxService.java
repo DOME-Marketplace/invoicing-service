@@ -1,4 +1,4 @@
-package it.eng.dome.invoicing.engine.rate;
+package it.eng.dome.invoicing.engine.service;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -12,7 +12,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import it.eng.dome.invoicing.service.exception.InvoicingBadRelatedPartyException;
+import it.eng.dome.invoicing.engine.rate.RateManager;
+import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.Price;
@@ -59,7 +60,7 @@ public class TaxService {
 		return order;
 	}
 
-	public AppliedCustomerBillingRate[] applyTaxes(Product product, AppliedCustomerBillingRate... bills)
+	public List<AppliedCustomerBillingRate> applyTaxes(Product product, List<AppliedCustomerBillingRate> bills)
 			throws Exception {
 		for (AppliedCustomerBillingRate bill : bills) {
 			this.applyTaxes(product, bill);
@@ -68,6 +69,7 @@ public class TaxService {
 	}
 
 	private AppliedCustomerBillingRate applyTaxes(Product product, AppliedCustomerBillingRate bill) throws Exception {
+
 		// retrieve the involved parties
 		List<RelatedParty> involvedParties = this.retrieveRelatedParties(product);
 		RelatedParty buyer = this.getBuyer(involvedParties);
