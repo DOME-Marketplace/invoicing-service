@@ -52,7 +52,7 @@ public final class TmfApiFactory implements InitializingBean {
 		}
 		
 		apiClient.setBasePath(basePath + "/" + tmf632PartyManagementPath);
-		log.debug("Invoke Catalog API at endpoint: " + apiClient.getBasePath());
+		log.debug("Invoke API Party Management API at endpoint: " + apiClient.getBasePath());
 		return apiClient;
 	}
 	
