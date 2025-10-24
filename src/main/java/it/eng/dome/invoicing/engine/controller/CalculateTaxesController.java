@@ -20,39 +20,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.api.ProductInventoryApis;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesResponseDTO;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
+import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
 import jakarta.ws.rs.core.MediaType;
 
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class LocalApplyTaxesRequestDTO {
-	
-	@JsonProperty("product")
-	private Product product;
-   
-	@JsonProperty("appliedCustomerBillingRate")
-	private List<AppliedCustomerBillingRate> appliedCustomerBillingRate;
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public List<AppliedCustomerBillingRate> getAppliedCustomerBillingRate() {
-		return appliedCustomerBillingRate;
-	}
-
-	public void setAppliedCustomerBillingRate(List<AppliedCustomerBillingRate> appliedCustomerBillingRate) {
-		this.appliedCustomerBillingRate = appliedCustomerBillingRate;
-	}
-}
-
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/invoicing")
 @Tag(name = "Calculate Taxes Controller", description = "APIs to calculate the taxes for the ProductOrder")
@@ -63,34 +40,32 @@ public class CalculateTaxesController {
 	@Autowired
 	protected TaxService taxService;
 	
-	private ProductInventoryApis producInventoryApis;
-	
-	public CalculateTaxesController(ProductInventoryApis producInventoryApis) {
-		this.producInventoryApis = producInventoryApis;
-	}
-
-
+    
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
-	public ResponseEntity<List<AppliedCustomerBillingRate>> applyTaxes(@RequestBody LocalApplyTaxesRequestDTO dto) {
-		try {
+   	public ResponseEntity<ApplyTaxesResponseDTO> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) {
+   		try {
 
-			// 1) retrieve the Product and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-			Product product = producInventoryApis.getProduct(dto.getProduct().getId(), null);			
-			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
+   			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
+   			Product product = dto.getProduct();
+   			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
-			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
-			Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
-			
-	        // 2) calculate the taxes
-			List<AppliedCustomerBillingRate> billsWithTaxes = taxService.applyTaxes(product, bills);
+   			CustomerBill cb=dto.getCustomerBill();
+   			Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
+   			
+   			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
+   			Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
+   			
+   	        // 2) calculate the taxes
+   			ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
             return ResponseEntity.ok(billsWithTaxes);
-		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(e.getStackTrace().toString());
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+   		}
+   		catch(Exception e) {
+   			logger.error(e.getMessage());
+   			logger.error(e.getStackTrace().toString());
+   			
+   			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+   		}
+   	}
 	
     @PostMapping(value="/previewTaxes", consumes=MediaType.APPLICATION_JSON)
     public ResponseEntity<ProductOrder> previewTaxes(@RequestBody ProductOrder order) throws IOException {

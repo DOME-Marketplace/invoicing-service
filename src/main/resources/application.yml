@@ -51,4 +51,7 @@ tmforumapi:
   tmf632_party_management_path: tmf-api/party/v4
   
   tmf637_billing_path: tmf-api/productInventory/v4
-  
+
+spring:
+  jackson:
+    default-property-inclusion: non_null

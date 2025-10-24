@@ -12,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesResponseDTO;
 import it.eng.dome.invoicing.engine.rate.RateManager;
 import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
@@ -25,7 +26,10 @@ import it.eng.dome.tmforum.tmf622.v4.model.RelatedParty;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedBillingTaxRate;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
+import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
+import it.eng.dome.tmforum.tmf678.v4.model.TaxItem;
 import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
+import jakarta.validation.constraints.NotNull;
 
 @Component(value = "taxService")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -59,13 +63,66 @@ public class TaxService {
 		}
 		return order;
 	}
-
-	public List<AppliedCustomerBillingRate> applyTaxes(Product product, List<AppliedCustomerBillingRate> bills)
+	
+	/*public List<AppliedCustomerBillingRate> applyTaxes(Product product, CustomerBill cb, List<AppliedCustomerBillingRate> bills)
 			throws Exception {
+		
 		for (AppliedCustomerBillingRate bill : bills) {
 			this.applyTaxes(product, bill);
 		}
+		
 		return bills;
+	}*/
+
+	public ApplyTaxesResponseDTO applyTaxes(Product product, CustomerBill cb, List<AppliedCustomerBillingRate> bills)
+			throws Exception {
+		
+		List<AppliedCustomerBillingRate> acbrWithTaxes=new ArrayList<AppliedCustomerBillingRate>();
+		
+		for (AppliedCustomerBillingRate bill : bills) {
+			acbrWithTaxes.add(this.applyTaxes(product, bill));
+		}
+		
+		this.updateCustomerBillWithTaxes(cb, acbrWithTaxes);
+		
+		return new ApplyTaxesResponseDTO(cb,acbrWithTaxes);
+	}
+	
+	private CustomerBill updateCustomerBillWithTaxes(@NotNull CustomerBill cb, @NotNull List<AppliedCustomerBillingRate> acbrsWithTaxes) {
+		
+		Float totalTaxIncludedAmount=0f;
+		List<TaxItem> taxItems=new ArrayList<TaxItem>();
+		
+		for(AppliedCustomerBillingRate acbr: acbrsWithTaxes) {
+			totalTaxIncludedAmount += acbr.getTaxIncludedAmount().getValue();
+			taxItems.addAll(this.getTaxItemsFromAppliedBillingTaxRate(acbr.getAppliedTax()));
+		}
+		
+		it.eng.dome.tmforum.tmf678.v4.model.Money taxIncludedAmount = new it.eng.dome.tmforum.tmf678.v4.model.Money();
+		taxIncludedAmount.setUnit(cb.getTaxExcludedAmount().getUnit());
+		taxIncludedAmount.setValue(totalTaxIncludedAmount);
+		
+		cb.setTaxIncludedAmount(taxIncludedAmount);
+		cb.setTaxItem(taxItems);
+		cb.setAmountDue(taxIncludedAmount);
+		cb.setRemainingAmount(taxIncludedAmount);
+		
+		return cb;
+	}
+	
+	private List<TaxItem> getTaxItemsFromAppliedBillingTaxRate(@NotNull List<AppliedBillingTaxRate> acbrTaxRates){
+		List<TaxItem> taxItems=new ArrayList<TaxItem>();
+		
+		for(AppliedBillingTaxRate acbrTaxRate: acbrTaxRates) {
+			TaxItem taxItem=new TaxItem();
+			taxItem.setTaxAmount(acbrTaxRate.getTaxAmount());
+			taxItem.setTaxCategory(acbrTaxRate.getTaxCategory());
+			taxItem.setTaxRate(acbrTaxRate.getTaxRate());
+			
+			taxItems.add(taxItem);
+		}
+		
+		return taxItems;
 	}
 
 	private AppliedCustomerBillingRate applyTaxes(Product product, AppliedCustomerBillingRate bill) throws Exception {

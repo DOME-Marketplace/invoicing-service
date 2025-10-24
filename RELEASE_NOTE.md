@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.0</code> :calendar: 24/10/2025
+**Improvements**
+* Changed `/invoicing/applyTaxes` REST API response DTO. The `/invoicing/applyTaxes` returns  `ApplyTaxesResponseDTO`.
+* Add `TMF678EnumModule` in the **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
+
 ### <code>1.2.5</code> :calendar: 14/10/2025
 **Improvements**
 * Usage of the new `Brokerage Utils` version: `2.2.0`.
