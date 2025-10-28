@@ -12,7 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesResponseDTO;
+import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.invoicing.engine.rate.RateManager;
 import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
@@ -63,18 +63,8 @@ public class TaxService {
 		}
 		return order;
 	}
-	
-	/*public List<AppliedCustomerBillingRate> applyTaxes(Product product, CustomerBill cb, List<AppliedCustomerBillingRate> bills)
-			throws Exception {
-		
-		for (AppliedCustomerBillingRate bill : bills) {
-			this.applyTaxes(product, bill);
-		}
-		
-		return bills;
-	}*/
 
-	public ApplyTaxesResponseDTO applyTaxes(Product product, CustomerBill cb, List<AppliedCustomerBillingRate> bills)
+	public BillingResponseDTO applyTaxes(Product product, CustomerBill cb, List<AppliedCustomerBillingRate> bills)
 			throws Exception {
 		
 		List<AppliedCustomerBillingRate> acbrWithTaxes=new ArrayList<AppliedCustomerBillingRate>();
@@ -85,7 +75,7 @@ public class TaxService {
 		
 		this.updateCustomerBillWithTaxes(cb, acbrWithTaxes);
 		
-		return new ApplyTaxesResponseDTO(cb,acbrWithTaxes);
+		return new BillingResponseDTO(cb,acbrWithTaxes);
 	}
 	
 	private CustomerBill updateCustomerBillWithTaxes(@NotNull CustomerBill cb, @NotNull List<AppliedCustomerBillingRate> acbrsWithTaxes) {

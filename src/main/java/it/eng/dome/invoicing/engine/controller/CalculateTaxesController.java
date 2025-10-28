@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.api.ProductInventoryApis;
+import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
-import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesResponseDTO;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -40,9 +40,14 @@ public class CalculateTaxesController {
 	@Autowired
 	protected TaxService taxService;
 	
-    
+    /**
+     * The POST /invoicing/applyTaxes REST API is invoked to calculate the taxes that must be applied to the bill 
+     * 
+     * @param dto An {@link ApplyTaxesRequestDTO} with the {@link CustomerBill} and {@link AppliedCustomerBillingRate}(s) of a {@link Product} for which the taxes must be applied
+     * @return a {@link BillingResponseDTO} containing the CustomerBill and the AppliedcustomerBillingRate updated with taxes
+     */
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
-   	public ResponseEntity<ApplyTaxesResponseDTO> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) {
+   	public ResponseEntity<BillingResponseDTO> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) {
    		try {
 
    			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
@@ -56,7 +61,8 @@ public class CalculateTaxesController {
    			Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
    			
    	        // 2) calculate the taxes
-   			ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
+   			//ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
+   			BillingResponseDTO billsWithTaxes=taxService.applyTaxes(product, cb, bills);
             return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
@@ -67,8 +73,14 @@ public class CalculateTaxesController {
    		}
    	}
 	
+    /**
+     * The POST /invoicing/previewTaxes REST API is invoked to calculate the price preview of a {@link ProductOrder} with taxes
+     * 
+     * @param order the {@link ProductOrder} to which the taxes must be applied
+     * @return The ProductOrder updated with applied taxes
+     */
     @PostMapping(value="/previewTaxes", consumes=MediaType.APPLICATION_JSON)
-    public ResponseEntity<ProductOrder> previewTaxes(@RequestBody ProductOrder order) throws IOException {
+    public ResponseEntity<ProductOrder> previewTaxes(@RequestBody ProductOrder order){
         try {
 			ProductOrder orderWithTaxes = taxService.applyTaxes(order);
             return ResponseEntity.ok(orderWithTaxes);
