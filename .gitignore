@@ -13,3 +13,4 @@ tmp/
 .metadata
 /.classpath
 /.project
+.idea/
