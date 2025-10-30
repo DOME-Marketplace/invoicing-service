@@ -5,8 +5,10 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
@@ -34,16 +36,33 @@ public class RateManager {
     // TMForum API to retrieve organizations
     private APIPartyApis apiPartyApis;
 
+    @Value("${rate-manager.enable-country-guesser:true}")
+    private boolean ENABLE_COUNTRY_GUESSER;
+
     public RateManager(APIPartyApis apiPartyApis) {
-    	this.apiPartyApis = apiPartyApis;
-        try {
-            logger.info("Instantiating a CountryGuesser");
-            this.countryGuesser = new CountryGuesser();
-        } catch(Exception e) {
-            logger.warn("Unable to instantiate a CountryGuesser. Relying on the 'country' characteristic, if any.");
-        }
+        this.apiPartyApis = apiPartyApis;
     }
 
+    /**
+     * Initializes the CountryGuesser after the RateManager bean has been constructed.
+     * This method is annotated with @PostConstruct so that Spring populates the
+     * 'enableCountryGuesser' flag from the application.yml before we attempt to
+     * instantiate the CountryGuesser. If the flag is false, the CountryGuesser
+     * will not be created.
+     */
+    @PostConstruct
+    private void init() {
+        if (this.ENABLE_COUNTRY_GUESSER) {
+            try {
+                logger.info("Instantiating a CountryGuesser");
+                this.countryGuesser = new CountryGuesser();
+            } catch (Exception e) {
+                logger.warn("Unable to instantiate a CountryGuesser. Relying on the 'country' characteristic, if any.");
+            }
+        } else {
+            logger.info("CountryGuesser is DISABLED.");
+        }
+    }
     
     public Number getVATRateFor(RelatedParty buyer, RelatedParty seller, Calendar date) throws Exception {
         String sellerCountryCode = this.getCountryCodeFor(seller);
@@ -60,7 +79,7 @@ public class RateManager {
         String countryCode = this.getCountryFromCharacteristic(org);
         if(countryCode == null) {
             logger.warn("Unable to find a 'country' characteristic for organization: {}", org.getId());
-            if(this.countryGuesser != null) {
+            if(this.ENABLE_COUNTRY_GUESSER && this.countryGuesser != null) {
                 List<GuessResult> guessResult = this.countryGuesser.guessCountry(org);
                 if(!guessResult.isEmpty()) {
                     countryCode = guessResult.get(0).getCountryCode();

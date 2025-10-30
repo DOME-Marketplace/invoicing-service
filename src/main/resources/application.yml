@@ -34,7 +34,10 @@ management:
       show-details: never
   health:
     probes:
-      enabled: true	
+      enabled: true
+
+rate-manager:
+  enable-country-guesser: true
 
 tmforumapi:
   tmf_endpoint: ${TMF_ENDPOINT:http://tm-forum-api}

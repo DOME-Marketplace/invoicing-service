@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>1.2.6</code> :calendar: 30/10/2025
+**Improvements**
+* Added a new flag `rate-manager.enable-country-guesser` in `application.yml` to enable/disable the CountryGuesser for organizations without a country characteristic.
+* Updated `RateManager` to initialize `CountryGuesser` only if the flag is enabled, using `@PostConstruct`.
+
 ### <code>1.2.5</code> :calendar: 14/10/2025
 **Improvements**
 * Usage of the new `Brokerage Utils` version: `2.2.0`.
