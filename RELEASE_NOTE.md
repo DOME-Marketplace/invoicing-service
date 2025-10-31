@@ -2,6 +2,13 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+
+### <code>2.0.0</code> :calendar: 31/10/2025
+**Improvements**
+* Changed `/invoicing/applyTaxes` REST API response DTO. The `/invoicing/applyTaxes` returns  `BillingResponseDTO`.
+* Add `TMF678EnumModule` in the **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
+
+
 ### <code>1.2.6</code> :calendar: 30/10/2025
 **Improvements**
 * Added a new flag `rate-manager.enable-country-guesser` in `application.yml` to enable/disable the CountryGuesser for organizations without a country characteristic.
