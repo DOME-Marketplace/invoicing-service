@@ -1,5 +1,9 @@
 package it.eng.dome.invoicing.engine.service;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
@@ -35,6 +39,15 @@ public class BomService {
         this.appliedCustomerBillingRateAPI = appliedCustomerBillingRateAPI;
         this.productCatalogManagementAPI = productCatalogManagementAPI;
 	}
+
+    public List<InvoiceBom> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) {
+        List<InvoiceBom> out = new ArrayList<>();
+        // TODO: implement me
+        out.add(new InvoiceBom(null));
+        out.add(new InvoiceBom(null));
+        out.add(new InvoiceBom(null));
+        return out;
+    }
 
     public InvoiceBom getBomFor(String customerBillId) throws ExternalServiceException {
 

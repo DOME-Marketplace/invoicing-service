@@ -23,7 +23,6 @@ import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrderItem;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.RelatedParty;
-import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedBillingTaxRate;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
