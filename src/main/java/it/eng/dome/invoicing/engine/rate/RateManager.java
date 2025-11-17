@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
-import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
+import it.eng.dome.invoicing.engine.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
-import it.eng.dome.invoicing.util.countryguesser.CountryGuesser;
-import it.eng.dome.invoicing.util.countryguesser.GuessResult;
+import it.eng.dome.invoicing.engine.util.countryguesser.CountryGuesser;
+import it.eng.dome.invoicing.engine.util.countryguesser.GuessResult;
 import it.eng.dome.tmforum.tmf622.v4.model.RelatedParty;
 import it.eng.dome.tmforum.tmf632.v4.model.Characteristic;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
