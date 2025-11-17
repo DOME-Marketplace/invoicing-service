@@ -1,19 +1,14 @@
 package it.eng.dome.invoicing.engine.service;
 
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
 import it.eng.dome.brokerage.api.AppliedCustomerBillRateApis;
 import it.eng.dome.brokerage.api.CustomerBillApis;
+import it.eng.dome.brokerage.api.ProductCatalogManagementApis;
 import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
-import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingApi;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOffering;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -31,13 +26,14 @@ public class BomService {
 	private final ProductInventoryApis productInventoryAPI;
     private final CustomerBillApis customerBillAPI;
     private final AppliedCustomerBillRateApis appliedCustomerBillingRateAPI;
-    private final ProductOfferingApi productOfferingAPI;
+    private final ProductCatalogManagementApis productCatalogManagementAPI;
 
-	public BomService(APIPartyApis partyAPI, ProductInventoryApis productInventoryAPI, CustomerBillApis customerBillAPI, AppliedCustomerBillRateApis appliedCustomerBillingRateAPI, ProductOfferingApi productOfferingAPI) {		this.partyAPI = partyAPI;
-		this.productInventoryAPI = productInventoryAPI;
+	public BomService(APIPartyApis partyAPI, ProductInventoryApis productInventoryAPI, CustomerBillApis customerBillAPI, AppliedCustomerBillRateApis appliedCustomerBillingRateAPI, ProductCatalogManagementApis productCatalogManagementAPI) {		
+        this.partyAPI = partyAPI;
+        this.productInventoryAPI = productInventoryAPI;
         this.customerBillAPI = customerBillAPI;
         this.appliedCustomerBillingRateAPI = appliedCustomerBillingRateAPI;
-        this.productOfferingAPI = productOfferingAPI;
+        this.productCatalogManagementAPI = productCatalogManagementAPI;
 	}
 
     public InvoiceBom getBomFor(String customerBillId) throws ExternalServiceException {
@@ -53,17 +49,20 @@ public class BomService {
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
+        /*
+        // FIXME: commented out, as tmf returns internal server error as of 17 nov 2025
         // add included acbrs (if any)
         try {
             List<AppliedCustomerBillingRate> acbrs;
             Map<String, String> filter = Map.of("bill.id", bom.getCustomerBill().getId());
-            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 1000, filter);
+            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 10, filter);
             for(AppliedCustomerBillingRate acbr: acbrs) {
                 bom.add(acbr);
             }
         } catch (ApiException e) {
             throw new ExternalServiceException(e.getMessage(), e);
         }
+        */
 
         try {
             // now add products (where referenced inside acbrs)
@@ -80,7 +79,7 @@ public class BomService {
             for(Product product: bom.getProducts()) {
                 if(product.getProductOffering()!=null && product.getProductOffering().getId()!=null) {
                     ProductOffering offering;
-                        offering = this.productOfferingAPI.retrieveProductOffering(product.getProductOffering().getId(), null);
+                        offering = this.productCatalogManagementAPI.getProductOffering(product.getProductOffering().getId(), null);
                     bom.add(offering);
                 }
             }
@@ -102,9 +101,11 @@ public class BomService {
         }
 
         // TODO: add billing accounts
+        // Q: which billing accounts to retrieve for those organisations?
 
 
-        // TODO: add POPs (are they needed)
+        // TODO: add POPs
+        // Q: are they needed?
 
         return bom;
     }
