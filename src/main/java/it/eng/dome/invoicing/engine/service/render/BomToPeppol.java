@@ -9,8 +9,11 @@ import it.eng.dome.invoicing.engine.service.PeppolPlaceholder;
 public class BomToPeppol {
 
     // replace Object with the proper PEPPOL type
-    public PeppolPlaceholder render(InvoiceBom bom) {
+    public PeppolPlaceholder render(InvoiceBom bom) {        
         // TODO: translate bom into a peppol invoice
+
+
+        
         return new PeppolPlaceholder();
     }
 

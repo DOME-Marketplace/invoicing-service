@@ -42,7 +42,6 @@ public class InvoicingController {
     @Autowired
     private ObjectMapper jacksonObjectMapper;
 
-
     @GetMapping("invoices/{billId}/dev/bom")
     public ResponseEntity<InvoiceBom> getInvoiceBom(@PathVariable String billId) {
         try {
@@ -53,14 +52,32 @@ public class InvoicingController {
             logger.error(e.getLocalizedMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }    
+    }
+    
+    @GetMapping("invoices/{billId}")
+    public ResponseEntity<String> getInvoice(@PathVariable String billId,  @QueryParam("format") String format) {
+        try {
+            if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
+                // TODO
+                return ResponseEntity.ok("peppol");
+            }
+            else {
+                // TODO
+                return ResponseEntity.ok("non-peppol");
+            }
+        } catch (Exception e) {            
+            logger.error("Error retrieving BOM for {}", billId);
+            logger.error(e.getLocalizedMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @GetMapping("invoices")
-    public ResponseEntity<InputStreamResource> getInvoiceBom(@QueryParam("sellerId") String sellerId, @QueryParam("buyerId") String buyerId, @QueryParam("format") String format, @QueryParam("fromDate") OffsetDateTime fromDate, @QueryParam("toDate") OffsetDateTime toDate) {
+    public ResponseEntity<InputStreamResource> getInvoices(@QueryParam("sellerId") String sellerId, @QueryParam("buyerId") String buyerId, @QueryParam("format") String format, @QueryParam("fromDate") OffsetDateTime fromDate, @QueryParam("toDate") OffsetDateTime toDate) {
         try {
 
             if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                Collection<PeppolPlaceholder> peppols = this.invoicingService.getPeppolInvoices(sellerId, buyerId, fromDate, toDate, format);
+                Collection<PeppolPlaceholder> peppols = this.invoicingService.getPeppolInvoices(sellerId, buyerId, fromDate, toDate);
                 InputStream in = new ByteArrayInputStream(jacksonObjectMapper.writeValueAsBytes(peppols));
                 return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new InputStreamResource(in));
             }

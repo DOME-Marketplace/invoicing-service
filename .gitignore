@@ -14,3 +14,4 @@ tmp/
 /.classpath
 /.project
 .idea/
+src/main/.DS_Store
