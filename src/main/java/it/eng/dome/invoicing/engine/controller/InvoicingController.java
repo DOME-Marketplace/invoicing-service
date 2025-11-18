@@ -1,10 +1,11 @@
 package it.eng.dome.invoicing.engine.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.time.OffsetDateTime;
-import java.util.Collection;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.eng.dome.invoicing.engine.model.InvoiceBom;
+import it.eng.dome.invoicing.engine.service.BomService;
+import it.eng.dome.invoicing.engine.service.InvoicingService;
+import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
+import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import peppol.bis.invoice3.api.PeppolBillingApi;
+import peppol.bis.invoice3.domain.Invoice;
+import peppol.bis.invoice3.validation.ValidationResult;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import it.eng.dome.invoicing.engine.model.InvoiceBom;
-import it.eng.dome.invoicing.engine.service.BomService;
-import it.eng.dome.invoicing.engine.service.InvoicingService;
-import it.eng.dome.invoicing.engine.service.PeppolPlaceholder;
-import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
-import jakarta.ws.rs.QueryParam;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.time.OffsetDateTime;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/invoicing")
@@ -58,8 +58,24 @@ public class InvoicingController {
     public ResponseEntity<String> getInvoice(@PathVariable String billId,  @QueryParam("format") String format) {
         try {
             if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                // TODO
-                return ResponseEntity.ok("peppol");
+                // Mappa InvoiceBom -> Invoice PEPPOL
+                Invoice invoice = invoicingService.getPeppolInvoice(billId);
+
+                // Validazione PEPPOL
+                PeppolBillingApi<Invoice> api = PeppolBillingApi.create(invoice);
+                ValidationResult result = api.validate();
+
+                if (result.isValid()) {
+                    return ResponseEntity.ok(api.prettyPrint()); // ritorna XML fattura PEPPOL
+                } else {
+                    StringBuilder sb = new StringBuilder("Errore di validazione:\n");
+                    result.errors().forEach(e -> sb.append(e).append("\n"));
+                    result.warns().forEach(w -> sb.append("WARN: ").append(w).append("\n"));
+                    //FIXME: return error
+                    /*sb.toString()*/
+                    logger.error("PEPPOL validation error for billId {}: {}", billId, sb.toString());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(sb.toString());
+                }
             }
             else {
                 // TODO
@@ -77,7 +93,7 @@ public class InvoicingController {
         try {
 
             if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                Collection<PeppolPlaceholder> peppols = this.invoicingService.getPeppolInvoices(sellerId, buyerId, fromDate, toDate);
+                Collection<Invoice> peppols = this.invoicingService.getPeppolInvoices(sellerId, buyerId, fromDate, toDate);
                 InputStream in = new ByteArrayInputStream(jacksonObjectMapper.writeValueAsBytes(peppols));
                 return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new InputStreamResource(in));
             }
@@ -91,6 +107,5 @@ public class InvoicingController {
             logger.error(e.getLocalizedMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }        
-
+    }
 }

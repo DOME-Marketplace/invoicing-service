@@ -11,6 +11,7 @@ import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.render.BomToPeppol;
 import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
+import peppol.bis.invoice3.domain.Invoice;
 
 @Service
 public class InvoicingService {
@@ -28,12 +29,12 @@ public class InvoicingService {
         return new LocalResourceRef();
     }
 
-    public Collection<PeppolPlaceholder> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) {
+    public Collection<Invoice> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) {
         List<InvoiceBom> boms = bomService.getBomsFor(buyerId, sellerId, fromDate, toDate);
         return new BomToPeppol().render(boms);
     }
 
-    public PeppolPlaceholder getPeppolInvoice(String billId) throws ExternalServiceException {
+    public Invoice getPeppolInvoice(String billId) throws ExternalServiceException {
         InvoiceBom bom = bomService.getBomFor(billId);
         return new BomToPeppol().render(bom);
     }

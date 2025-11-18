@@ -3,7 +3,9 @@ package it.eng.dome.invoicing.engine.service;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import it.eng.dome.invoicing.engine.peppol.mapper.InvoiceBomMapper;
 import org.springframework.stereotype.Service;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
@@ -20,6 +22,7 @@ import it.eng.dome.tmforum.tmf678.v4.ApiException;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
 import it.eng.dome.tmforum.tmf678.v4.model.RelatedParty;
+import peppol.bis.invoice3.domain.Invoice;
 
 @Service
 public class BomService {
@@ -62,20 +65,18 @@ public class BomService {
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
-        /*
         // FIXME: commented out, as tmf returns internal server error as of 17 nov 2025
         // add included acbrs (if any)
         try {
             List<AppliedCustomerBillingRate> acbrs;
             Map<String, String> filter = Map.of("bill.id", bom.getCustomerBill().getId());
-            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 10, filter);
+            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 5, filter);
             for(AppliedCustomerBillingRate acbr: acbrs) {
                 bom.add(acbr);
             }
         } catch (ApiException e) {
             throw new ExternalServiceException(e.getMessage(), e);
         }
-        */
 
         try {
             // now add products (where referenced inside acbrs)
@@ -122,6 +123,4 @@ public class BomService {
 
         return bom;
     }
-
-
 }

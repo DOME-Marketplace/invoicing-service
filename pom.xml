@@ -24,6 +24,19 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,6 +132,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+        <!-- PEPPOL Billing 3 API -->
+        <dependency>
+            <groupId>no.digipost</groupId>
+            <artifactId>peppol-bis-billing-3-generator-api</artifactId>
+            <version>v0.5-billing-3.0.18</version>
+        </dependency>
+        <dependency>
+            <groupId>no.digipost</groupId>
+            <artifactId>peppol-bis-billing-3-generator-validation</artifactId>
+            <version>v0.5-billing-3.0.18</version>
+        </dependency>
+
     </dependencies>
 
     <build>
