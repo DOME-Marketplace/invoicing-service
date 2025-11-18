@@ -1,6 +1,7 @@
 package it.eng.dome.invoicing.engine.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
+import it.eng.dome.brokerage.exception.DefaultErrorResponse;
 import it.eng.dome.brokerage.exception.ErrorResponse;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.invoicing.engine.service.TaxService;
@@ -68,7 +70,7 @@ public class CalculateTaxesController {
             return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
-			logger.error("Error: {}", e.getMessage());
+			logger.error("Error in applyTaxes: {}", e.getMessage());
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
@@ -87,10 +89,13 @@ public class CalculateTaxesController {
 			ProductOrder orderWithTaxes = taxService.applyTaxes(order);
 			return ResponseEntity.ok(orderWithTaxes);
 		} catch (Exception e) {
-			logger.error("Error: {}", e.getMessage());
+			logger.error("Error in previewTaxes: {}", e.getMessage());
 
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+			
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+					.body(new DefaultErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), URI.create(request.getRequestURI())));
 		}
 	}
 	

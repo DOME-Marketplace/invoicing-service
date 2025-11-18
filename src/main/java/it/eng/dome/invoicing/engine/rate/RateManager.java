@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.api.APIPartyApis;
-import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
+import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.invoicing.util.countryguesser.CountryGuesser;
@@ -74,7 +74,7 @@ public class RateManager {
         Organization org = apiPartyApis.getOrganization(party.getId(), null);
         if(org == null) {
         	logger.warn("Cannot found the organization: {}", party.getId());
-        	throw new InvoicingBadRelatedPartyException(String.format("Error! The organization with id %s doesn't exist!", party.getId()));
+        	throw new BadRelatedPartyException(String.format("Error! The organization with id %s doesn't exist!", party.getId()));
         }
         String countryCode = this.getCountryFromCharacteristic(org);
         if(countryCode == null) {

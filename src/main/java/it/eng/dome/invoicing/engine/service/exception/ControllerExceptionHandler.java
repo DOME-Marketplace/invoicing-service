@@ -1,6 +1,8 @@
 package it.eng.dome.invoicing.engine.service.exception;
 
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -16,6 +18,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import it.eng.dome.brokerage.exception.DefaultErrorResponse;
 import it.eng.dome.brokerage.exception.ErrorResponse;
 import it.eng.dome.brokerage.exception.IllegalEnumException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +52,8 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpServletRequest httpRequest = ((ServletWebRequest) request).getRequest();
        
-        return buildResponseEntity(new ErrorResponse(httpRequest, HttpStatus.BAD_REQUEST, message));
+        //return buildResponseEntity(new ErrorResponse(httpRequest, HttpStatus.BAD_REQUEST, message));
+        return buildDefaultResponseEntity(new DefaultErrorResponse(HttpStatus.BAD_REQUEST, message, URI.create(httpRequest.getRequestURI())));
     }
 
 	@ExceptionHandler(IllegalArgumentException.class)
@@ -58,8 +62,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> buildResponseEntity(ErrorResponse errorResponse) {
-		logger.error("{} - {}", errorResponse.getStatus(), errorResponse.getMessage());
+		logger.error("buildResponseEntity {} - {}", errorResponse.getStatus(), errorResponse.getMessage());
 		return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
 	}
 	
+	private ResponseEntity<Object> buildDefaultResponseEntity(DefaultErrorResponse defaultErrorResponse) {
+		logger.error("buildDefaultResponseEntity {} - {}", defaultErrorResponse.getStatus(), defaultErrorResponse.getDetail());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(defaultErrorResponse);
+	}
 }

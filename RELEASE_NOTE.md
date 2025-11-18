@@ -8,7 +8,7 @@
 * Changed `/invoicing/applyTaxes` REST API response DTO. The `/invoicing/applyTaxes` returns `BillingResponseDTO`.
 * Add `TMF678EnumModule` in the **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
 * Usage of the new `Brokerage Utils` version: `2.2.2`.
-* Manage of `BadRelatedPartyException`.
+* Manage of **relatedParty exception** using `BadRelatedPartyException` of the brokerage-utils (removing `InvoicingBadRelatedPartyException`).
 
 
 ### <code>1.2.6</code> :calendar: 30/10/2025
