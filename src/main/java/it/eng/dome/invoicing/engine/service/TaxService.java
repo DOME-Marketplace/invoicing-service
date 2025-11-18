@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
+import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.invoicing.engine.rate.RateManager;
-import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.Price;
@@ -22,10 +24,12 @@ import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrderItem;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.RelatedParty;
-import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedBillingTaxRate;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
+import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
+import it.eng.dome.tmforum.tmf678.v4.model.TaxItem;
 import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
+import jakarta.validation.constraints.NotNull;
 
 @Component(value = "taxService")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -60,18 +64,61 @@ public class TaxService {
 		return order;
 	}
 
-	public List<AppliedCustomerBillingRate> applyTaxes(Product product, List<AppliedCustomerBillingRate> bills)
+	public BillingResponseDTO applyTaxes(CustomerBill cb, List<AppliedCustomerBillingRate> acbrs)
 			throws Exception {
-		for (AppliedCustomerBillingRate bill : bills) {
-			this.applyTaxes(product, bill);
+		
+		List<AppliedCustomerBillingRate> acbrWithTaxes=new ArrayList<AppliedCustomerBillingRate>();
+		
+		for (AppliedCustomerBillingRate acbr : acbrs) {
+			acbrWithTaxes.add(this.applyTaxes(acbr));
 		}
-		return bills;
+		
+		this.updateCustomerBillWithTaxes(cb, acbrWithTaxes);
+		
+		return new BillingResponseDTO(cb,acbrWithTaxes);
+	}
+	
+	private CustomerBill updateCustomerBillWithTaxes(@NotNull CustomerBill cb, @NotNull List<AppliedCustomerBillingRate> acbrsWithTaxes) {
+		
+		Float totalTaxIncludedAmount=0f;
+		List<TaxItem> taxItems=new ArrayList<TaxItem>();
+		
+		for(AppliedCustomerBillingRate acbr: acbrsWithTaxes) {
+			totalTaxIncludedAmount += acbr.getTaxIncludedAmount().getValue();
+			taxItems.addAll(this.getTaxItemsFromAppliedBillingTaxRate(acbr.getAppliedTax()));
+		}
+		
+		it.eng.dome.tmforum.tmf678.v4.model.Money taxIncludedAmount = new it.eng.dome.tmforum.tmf678.v4.model.Money();
+		taxIncludedAmount.setUnit(cb.getTaxExcludedAmount().getUnit());
+		taxIncludedAmount.setValue(totalTaxIncludedAmount);
+		
+		cb.setTaxIncludedAmount(taxIncludedAmount);
+		cb.setTaxItem(taxItems);
+		cb.setAmountDue(taxIncludedAmount);
+		cb.setRemainingAmount(taxIncludedAmount);
+		
+		return cb;
+	}
+	
+	private List<TaxItem> getTaxItemsFromAppliedBillingTaxRate(@NotNull List<AppliedBillingTaxRate> acbrTaxRates){
+		List<TaxItem> taxItems=new ArrayList<TaxItem>();
+		
+		for(AppliedBillingTaxRate acbrTaxRate: acbrTaxRates) {
+			TaxItem taxItem=new TaxItem();
+			taxItem.setTaxAmount(acbrTaxRate.getTaxAmount());
+			taxItem.setTaxCategory(acbrTaxRate.getTaxCategory());
+			taxItem.setTaxRate(acbrTaxRate.getTaxRate());
+			
+			taxItems.add(taxItem);
+		}
+		
+		return taxItems;
 	}
 
-	private AppliedCustomerBillingRate applyTaxes(Product product, AppliedCustomerBillingRate bill) throws Exception {
+	private AppliedCustomerBillingRate applyTaxes(AppliedCustomerBillingRate bill) throws Exception {
 
 		// retrieve the involved parties
-		List<RelatedParty> involvedParties = this.retrieveRelatedParties(product);
+		List<RelatedParty> involvedParties = this.retrieveRelatedParties(bill);
 		RelatedParty buyer = this.getBuyer(involvedParties);
 		RelatedParty seller = this.getSeller(involvedParties);
 
@@ -138,6 +185,7 @@ public class TaxService {
 		return c;
 	}
 
+	/*
 	private List<RelatedParty> retrieveRelatedParties(Product product) throws Exception {
 		List<it.eng.dome.tmforum.tmf637.v4.model.RelatedParty> parties = product.getRelatedParty();
 		if (parties != null) {
@@ -145,14 +193,37 @@ public class TaxService {
 		}
 		return new ArrayList<RelatedParty>();
 	}
+	*/
 
-	private RelatedParty convert(it.eng.dome.tmforum.tmf637.v4.model.RelatedParty inParty) throws IOException {
+	private List<RelatedParty> retrieveRelatedParties(AppliedCustomerBillingRate acbr) throws Exception {
+		List<it.eng.dome.tmforum.tmf678.v4.model.RelatedParty> parties = acbr.getRelatedParty();
+		if (parties != null) {
+			return this.convert(parties);
+		}
+		return new ArrayList<RelatedParty>();
+	}
+
+//	private RelatedParty convert(it.eng.dome.tmforum.tmf637.v4.model.RelatedParty inParty) throws IOException {
+//		return RelatedParty.fromJson(inParty.toJson());
+//	}
+
+	private RelatedParty convert(it.eng.dome.tmforum.tmf678.v4.model.RelatedParty inParty) throws IOException {
 		return RelatedParty.fromJson(inParty.toJson());
 	}
 
+	/*
 	private List<RelatedParty> convert(List<it.eng.dome.tmforum.tmf637.v4.model.RelatedParty> inList) throws IOException {
 		List<RelatedParty> out = new ArrayList<>();
 		for (it.eng.dome.tmforum.tmf637.v4.model.RelatedParty rp : inList) {
+			out.add(this.convert(rp));
+		}
+		return out;
+	}
+	*/
+
+	private List<RelatedParty> convert(List<it.eng.dome.tmforum.tmf678.v4.model.RelatedParty> inList) throws IOException {
+		List<RelatedParty> out = new ArrayList<>();
+		for (it.eng.dome.tmforum.tmf678.v4.model.RelatedParty rp : inList) {
 			out.add(this.convert(rp));
 		}
 		return out;
@@ -241,7 +312,7 @@ public class TaxService {
 	private RelatedParty getSeller(ProductOrder order)  throws Exception {
 		RelatedParty out=this.extractRelatedPartyIdByRole(order, "seller");
 		if(out==null) 
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'seller' is missing in the order");
 		return out;
 		//return this.extractRelatedPartyIdByRole(order, "seller");
 	}
@@ -249,7 +320,7 @@ public class TaxService {
 	private RelatedParty getSeller(List<RelatedParty> parties) throws Exception {
 		RelatedParty out=this.extractRelatedPartyIdByRole(parties, "seller");
 		if(out==null) 
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'seller' is missing in the order");
 		return out;
 		//return this.extractRelatedPartyIdByRole(parties, "seller");
 	}
@@ -261,7 +332,7 @@ public class TaxService {
 			out = this.extractRelatedPartyIdByRole(order, "buyer");
 		}
 		if(out==null)
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 
@@ -272,7 +343,7 @@ public class TaxService {
 			out = this.extractRelatedPartyIdByRole(parties, "buyer");
 		}
 		if(out==null)
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 

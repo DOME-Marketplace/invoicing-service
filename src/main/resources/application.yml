@@ -34,7 +34,10 @@ management:
       show-details: never
   health:
     probes:
-      enabled: true	
+      enabled: true
+
+rate-manager:
+  enable-country-guesser: true
 
 tmforumapi:
   tmf_endpoint: ${TMF_ENDPOINT:http://tm-forum-api}
@@ -51,4 +54,7 @@ tmforumapi:
   tmf632_party_management_path: tmf-api/party/v4
   
   tmf637_billing_path: tmf-api/productInventory/v4
-  
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
