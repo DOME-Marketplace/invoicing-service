@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
+import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.invoicing.engine.rate.RateManager;
-import it.eng.dome.invoicing.engine.service.exception.InvoicingBadRelatedPartyException;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.Price;
@@ -288,7 +288,7 @@ public class TaxService {
 	private RelatedParty getSeller(ProductOrder order)  throws Exception {
 		RelatedParty out=this.extractRelatedPartyIdByRole(order, "seller");
 		if(out==null) 
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'seller' is missing in the order");
 		return out;
 		//return this.extractRelatedPartyIdByRole(order, "seller");
 	}
@@ -296,7 +296,7 @@ public class TaxService {
 	private RelatedParty getSeller(List<RelatedParty> parties) throws Exception {
 		RelatedParty out=this.extractRelatedPartyIdByRole(parties, "seller");
 		if(out==null) 
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'seller' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'seller' is missing in the order");
 		return out;
 		//return this.extractRelatedPartyIdByRole(parties, "seller");
 	}
@@ -308,7 +308,7 @@ public class TaxService {
 			out = this.extractRelatedPartyIdByRole(order, "buyer");
 		}
 		if(out==null)
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 
@@ -319,7 +319,7 @@ public class TaxService {
 			out = this.extractRelatedPartyIdByRole(parties, "buyer");
 		}
 		if(out==null)
-			throw new InvoicingBadRelatedPartyException("The reltedParty with role 'buyer/customer' is missing in the order");
+			throw new BadRelatedPartyException("The RelatedParty with role 'buyer/customer' is missing in the order");
 		return out;
 	}
 

@@ -21,12 +21,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
+import it.eng.dome.brokerage.exception.ErrorResponse;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.MediaType;
 
 @SuppressWarnings("unused")
@@ -47,14 +49,14 @@ public class CalculateTaxesController {
      * @return a {@link BillingResponseDTO} containing the CustomerBill and the AppliedcustomerBillingRate updated with taxes
      */
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
-   	public ResponseEntity<BillingResponseDTO> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto) {
+   	public ResponseEntity<?> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto, HttpServletRequest request) {
    		try {
 
    			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
    			Product product = dto.getProduct();
    			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
-   			CustomerBill cb=dto.getCustomerBill();
+   			CustomerBill cb = dto.getCustomerBill();
    			Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
    			
    			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
@@ -62,14 +64,14 @@ public class CalculateTaxesController {
    			
    	        // 2) calculate the taxes
    			//ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
-   			BillingResponseDTO billsWithTaxes=taxService.applyTaxes(product, cb, bills);
+   			BillingResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
             return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
-   			logger.error(e.getMessage());
-   			logger.error(e.getStackTrace().toString());
-   			
-   			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			logger.error("Error: {}", e.getMessage());
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
    		}
    	}
 	
@@ -79,15 +81,17 @@ public class CalculateTaxesController {
      * @param order the {@link ProductOrder} to which the taxes must be applied
      * @return The ProductOrder updated with applied taxes
      */
-    @PostMapping(value="/previewTaxes", consumes=MediaType.APPLICATION_JSON)
-    public ResponseEntity<ProductOrder> previewTaxes(@RequestBody ProductOrder order){
-        try {
+	@PostMapping(value = "/previewTaxes", consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> previewTaxes(@RequestBody ProductOrder order, HttpServletRequest request) {
+		try {
 			ProductOrder orderWithTaxes = taxService.applyTaxes(order);
-            return ResponseEntity.ok(orderWithTaxes);
-        } catch (Exception e) {
+			return ResponseEntity.ok(orderWithTaxes);
+		} catch (Exception e) {
 			logger.error("Error: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+		}
+	}
 	
 }
