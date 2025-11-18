@@ -55,8 +55,8 @@ public class CalculateTaxesController {
    		try {
 
    			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-   			Product product = dto.getProduct();
-   			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
+//   			Product product = dto.getProduct();
+//   			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
    			CustomerBill cb = dto.getCustomerBill();
    			Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
@@ -66,7 +66,7 @@ public class CalculateTaxesController {
    			
    	        // 2) calculate the taxes
    			//ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
-   			BillingResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
+   			BillingResponseDTO billsWithTaxes=taxService.applyTaxes(cb, bills);
             return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
