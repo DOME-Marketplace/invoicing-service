@@ -1,5 +1,7 @@
 package it.eng.dome.invoicing.engine.service.render;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -71,17 +73,12 @@ public class BomToPeppol {
     private static final int SCALE = 2;
     private static final String EXEMPTION_TEXT = "Not subject to VAT";
 
-    // Minimal whitelist of EAS codes used in mapping (add more if needed)
-    private static final Set<String> EAS_WHITELIST = new HashSet<>();
-    static {
-        EAS_WHITELIST.add("0211"); // IT
-        EAS_WHITELIST.add("0060"); // ES
-        EAS_WHITELIST.add("0192"); // NO
-        EAS_WHITELIST.add("0088"); // GLN
-        EAS_WHITELIST.add("0007"); // SE
-        EAS_WHITELIST.add("0037"); // FI
-        EAS_WHITELIST.add("9901"); // Other
-        EAS_WHITELIST.add("EM");   // Email
+    public Collection<Invoice> render(Collection<InvoiceBom> boms) {
+        Collection<Invoice> out = new ArrayList<>();
+        for (InvoiceBom bom : boms) {
+            out.add(this.render(bom));
+        }
+        return out;
     }
 
     /**

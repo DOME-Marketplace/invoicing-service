@@ -1,6 +1,8 @@
 package it.eng.dome.invoicing.engine.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
+import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.BomService;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
@@ -50,7 +52,9 @@ public class InvoicingController {
         } catch (Exception e) {            
             logger.error("Error retrieving BOM for {}", billId);
             logger.error(e.getLocalizedMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
     
@@ -58,33 +62,30 @@ public class InvoicingController {
     public ResponseEntity<String> getInvoice(@PathVariable String billId,  @QueryParam("format") String format) {
         try {
             if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                // Mappa InvoiceBom -> Invoice PEPPOL
-                Invoice invoice = invoicingService.getPeppolInvoice(billId);
-
-                // Validazione PEPPOL
-                PeppolBillingApi<Invoice> api = PeppolBillingApi.create(invoice);
-                ValidationResult result = api.validate();
-
-                if (result.isValid()) {
-                    return ResponseEntity.ok(api.prettyPrint()); // ritorna XML fattura PEPPOL
-                } else {
-                    StringBuilder sb = new StringBuilder("Errore di validazione:\n");
-                    result.errors().forEach(e -> sb.append(e).append("\n"));
-                    result.warns().forEach(w -> sb.append("WARN: ").append(w).append("\n"));
-                    //FIXME: return error
-                    /*sb.toString()*/
-                    logger.error("PEPPOL validation error for billId {}: {}", billId, sb.toString());
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(sb.toString());
-                }
+                String xml = invoicingService.getXmlFromPeppol(billId);
+                return ResponseEntity.ok(xml);
             }
             else {
                 // TODO
                 return ResponseEntity.ok("non-peppol");
             }
+        } catch (PeppolValidationException e) {
+            logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .build();
+        } catch (ExternalServiceException e) {
+            // External service failed, status 503
+            logger.error("External service error for billId {}: {}", billId, e.getMessage(), e);
+            return ResponseEntity
+                    .status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .build();
         } catch (Exception e) {            
             logger.error("Error retrieving BOM for {}", billId);
             logger.error(e.getLocalizedMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
