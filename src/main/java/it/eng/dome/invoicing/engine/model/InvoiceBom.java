@@ -100,7 +100,11 @@ public class InvoiceBom {
         return this.billingAccounts.values();
     }
 
-    public BillingAccount getBillingAccounts(String id) {
+    public BillingAccount getBillingAccountWithRole(String role) {
+        return this.billingAccounts.get(role);
+    }
+
+    public BillingAccount getBillingAccount(String id) {
         return this.billingAccounts.get(id);
     }
 
@@ -124,9 +128,9 @@ public class InvoiceBom {
             this.organizations.put(role, organization);
     }
 
-    public void add(BillingAccount account) {
+    public void add(BillingAccount account, String role) {
         if(account!=null && account.getId()!=null)
-            this.billingAccounts.put(account.getId(), account);
+            this.billingAccounts.put(role, account);
     }
 
     public void add(AppliedCustomerBillingRate acbr) {
