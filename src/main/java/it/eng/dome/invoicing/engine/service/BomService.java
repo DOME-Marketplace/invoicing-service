@@ -1,27 +1,23 @@
 package it.eng.dome.invoicing.engine.service;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
-import it.eng.dome.brokerage.api.APIPartyApis;
-import it.eng.dome.brokerage.api.AppliedCustomerBillRateApis;
-import it.eng.dome.brokerage.api.CustomerBillApis;
-import it.eng.dome.brokerage.api.ProductCatalogManagementApis;
-import it.eng.dome.brokerage.api.ProductInventoryApis;
+import it.eng.dome.brokerage.api.*;
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOffering;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
+import it.eng.dome.tmforum.tmf666.v4.model.BillingAccount;
 import it.eng.dome.tmforum.tmf678.v4.ApiException;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
 import it.eng.dome.tmforum.tmf678.v4.model.RelatedParty;
-import peppol.bis.invoice3.domain.Invoice;
+import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class BomService {
@@ -33,13 +29,15 @@ public class BomService {
     private final CustomerBillApis customerBillAPI;
     private final AppliedCustomerBillRateApis appliedCustomerBillingRateAPI;
     private final ProductCatalogManagementApis productCatalogManagementAPI;
+    private final AccountManagementApis accountManagementAPI;
 
-	public BomService(APIPartyApis partyAPI, ProductInventoryApis productInventoryAPI, CustomerBillApis customerBillAPI, AppliedCustomerBillRateApis appliedCustomerBillingRateAPI, ProductCatalogManagementApis productCatalogManagementAPI) {		
+	public BomService(APIPartyApis partyAPI, ProductInventoryApis productInventoryAPI, CustomerBillApis customerBillAPI, AppliedCustomerBillRateApis appliedCustomerBillingRateAPI, ProductCatalogManagementApis productCatalogManagementAPI, AccountManagementApis accountManagementAPI) {
         this.partyAPI = partyAPI;
         this.productInventoryAPI = productInventoryAPI;
         this.customerBillAPI = customerBillAPI;
         this.appliedCustomerBillingRateAPI = appliedCustomerBillingRateAPI;
         this.productCatalogManagementAPI = productCatalogManagementAPI;
+        this.accountManagementAPI = accountManagementAPI;
 	}
 
     public List<InvoiceBom> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) {
@@ -113,9 +111,30 @@ public class BomService {
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
-        // TODO: add billing accounts
         // Q: which billing accounts to retrieve for those organisations?
+        try {
+            // add billing account (for each organization referenced within the CB)
+            HashMap<String, String> sellerFilter = new HashMap<>();
+            String sellerId = bom.getOrganizationWithRole("Seller").getId();
+            sellerFilter.put("relatedParty.id", sellerId);
+            List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, sellerFilter);
+//            if (sellerBAs.size() == 1
+            //FIXME: take the first one only for now
+            bom.add(sellerBAs.get(0), "Seller");
 
+            HashMap<String, String> buyerFilter = new HashMap<>();
+            String buyerId = bom.getOrganizationWithRole("Buyer").getId();
+            buyerFilter.put("relatedParty.id", buyerId);
+            List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, buyerFilter);
+//            if (buyerBAs.size() == 1)
+            //FIXME: take the first one only for now
+            bom.add(buyerBAs.get(0), "Buyer");
+
+           /*BillingAccount buyerBA = this.accountManagementAPI.getBillingAccount(bom.getCustomerBill().getBillingAccount().getId(), null);
+           bom.add(buyerBA, "Buyer");*/
+        } catch (it.eng.dome.tmforum.tmf666.v4.ApiException e) {
+            throw new ExternalServiceException(e.getMessage(), e);
+        }
 
         // TODO: add POPs
         // Q: are they needed?

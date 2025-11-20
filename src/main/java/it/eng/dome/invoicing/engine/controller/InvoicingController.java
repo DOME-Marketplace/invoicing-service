@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import peppol.bis.invoice3.api.PeppolBillingApi;
 import peppol.bis.invoice3.domain.Invoice;
-import peppol.bis.invoice3.validation.ValidationResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

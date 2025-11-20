@@ -1,15 +1,12 @@
 package it.eng.dome.invoicing.engine.service.render;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
+import it.eng.dome.tmforum.tmf666.v4.model.BillingAccount;
+import it.eng.dome.tmforum.tmf666.v4.model.Contact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +89,8 @@ public class BomToPeppol {
 
         Organization supplierOrg = bom.getOrganizationWithRole("Seller");
         Organization customerOrg = bom.getOrganizationWithRole("Buyer");
+        BillingAccount sellerBA = bom.getBillingAccountWithRole("Seller");
+        BillingAccount buyerBA = bom.getBillingAccountWithRole("Buyer");
 
         // extract best candidate identifier and country
         String supplierId = extractIdentifier(supplierOrg);
@@ -107,8 +106,8 @@ public class BomToPeppol {
         boolean hasO = containsZeroRatedLineWithoutSupplierId(bom, supplierId);
         boolean includePartyTaxScheme = !hasO;
 
-        AccountingSupplierParty supplier = buildSupplierParty(supplierOrg, supplierId, supplierScheme, includePartyTaxScheme);
-        AccountingCustomerParty customer = buildCustomerParty(customerOrg, customerId, customerScheme, includePartyTaxScheme);
+        AccountingSupplierParty supplier = buildSupplierParty(supplierOrg, supplierId, supplierScheme, includePartyTaxScheme, sellerBA);
+        AccountingCustomerParty customer = buildCustomerParty(customerOrg, customerId, customerScheme, includePartyTaxScheme, buyerBA);
 
         CustomerBill cb = bom.getCustomerBill();
 
@@ -202,7 +201,7 @@ public class BomToPeppol {
     // -----------------------
 
     /** Build supplier party. If identifier is null the EndpointID and CompanyID are omitted. */
-    private AccountingSupplierParty buildSupplierParty(Organization org, String id, String scheme, boolean includeTaxScheme) {
+    private AccountingSupplierParty buildSupplierParty(Organization org, String id, String scheme, boolean includeTaxScheme, BillingAccount ba) {
         EndpointID endpoint = null;
         if (id != null && !id.isBlank() && scheme != null) {
             endpoint = new EndpointID(id).withSchemeID(scheme);
@@ -214,7 +213,9 @@ public class BomToPeppol {
         }
 
         PostalAddress addr = new PostalAddress(new Country(extractCountryCode(org)))
-                .withStreetName("streetName").withCityName("city").withPostalZone("postalcode");
+                .withStreetName(this.getPostalAddressField(ba.getContact(), "street"))
+                .withCityName(this.getPostalAddressField(ba.getContact(), "city"))
+                .withPostalZone(this.getPostalAddressField(ba.getContact(), "postcode"));
 
         Party party = new Party(endpoint, addr, ple)
                 .withPartyIdentification(new PartyIdentification(new ID(org != null ? org.getId() : null)))
@@ -229,7 +230,7 @@ public class BomToPeppol {
     }
 
     /** Build customer party. Similar rules as for supplier. */
-    private AccountingCustomerParty buildCustomerParty(Organization org, String id, String scheme, boolean includeTaxScheme) {
+    private AccountingCustomerParty buildCustomerParty(Organization org, String id, String scheme, boolean includeTaxScheme, BillingAccount ba) {
         EndpointID endpoint = null;
         if (id != null && !id.isBlank() && scheme != null) {
             endpoint = new EndpointID(id).withSchemeID(scheme);
@@ -241,7 +242,9 @@ public class BomToPeppol {
         }
 
         PostalAddress addr = new PostalAddress(new Country(extractCountryCode(org)))
-                .withStreetName("streetName").withCityName("city").withPostalZone("postalcode");
+                .withStreetName(this.getPostalAddressField(ba.getContact(), "street"))
+                .withCityName(this.getPostalAddressField(ba.getContact(), "city"))
+                .withPostalZone(this.getPostalAddressField(ba.getContact(), "postcode"));
 
         Party party = new Party(endpoint, addr, ple)
                 .withPartyIdentification(new PartyIdentification(new ID(org != null ? org.getId() : null)))
@@ -426,4 +429,22 @@ public class BomToPeppol {
         }
         return null;
     }
+
+    private String getPostalAddressField(List<Contact> contacts, String fieldName) {
+        return contacts.stream()
+                .flatMap(c -> c.getContactMedium().stream())
+                .filter(cm -> "PostalAddress".equalsIgnoreCase(cm.getMediumType()))
+                .map(cm -> {
+                    switch (fieldName.toLowerCase()) {
+                        case "street": return cm.getCharacteristic().getStreet1();
+                        case "city": return cm.getCharacteristic().getCity();
+                        case "postcode": return cm.getCharacteristic().getPostCode();
+                        default: return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
 }
