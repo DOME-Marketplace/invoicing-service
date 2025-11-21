@@ -367,21 +367,56 @@ public class BomToPeppol {
     private String schemeFor(String countryCode, String identifier) {
         if (identifier == null) return null;
         String cleaned = identifier.trim();
+
+        // email
         if (cleaned.contains("@")) return "EM";
-        if (cleaned.matches("\\d{13}")) return "0088"; // GLN
+
+        // GLN (13 digits)
+        if (cleaned.matches("\\d{13}")) return "0088";
+
         if (countryCode != null) {
             switch (countryCode.trim().toUpperCase()) {
-                case "IT": return "0211";
-                case "ES": return "0060";
-                case "NO": return "0192";
-                case "SE": return "0007";
-                case "FI": return "0037";
-                case "DE": return "0088";
-                default: return "9901";
+
+                case "IT": return "0211";   
+                case "ES": return "0060";   
+                case "FR": return "0004";  
+                case "DE": return "0088";  
+                case "NL": return "0106";   
+                case "SE": return "0007";   
+                case "FI": return "0037";   
+                case "NO": return "0192"; 
+                case "DK": return "0195";   
+                case "IS": return "0088";   
+                case "BE": return "0208";  
+                case "LU": return "0177";   
+                case "PL": return "9920";
+                case "CZ": return "9952";
+                case "SK": return "9957";
+                case "HU": return "9917";
+                case "SI": return "9938";
+                case "RO": return "9911";
+                case "BG": return "9913";
+                case "EE": return "9944";
+                case "LT": return "9939";
+                case "LV": return "9937";
+                case "PT": return "9910";
+                case "GR":
+                case "EL": return "9912"; 
+                case "MT": return "9915";  
+                case "CY": return "9950";  
+                case "HR": return "9940";  
+                case "GB":
+                case "UK": return "9932"; 
+                case "CH": return "9925";  
+
+                default:
+                    return "9901"; 
             }
         }
+
         return "9901";
     }
+
 
     /**
      * If supplierId is missing and there is at least one zero-rated line, BR-O-02 applies.
