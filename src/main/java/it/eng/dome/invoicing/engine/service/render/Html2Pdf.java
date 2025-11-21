@@ -35,6 +35,6 @@ public class Html2Pdf {
         renderer.layout();
         renderer.createPDF(outputStream);
         // return html
-        return new Envelope<ByteArrayOutputStream>(outputStream, html.getName(), MediaType.APPLICATION_PDF.toString());
+        return new Envelope<ByteArrayOutputStream>(outputStream, html.getName(), "pdf");
     }
 }

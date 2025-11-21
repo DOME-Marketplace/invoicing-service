@@ -21,7 +21,7 @@ public class ZipUtils {
             int counter = 1;
 
             for (Envelope<?> env : envelopes) {
-                String name = (env.getName() != null && !env.getName().isEmpty()) ? env.getName() : "file";
+                String name = (env.getName() != null && !env.getName().isEmpty()) ? env.getName() : "inv";
                 String format = (env.getFormat() != null && !env.getFormat().isEmpty()) ? env.getFormat() : "dat";
                 String fileName = name + "-" + counter++ + "." + format;
 

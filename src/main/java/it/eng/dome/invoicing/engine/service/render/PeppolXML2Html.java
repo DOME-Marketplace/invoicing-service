@@ -57,7 +57,7 @@ public class PeppolXML2Html {
         transformer.transform(peppolXML, new StreamResult( outWriter ));
 
         // return html
-        return new Envelope<String>(outWriter.getBuffer().toString(), env.getName(), MediaType.TEXT_HTML.toString());
+        return new Envelope<String>(outWriter.getBuffer().toString(), env.getName(), "html");
     }
 
 }
