@@ -14,8 +14,6 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.springframework.http.MediaType;
-
 class ClasspathResourceURIResolver implements URIResolver {
 
     @Override

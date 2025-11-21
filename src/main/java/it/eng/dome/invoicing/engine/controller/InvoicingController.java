@@ -25,14 +25,8 @@ public class InvoicingController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(InvoicingController.class);
 
-//    @Autowired
-//    private BomService bomService;
-    
     @Autowired
     private InvoicingService invoicingService;
-
-    //@Autowired
-//    private ObjectMapper jacksonObjectMapper;
 
     @GetMapping("invoices/{billId}")
     public ResponseEntity<Resource> getInvoice(@PathVariable String billId,
