@@ -6,7 +6,6 @@ import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.BomService;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
-import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 
 @RestController
@@ -63,7 +63,7 @@ public class InvoicingController {
                         .body(xml);
             }
             else if("html".equalsIgnoreCase(format)) {
-                String html = this.invoicingService.getPeppolHTML(billId);
+                String html = this.invoicingService.getPeppolHTML(billId).getContent();
                 return ResponseEntity.ok()
                         .contentType(MediaType.TEXT_HTML)
                         .body(html);
@@ -109,6 +109,15 @@ public class InvoicingController {
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=invoices.zip")
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(resource);
+            }
+            else { 
+                String msg = "BAD REQUEST: Unsupported output format: " + format;
+                InputStreamResource res = new InputStreamResource(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(res);
+            }
+            /*
             } else {
                 // Probably no longer neeeded. To check.
                 LocalResourceRef ref = this.invoicingService.getPackagedInvoices(sellerId, buyerId, fromDate, toDate, format);
@@ -116,6 +125,7 @@ public class InvoicingController {
                 return ResponseEntity.ok()
                         .contentType(ref.getContentType()).body(new InputStreamResource(in));
             }
+            */
         } catch (ExternalServiceException e) {
             logger.error("External service error for invoices {}-{}: {}", buyerId, sellerId, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

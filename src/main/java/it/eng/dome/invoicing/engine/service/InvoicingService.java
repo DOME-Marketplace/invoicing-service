@@ -4,7 +4,7 @@ import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.render.BomToPeppol;
-import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
+import it.eng.dome.invoicing.engine.service.render.Envelope;
 import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
 import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
 
@@ -37,11 +37,13 @@ public class InvoicingService {
 
 	public InvoicingService(){}
 
+    /*
     public LocalResourceRef getPackagedInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate, String format) throws ExternalServiceException {
         List<InvoiceBom> boms = bomService.getBomsFor(buyerId, sellerId, fromDate, toDate);
         // TODO: generate the needed local resources, probably by generating first some peppol objects...
         return new LocalResourceRef();
     }
+    */
 
     private Collection<Invoice> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
         List<InvoiceBom> boms = bomService.getBomsFor(buyerId, sellerId, fromDate, toDate);
@@ -53,10 +55,10 @@ public class InvoicingService {
         return new BomToPeppol().render(bom);
     }
 
-    public String getPeppolHTML(String billId) throws Exception {
+    public Envelope<String> getPeppolHTML(String billId) throws Exception {
         Invoice invoice = this.getPeppolInvoice(billId);
-        String xml = new Peppol2XML().render(invoice);
-        String html = new PeppolXML2Html().render(xml);
+        Envelope<String> xml = new Peppol2XML().render(invoice);
+        Envelope<String> html = new PeppolXML2Html().render(xml);
         return html;
     }
 

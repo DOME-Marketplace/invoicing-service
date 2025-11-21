@@ -14,6 +14,8 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.springframework.http.MediaType;
+
 class ClasspathResourceURIResolver implements URIResolver {
 
     @Override
@@ -24,22 +26,22 @@ class ClasspathResourceURIResolver implements URIResolver {
 
 public class PeppolXML2Html {
 
-    public Collection<String> render(Collection<String> xmls) throws Exception {
-        Collection<String> out = new ArrayList<>();
-        for (String xml : xmls) {
-            out.add(this.render(xml));
+    public Collection<Envelope<String>> render(Collection<Envelope<String>> envs) throws Exception {
+        Collection<Envelope<String>> out = new ArrayList<>();
+        for (Envelope<String> env : envs) {
+            out.add(this.render(env));
         }
         return out;
     }
 
-    public String render(String xml) throws Exception {
+    public Envelope<String> render(Envelope<String> env) throws Exception {
 
         // the stylesheet
         InputStream is = getClass().getClassLoader().getResourceAsStream("xsl/html/render-billing-3.xsl");
         Source xsl = new StreamSource(is);
 
         // the peppol xml
-        Source peppolXML = new StreamSource(new StringReader(xml));
+        Source peppolXML = new StreamSource(new StringReader(env.getContent()));
 
         // the factory
         TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -55,7 +57,7 @@ public class PeppolXML2Html {
         transformer.transform(peppolXML, new StreamResult( outWriter ));
 
         // return html
-        return outWriter.getBuffer().toString();
+        return new Envelope<String>(outWriter.getBuffer().toString(), env.getName(), MediaType.TEXT_HTML.toString());
     }
 
 }
