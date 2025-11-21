@@ -9,6 +9,7 @@ import it.eng.dome.invoicing.engine.service.render.Html2Pdf;
 import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
 import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
 
+import it.eng.dome.invoicing.engine.service.utils.ZipUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,70 +71,65 @@ public class InvoicingService {
         return pdf;
     }
 
-    public String getPeppolXml(String billId) throws ExternalServiceException {
-        Invoice peppolInvoice = getPeppolInvoice(billId);
+    public Envelope<String> getPeppolXml(String billId) throws ExternalServiceException {
+        Invoice inv = getPeppolInvoice(billId);
 
-        PeppolBillingApi<Invoice> api = PeppolBillingApi.create(peppolInvoice);
-        ValidationResult result = api.validate();
-
-        if (!result.isValid()) {
-            StringBuilder sb = new StringBuilder("Validation error:\n");
-            result.errors().forEach(e -> sb.append(e).append("\n"));
-            result.warns().forEach(w -> sb.append("WARN: ").append(w).append("\n"));
-
-            logger.error("Validation errors for billId {}: {}", billId, sb);
-            throw new PeppolValidationException(sb.toString());
-        }
-
-        return api.prettyPrint();
+        Peppol2XML renderer = new Peppol2XML();
+        return renderer.render(inv);
     }
 
-    public Collection<String> getPeppolsXml (String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
-        Collection<Invoice> peppolInvoices = getPeppolInvoices(buyerId, sellerId, fromDate, toDate);
-        PeppolBillingApi<Invoice> api;
-        ValidationResult result;
-        Collection<String> out = new java.util.ArrayList<>();
-        for(Invoice inv : peppolInvoices) {
-            api = PeppolBillingApi.create(inv);
-            result = api.validate();
-            if (result.isValid()) {
-                out.add(api.prettyPrint());
-            } else {
-                // errors
-                StringBuilder sb = new StringBuilder("Validation error:\n");
-                result.errors().forEach(e -> sb.append(e).append("\n"));
-                result.warns().forEach(w -> sb.append("WARN: ").append(w).append("\n"));
-                logger.error("Peppol validation errors for invoice {}: {}", inv.getProfileID(), sb.toString());
-            }
-        }
+    public Collection<Envelope<String>> getPeppolsXml(
+            String buyerId,
+            String sellerId,
+            OffsetDateTime fromDate,
+            OffsetDateTime toDate
+    ) throws ExternalServiceException {
 
-        return out;
+        Collection<Invoice> invoices = invoices = getPeppolInvoices(buyerId, sellerId, fromDate, toDate);
+
+        Peppol2XML renderer = new Peppol2XML();
+        return renderer.render(invoices);
+    }
+
+    public Collection<Envelope<String>> getPeppolsHTML(String buyerId,
+                                           String sellerId,
+                                           OffsetDateTime fromDate,
+                                           OffsetDateTime toDate) throws Exception {
+
+        Collection<Invoice> invoices = getPeppolInvoices(buyerId, sellerId, fromDate, toDate);
+        Collection<Envelope<String>> xml = new Peppol2XML().render(invoices);
+        Collection<Envelope<String>> htmls = new PeppolXML2Html().render(xml);
+        return htmls;
+    }
+
+    public Collection<Envelope<ByteArrayOutputStream>> getPeppolsPdf(String buyerId,
+                                                         String sellerId,
+                                                         OffsetDateTime fromDate,
+                                                         OffsetDateTime toDate) throws Exception {
+        Collection<Envelope<String>> htmls = this.getPeppolsHTML(buyerId, sellerId, fromDate, toDate);
+        Collection<Envelope<ByteArrayOutputStream>> pdfs = new Html2Pdf().render(htmls);
+        return pdfs;
     }
 
     // retrieves invoices as XML, creates a ZIP archive, and returns it as an InputStreamResource
-    public InputStreamResource getInvoicesZip(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException, IOException {
-        Collection<String> peppolsXml = getPeppolsXml(buyerId, sellerId, fromDate, toDate);
-        byte[] zipBytes = createInvoicesZip(peppolsXml);
+    public InputStreamResource getInvoicesXml(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate)
+            throws ExternalServiceException, IOException {
+        return createZipResource(getPeppolsXml(buyerId, sellerId, fromDate, toDate));
+    }
+
+    public InputStreamResource getInvoicesHtml(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate)
+            throws Exception {
+        return createZipResource(getPeppolsHTML(buyerId, sellerId, fromDate, toDate));
+    }
+
+    public InputStreamResource getInvoicesPdf(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate)
+            throws Exception {
+        return createZipResource(getPeppolsPdf(buyerId, sellerId, fromDate, toDate));
+    }
+
+    private <T> InputStreamResource createZipResource(Collection<Envelope<T>> envelopes) throws IOException {
+        byte[] zipBytes = ZipUtils.createZip(envelopes);
         return new InputStreamResource(new ByteArrayInputStream(zipBytes));
     }
-
-    // to create a zip file containing multiple invoices in XML format
-    public byte[] createInvoicesZip(Collection<String> invoicesXml) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
-
-        int index = 1;
-        for (String xml : invoicesXml) {
-            ZipEntry entry = new ZipEntry("invoice_" + index + ".xml");
-            zos.putNextEntry(entry);
-            zos.write(xml.getBytes(StandardCharsets.UTF_8));
-            zos.closeEntry();
-            index++;
-        }
-
-        zos.close();
-        return baos.toByteArray();
-    }
-
 
 }

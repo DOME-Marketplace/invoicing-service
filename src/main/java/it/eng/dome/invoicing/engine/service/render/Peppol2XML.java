@@ -15,7 +15,7 @@ public class Peppol2XML {
 
     private static final Logger logger = LoggerFactory.getLogger(Peppol2XML.class);
 
-    public Collection<Envelope<String>> render(Collection<Invoice> invoices) throws Exception {
+    public Collection<Envelope<String>> render(Collection<Invoice> invoices) {
         Collection<Envelope<String>> out = new ArrayList<>();
         for (Invoice invoice : invoices) {
             out.add(this.render(invoice));
@@ -36,8 +36,6 @@ public class Peppol2XML {
             throw new PeppolValidationException(sb.toString());
         }
 
-        return new Envelope<String>(api.prettyPrint(), invoice.name(), "peppol-xml");
+        return new Envelope<String>(api.prettyPrint(), invoice.xmlRoot().id(), "xml");
     }
-
-
 }

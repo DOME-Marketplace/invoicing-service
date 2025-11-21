@@ -4,24 +4,17 @@ import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
 import it.eng.dome.invoicing.engine.service.render.Envelope;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 
@@ -38,45 +31,44 @@ public class InvoicingController {
     @Autowired
     private InvoicingService invoicingService;
 
-    @Autowired
+    //@Autowired
 //    private ObjectMapper jacksonObjectMapper;
 
     @GetMapping("invoices/{billId}")
     public ResponseEntity<Resource> getInvoice(@PathVariable String billId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
         try {
-            if (format == null || format.isEmpty() || "peppol".equalsIgnoreCase(format)
-                    || "peppol-xml".equalsIgnoreCase(format) || "xml".equalsIgnoreCase(format)) {
-                String xml = invoicingService.getPeppolXml(billId);
-                Resource resource = new ByteArrayResource(xml.getBytes());
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_XML)
-                        .body(resource);
-            }
-            else if("html".equalsIgnoreCase(format)) {
-                String html = this.invoicingService.getPeppolHTML(billId).getContent();
-                Resource resource = new ByteArrayResource(html.getBytes());
-                return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_HTML)
-                        .body(resource);
-            }
-            else if("pdf".equalsIgnoreCase(format)) {
-                Envelope<ByteArrayOutputStream> pdf = this.invoicingService.getPeppolPdf(billId);
-                ByteArrayResource resource = new ByteArrayResource(pdf.getContent().toByteArray());
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_PDF)
-                        .header(HttpHeaders.CONTENT_DISPOSITION,
-                                ContentDisposition.attachment()
-                                    .filename(pdf.getName()+".pdf")
-                                    .build().toString())
-                        .body(resource);
-            }
-            else {
-                String msg = "BAD REQUEST: Unsupported output format: " + format;
-                ByteArrayResource resource = new ByteArrayResource(msg.getBytes());
-                return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(resource);
+            String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
+            switch (fmt) {
+                case "peppol", "xml", "peppol-xml":
+                    String xml = invoicingService.getPeppolXml(billId).getContent();
+                    Resource xmlResource = new ByteArrayResource(xml.getBytes());
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.APPLICATION_XML)
+                            .body(xmlResource);
+                case "html":
+                    String html = invoicingService.getPeppolHTML(billId).getContent();
+                    Resource htmlResource = new ByteArrayResource(html.getBytes());
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.TEXT_HTML)
+                            .body(htmlResource);
+                case "pdf":
+                    Envelope<ByteArrayOutputStream> pdf = invoicingService.getPeppolPdf(billId);
+                    ByteArrayResource pdfResource = new ByteArrayResource(pdf.getContent().toByteArray());
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.APPLICATION_PDF)
+                            .header(HttpHeaders.CONTENT_DISPOSITION,
+                                    ContentDisposition.attachment()
+                                            .filename(pdf.getName() + ".pdf")
+                                            .build().toString())
+                            .body(pdfResource);
+
+                default:
+                    String msg = "BAD REQUEST: Unsupported output format: " + fmt;
+                    ByteArrayResource errorResource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(errorResource);
             }
         } catch (PeppolValidationException e) {
             logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());
@@ -106,22 +98,41 @@ public class InvoicingController {
             @RequestParam(name = "fromDate", required = false) OffsetDateTime fromDate,
             @RequestParam(name = "toDate", required = false) OffsetDateTime toDate) {
         try {
+            String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
+            InputStreamResource resource;
+            String fileName;
+            MediaType mediaType;
 
-            if (format == null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                InputStreamResource resource = invoicingService.getInvoicesZip(buyerId, sellerId, fromDate, toDate);
+            switch (fmt) {
+                case "peppol", "xml", "peppol-xml":
+                    resource = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
+                    fileName = "invoices.zip";
+                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                    break;
 
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=invoices.zip")
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                        .body(resource);
+                case "html":
+                    resource = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
+                    fileName = "invoices-html.zip"; // lo ZIP contiene tutti gli HTML
+                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                    break;
+
+                case "pdf":
+                    resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
+                    fileName = "invoices.pdf"; // se vuoi puoi anche zipparli
+                    mediaType = MediaType.APPLICATION_PDF;
+                    break;
+
+                default:
+                    String msg = "BAD REQUEST: Unsupported output format: " + fmt;
+                    resource = new InputStreamResource(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(resource);
             }
-            else { 
-                String msg = "BAD REQUEST: Unsupported output format: " + format;
-                InputStreamResource res = new InputStreamResource(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
-                return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(res);
-            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                    .contentType(mediaType)
+                    .body(resource);
             /*
             } else {
                 // Probably no longer neeeded. To check.
