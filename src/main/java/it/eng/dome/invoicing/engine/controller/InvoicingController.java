@@ -7,24 +7,18 @@ import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.BomService;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
 import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
-import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import peppol.bis.invoice3.domain.Invoice;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/invoicing")
@@ -57,14 +51,16 @@ public class InvoicingController {
     }
     
     @GetMapping("invoices/{billId}")
-    public ResponseEntity<String> getInvoice(@PathVariable String billId,  @QueryParam("format") String format) {
+    public ResponseEntity<String> getInvoice(
+            @PathVariable String billId,
+            @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
         try {
             if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                String xml = invoicingService.getXmlFromPeppol(billId);
+                String xml = invoicingService.getPeppolXml(billId);
                 return ResponseEntity.ok(xml);
             }
             else {
-                // TODO
+                // TODO: implement other formats
                 return ResponseEntity.ok("non-peppol");
             }
         } catch (PeppolValidationException e) {
@@ -88,23 +84,35 @@ public class InvoicingController {
     }
 
     @GetMapping("invoices")
-    public ResponseEntity<InputStreamResource> getInvoices(@QueryParam("sellerId") String sellerId, @QueryParam("buyerId") String buyerId, @QueryParam("format") String format, @QueryParam("fromDate") OffsetDateTime fromDate, @QueryParam("toDate") OffsetDateTime toDate) {
+    public ResponseEntity<InputStreamResource> getInvoices(
+            @RequestParam(name = "sellerId", required = false) String sellerId,
+            @RequestParam(name = "buyerId", required = false) String buyerId,
+            @RequestParam(name = "format", required = false, defaultValue = "peppol") String format,
+            @RequestParam(name = "fromDate", required = false) OffsetDateTime fromDate,
+            @RequestParam(name = "toDate", required = false) OffsetDateTime toDate) {
         try {
 
-            if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
-                Collection<Invoice> peppols = this.invoicingService.getPeppolInvoices(sellerId, buyerId, fromDate, toDate);
-                InputStream in = new ByteArrayInputStream(jacksonObjectMapper.writeValueAsBytes(peppols));
-                return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new InputStreamResource(in));
-            }
-            else {
+            if (format == null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
+                InputStreamResource resource = invoicingService.getInvoicesZip(buyerId, sellerId, fromDate, toDate);
+
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=invoices.zip")
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .body(resource);
+            } else {
                 LocalResourceRef ref = this.invoicingService.getPackagedInvoices(sellerId, buyerId, fromDate, toDate, format);
                 InputStream in = getClass().getResourceAsStream(ref.getLocation());
-                return ResponseEntity.ok().contentType(ref.getContentType()).body(new InputStreamResource(in));
+                return ResponseEntity.ok()
+                        .contentType(ref.getContentType()).body(new InputStreamResource(in));
             }
-
-        } catch (Exception e) {            
+        } catch (ExternalServiceException e) {
+            logger.error("External service error for invoices {}-{}: {}", buyerId, sellerId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .build();
+        } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 }
