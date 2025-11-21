@@ -106,20 +106,20 @@ public class InvoicingController {
             switch (fmt) {
                 case "peppol", "xml", "peppol-xml":
                     resource = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices.zip";
+                    fileName = "invoices-xml.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 case "html":
                     resource = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices-html.zip"; // lo ZIP contiene tutti gli HTML
+                    fileName = "invoices-html.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 case "pdf":
                     resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices.pdf"; // se vuoi puoi anche zipparli
-                    mediaType = MediaType.APPLICATION_PDF;
+                    fileName = "invoices-pdf.zip";
+                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 default:
