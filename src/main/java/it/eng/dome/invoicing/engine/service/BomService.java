@@ -11,9 +11,12 @@ import it.eng.dome.tmforum.tmf678.v4.ApiException;
 import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
 import it.eng.dome.tmforum.tmf678.v4.model.RelatedParty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.Map;
 @Service
 public class BomService {
 
-//	private final Logger logger = LoggerFactory.getLogger(BomService.class);
+	private final Logger logger = LoggerFactory.getLogger(BomService.class);
 
 	private final APIPartyApis partyAPI;
 	private final ProductInventoryApis productInventoryAPI;
@@ -40,12 +43,58 @@ public class BomService {
         this.accountManagementAPI = accountManagementAPI;
 	}
 
-    public List<InvoiceBom> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) {
+    public List<InvoiceBom> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
         List<InvoiceBom> out = new ArrayList<>();
-        // TODO: implement me
-        out.add(new InvoiceBom(null));
-        out.add(new InvoiceBom(null));
-        out.add(new InvoiceBom(null));
+
+        Map<String, String> filter = new HashMap<>();
+        if (buyerId != null) filter.put("relatedParty.id", buyerId); // only one filter per relatedParty.id is allowed
+        if (sellerId != null) filter.put("relatedParty.id", sellerId); // so we need to filter manually later
+        if (fromDate != null) filter.put("billDate>= ", fromDate.truncatedTo(ChronoUnit.SECONDS).toString());
+        if (toDate != null) filter.put("billDate<= ", toDate.truncatedTo(ChronoUnit.SECONDS).toString());
+
+        try {
+            List<CustomerBill> bills = this.customerBillAPI.listCustomerBills(null, 0, 100, filter);
+            logger.debug("Found {} Customer Bills between {} and {}", bills.size(), fromDate, toDate);
+
+            for (CustomerBill cb : bills) {
+                boolean include = true; // default: include the bill unless it fails a filter
+
+                // filter by buyerId if provided
+                if (buyerId != null) {
+                    include = false; // reset inclusion, must match buyer
+                    if (cb.getRelatedParty() != null) {
+                        for (RelatedParty rp : cb.getRelatedParty()) {
+                            if (buyerId.equals(rp.getId()) && "Buyer".equalsIgnoreCase(rp.getRole())) {
+                                include = true; // matched buyer
+                                break; // no need to continue checking other related parties
+                            }
+                        }
+                    }
+                }
+
+                // filter by sellerId if provided
+                if (include && sellerId != null) {
+                    include = false; // reset inclusion, must match seller
+                    if (cb.getRelatedParty() != null) {
+                        for (RelatedParty rp : cb.getRelatedParty()) {
+                            if (sellerId.equals(rp.getId()) && "Seller".equalsIgnoreCase(rp.getRole())) {
+                                include = true; // matched seller
+                                break; // no need to continue checking other related parties
+                            }
+                        }
+                    }
+                }
+
+                // add to output if passed all applicable filters
+                if (include) {
+                    out.add(getBomFor(cb.getId()));
+                }
+            }
+        } catch (ApiException e) {
+            throw new ExternalServiceException(e.getMessage(), e);
+        }
+
+        logger.debug("Retrieved {} BOMs for buyerId={} and sellerId={}", out.size(), buyerId, sellerId);
         return out;
     }
 
