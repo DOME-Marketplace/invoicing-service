@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeList xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+	<Identification>
+		<ShortName>UNCL1001</ShortName>
+		<Version></Version>
+		<CanonicalUri></CanonicalUri>
+		<CanonicalVersionUri></CanonicalVersionUri>
+	</Identification>
+	<ColumnSet>
+		<Column Id="code" Use="required">
+			<ShortName>Code</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Column Id="name" Use="optional">
+			<ShortName>Name</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Key Id="codeKey">
+			<ShortName>CodeKey</ShortName>
+			<ColumnRef Ref="code"/>
+		</Key>
+	</ColumnSet>
+	<SimpleCodeList>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>80</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debetreikningur í tengslum við vörur eða þjónustu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>82</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur fyrir þjónustunotkun</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>84</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debetreikningur í tengslum við afstemmingu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>310</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Offer / quotation</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>311</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Request for quote</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>380</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Sölureikningur</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>383</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debetreikningur</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>386</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Fyrirframgreiddur reikningur</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>393</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kröfukaupareikningur</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>395</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur fyrir sendingu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>575</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur tryggingaraðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>623</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur flutningsmiðlara</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>780</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Flutningsreikningur</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>81</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kreditnóta í tengslum við vörur eða þjónustu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>83</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kreditnóta í tengslum við afstemmingu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>381</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kreditnóta</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>396</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kröfukaupakreditnóta</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>532</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kreditnóta miðlara</SimpleValue>
+			</Value>
+		</Row>
+	</SimpleCodeList>
+</CodeList>

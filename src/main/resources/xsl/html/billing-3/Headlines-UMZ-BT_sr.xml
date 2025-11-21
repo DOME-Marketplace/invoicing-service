@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SemanticModel>
+	<BusinessTerm id="UMZ-BT-001">
+		<TermName>Faks</TermName>
+		<DisplayName>Faks</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-002">
+		<TermName>Datum perioda zaključenja</TermName>
+		<DisplayName>Datum perioda zaključenja</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-003">
+		<TermName>Trgovinski račun</TermName>
+		<DisplayName>Trgovinski račun</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-004">
+		<!-- Ove se koristi za nacionalnu registraciju, ako je potrebno pozivanje na zakon. -->
+		<TermName></TermName>
+		<DisplayName></DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-005">
+		<TermName>Opis</TermName>
+		<DisplayName>Opis</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-006">
+		<TermName>Iznos sa porezom</TermName>
+		<DisplayName>Iznos sa porezom</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-007">
+		<TermName>Valuta fakture</TermName>
+		<DisplayName>Valuta fakture</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-008">
+		<TermName>Dodatne informacije</TermName>
+		<DisplayName>Dodatne informacije</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-009">
+		<TermName>Dodatne informacije o kupcu</TermName>
+		<DisplayName>Dodatne informacije o kupcu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-010">
+		<TermName>Vrsta računa</TermName>
+		<DisplayName>Vrsta računa</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-011">
+		<TermName>Obračunski period</TermName>
+		<DisplayName>Obračunski period</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-020">
+		<TermName>Pravni naziv i adresa</TermName>
+		<DisplayName>Pravni naziv i adresa</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-026">
+		<TermName>Pravni naziv</TermName>
+		<DisplayName>Pravni naziv</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-071">
+		<TermName>Referenca na fakturu</TermName>
+		<DisplayName>Referenca na fakturu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-072">
+		<TermName>Napomene</TermName>
+		<DisplayName>Napomene</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-074">
+		<TermName>Datum isteka grejs perioda</TermName>
+		<DisplayName>Datum isteka grejs perioda</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-075">
+		<TermName>Referenca na izvorni dokument</TermName>
+		<DisplayName>Referenca na izvorni dokument</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-084">
+		<TermName>Trošak </TermName>
+		<DisplayName>Trošak </DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-085">
+		<TermName>Popust </TermName>
+		<DisplayName>Popust </DisplayName>
+	</BusinessTerm>
+
+	<!-- CREDIT NOTE TITLES -->
+	<BusinessTerm id="UMZ-BT-012">
+		<TermName>Odobreno</TermName>
+		<DisplayName>Odobreno</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-013">
+		<TermName>Informacije o rezervaciji</TermName>
+		<DisplayName>Informacije o rezervaciji</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-014">
+		<TermName>Valuta knjižnog odobrenja</TermName>
+		<DisplayName>Valuta knjižnog odobrenja</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-015">
+		<TermName>Datum izdavanja knjižnog odobrenja</TermName>
+		<DisplayName>Datum izdavanja knjižnog odobrenja</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-016">
+		<TermName>ID adrese</TermName>
+		<DisplayName>ID adrese</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-017">
+		<TermName>Broj klijenta</TermName>
+		<DisplayName>Broj klijenta</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-018">
+		<TermName>Referenca na knjižno odobrenje</TermName>
+		<DisplayName>Referenca na knjižno odobrenje</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-019">
+		<TermName>Br.</TermName>
+		<DisplayName>Br.</DisplayName>
+	</BusinessTerm>
+
+	<!-- PAYMENT NOTIFICATION TITLES -->
+	<BusinessTerm id="UMZ-BT-021">
+		<TermName>Dokument</TermName>
+		<DisplayName>Dokument</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-022">
+		<TermName>Datum uplate</TermName>
+		<DisplayName>Datum uplate</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-023">
+		<TermName>Referenca na uplatu</TermName>
+		<DisplayName>Referenca na uplatu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-024">
+		<TermName>Doznaka</TermName>
+		<DisplayName>Doznaka</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-025">
+		<TermName>Ukupno plaćeno</TermName>
+		<DisplayName>Ukupno plaćeno</DisplayName>
+	</BusinessTerm>
+
+
+	<!-- ORDER TITLES -->
+	<BusinessTerm id="UMZ-BT-027">
+		<TermName>Nalogodavac</TermName>
+		<DisplayName>Nalogodavac</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-028">
+		<TermName>Naziv</TermName>
+		<DisplayName>Naziv</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-029">
+		<TermName>Referenca na kupca</TermName>
+		<DisplayName>Referenca na kupca</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-030">
+		<TermName>Računovodstveni trošak</TermName>
+		<DisplayName>Računovodstveni trošak</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-031">
+		<TermName>Krajnji kupac</TermName>
+		<DisplayName>Krajnji kupac</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-032">
+		<TermName>Poreski identifikacioni broj poreskog zastupnika kupca</TermName>
+		<DisplayName>PIB</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-033">
+		<TermName>Serijska identifikacija artikla</TermName>
+		<DisplayName>Serijska identifikacija artikla</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-034">
+		<TermName>Informacije o seriji artikla</TermName>
+		<DisplayName>Informacije o seriji artikla</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-035">
+		<TermName>Osnovica popusta</TermName>
+		<DisplayName>Osnovica popusta</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-036">
+		<TermName>Informacije o nalogodavcu</TermName>
+		<DisplayName>Informacije o nalogodavcu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-037">
+		<TermName>Datum izdavanja</TermName>
+		<DisplayName>Datum izdavanja</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-038">
+		<TermName>Iznos porudžbenice</TermName>
+		<DisplayName>Iznos porudžbenice</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-039">
+		<TermName>Valuta porudžbenice</TermName>
+		<DisplayName>Valuta porudžbenice</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-040">
+		<TermName>Referenca specifikacije artikla</TermName>
+		<DisplayName>Referenca specifikacije artikla</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-041">
+		<TermName>Krajnji kupac</TermName>
+		<DisplayName>Krajnji kupac</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-042">
+		<TermName>Broj linija</TermName>
+		<DisplayName>Broj linija</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-043">
+		<TermName>*Jedinične cene ne uključuju PDV</TermName>
+		<DisplayName>*Jedinične cene ne uključuju PDV</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-044">
+		<TermName>Vreme izdavanja</TermName>
+		<DisplayName>Vreme izdavanja</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-045">
+		<TermName>Elektronska adresa kupca</TermName>
+		<DisplayName>Elektronska adresa kupca</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-046">
+		<TermName>Identifikator nalogodavca</TermName>
+		<DisplayName>ID</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-047">
+		<TermName>Referenca na ponudu za prodaju</TermName>
+		<DisplayName>Referenca na ponudu za prodaju</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-048">
+		<TermName>Referenca na dokument porudžbine</TermName>
+		<DisplayName>Referenca na dokument porudžbine</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-073">
+		<TermName>Rok važenja</TermName>
+		<DisplayName>Rok važenja</DisplayName>
+	</BusinessTerm>
+
+
+	<!-- INVOICE RESPONSE -->
+	<BusinessTerm id="UMZ-BT-049">
+		<TermName>Pošiljalac</TermName>
+		<DisplayName>Pošiljalac</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-050">
+		<TermName>Primalac</TermName>
+		<DisplayName>Primalac</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-051">
+		<TermName>Identifikator</TermName>
+		<DisplayName>Identifikator</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-052">
+		<TermName>Elektronska adresa</TermName>
+		<DisplayName>Elektronska adresa</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-053">
+		<TermName>Kontakt</TermName>
+		<DisplayName>Kontakt</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-054">
+		<TermName>Odgovor na dokument</TermName>
+		<DisplayName>Odgovor na dokument</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-055">
+		<TermName>Status fakture</TermName>
+		<DisplayName>Status fakture</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-056">
+		<TermName>Datum statusa</TermName>
+		<DisplayName>Datum statusa</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-057">
+		<TermName>Razlog</TermName>
+		<DisplayName>Razlog</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-058">
+		<TermName>Uslovi</TermName>
+		<DisplayName>Uslovi</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-059">
+		<TermName>Postupak</TermName>
+		<DisplayName>Postupak</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-060">
+		<TermName>Datum stupanja na snagu</TermName>
+		<DisplayName>Datum stupanja na snagu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-061">
+		<TermName>Nije naveden razlog</TermName>
+		<DisplayName>Nije naveden razlog</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-062">
+		<TermName>Nema postupka</TermName>
+		<DisplayName>Nema postupka</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-063">
+		<TermName>Dodatne informacije o pošiljaocu</TermName>
+		<DisplayName>Dodatne informacije o pošiljaocu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-064">
+		<TermName>Dodatne informacije o primaocu</TermName>
+		<DisplayName>Dodatne informacije o primaocu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-065">
+		<TermName>Primer</TermName>
+		<DisplayName>Primer</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-070">
+		<TermName>Vremenski žig odgovora</TermName>
+		<DisplayName>Vremenski žig odgovora</DisplayName>
+	</BusinessTerm>
+
+
+	<!-- QUOTATION TITLES -->
+	<BusinessTerm id="UMZ-BT-066">
+		<TermName>Referenca na zahtev za ponudu</TermName>
+		<DisplayName>Referenca na zahtev za ponudu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-067">
+		<TermName>ID linije zahteva za ponudu</TermName>
+		<DisplayName>ID linije zahteva za ponudu</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-068">
+		<TermName>Iznos ponude</TermName>
+		<DisplayName>Iznos ponude</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-069">
+		<TermName>Valuta ponude</TermName>
+		<DisplayName>Valuta ponude</DisplayName>
+	</BusinessTerm>
+	
+</SemanticModel>

@@ -55,13 +55,23 @@ public class InvoicingController {
             @PathVariable String billId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
         try {
-            if(format==null || format.isEmpty() || "peppol".equalsIgnoreCase(format)) {
+            if (format == null || format.isEmpty() || "peppol".equalsIgnoreCase(format)
+                    || "peppol-xml".equalsIgnoreCase(format) || "xml".equalsIgnoreCase(format)) {
                 String xml = invoicingService.getPeppolXml(billId);
-                return ResponseEntity.ok(xml);
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_XML)
+                        .body(xml);
+            }
+            else if("html".equalsIgnoreCase(format)) {
+                String html = this.invoicingService.getPeppolHTML(billId);
+                return ResponseEntity.ok()
+                        .contentType(MediaType.TEXT_HTML)
+                        .body(html);
             }
             else {
-                // TODO: implement other formats
-                return ResponseEntity.ok("non-peppol");
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("BAD REQUEST: Unsupported output format: " + format);
             }
         } catch (PeppolValidationException e) {
             logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());
@@ -100,6 +110,7 @@ public class InvoicingController {
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(resource);
             } else {
+                // Probably no longer neeeded. To check.
                 LocalResourceRef ref = this.invoicingService.getPackagedInvoices(sellerId, buyerId, fromDate, toDate, format);
                 InputStream in = getClass().getResourceAsStream(ref.getLocation());
                 return ResponseEntity.ok()

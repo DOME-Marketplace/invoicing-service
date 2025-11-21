@@ -5,6 +5,9 @@ import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.render.BomToPeppol;
 import it.eng.dome.invoicing.engine.service.render.LocalResourceRef;
+import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
+import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +43,21 @@ public class InvoicingService {
         return new LocalResourceRef();
     }
 
-    public Collection<Invoice> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
+    private Collection<Invoice> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
         List<InvoiceBom> boms = bomService.getBomsFor(buyerId, sellerId, fromDate, toDate);
         return new BomToPeppol().render(boms);
     }
 
-    public Invoice getPeppolInvoice(String billId) throws ExternalServiceException {
+    private Invoice getPeppolInvoice(String billId) throws ExternalServiceException {
         InvoiceBom bom = bomService.getBomFor(billId);
         return new BomToPeppol().render(bom);
+    }
+
+    public String getPeppolHTML(String billId) throws Exception {
+        Invoice invoice = this.getPeppolInvoice(billId);
+        String xml = new Peppol2XML().render(invoice);
+        String html = new PeppolXML2Html().render(xml);
+        return html;
     }
 
     public String getPeppolXml(String billId) throws ExternalServiceException {

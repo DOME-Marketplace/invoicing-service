@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeList xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+	<Identification>
+		<ShortName>UNCL4461</ShortName>
+		<Version></Version>
+		<CanonicalUri></CanonicalUri>
+		<CanonicalVersionUri></CanonicalVersionUri>
+	</Identification>
+	<ColumnSet>
+		<Column Id="code" Use="required">
+			<ShortName>Code</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Column Id="name" Use="optional">
+			<ShortName>Name</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Key Id="codeKey">
+			<ShortName>CodeKey</ShortName>
+			<ColumnRef Ref="code"/>
+		</Key>
+	</ColumnSet>
+	<SimpleCodeList>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>1</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Ekki tilgreint</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>2</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kredit sjálfvirkrar stöðustofnunarstöðvar</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>3</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debet sjálfvirkrar stöðustofnunarstöðvar</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>4</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand debit reversal</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>5</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand credit reversal</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>6</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>7</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>8</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Bið</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>9</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<!-- <SimpleValue>Krafa (greiðsluseðill)</SimpleValue> -->
+				<SimpleValue>Innlent uppgjör</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>9_issuerIS</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Krafa</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>10</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Í reiðufé</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>11</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings credit reversal</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>12</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings debit reversal</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>13</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>14</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>15</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skráning kredit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>16</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skráning debet</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>17</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand cash concentration/disbursement (CCD) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>18</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand cash concentration/disbursement (CCD) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>19</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand corporate trade payment (CTP) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>20</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Ávísun</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>21</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Bankaábyrgð</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>22</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Löggild bankaábyrgð</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>23</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Ávísun úr banka (útgefin af banka eða annarri svipaðri stofnun)</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>24</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Víxill bíður samþykkis</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>25</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Löggild ávísun</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>26</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Staðbundin ávísun</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>27</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand corporate trade payment (CTP) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>28</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand corporate trade exchange (CTX) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>29</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand corporate trade exchange (CTX) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>30</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kredit yfirfærsla</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>31</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debet yfirfærsla</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>32</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand cash concentration/disbursement plus (CCD+) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>33</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH demand cash concentration/disbursement plus (CCD+) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>34</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH prearranged payment and deposit (PPD)</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>35</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings cash concentration/disbursement (CCD) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>36</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings cash concentration/disbursement (CCD) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>37</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings corporate trade payment (CTP) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>38</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings corporate trade payment (CTP) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>39</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings corporate trade exchange (CTX) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>40</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings corporate trade exchange (CTX) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>41</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings cash concentration/disbursement plus (CCD+) credit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>42</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Millifærsla</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>43</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>ACH savings cash concentration/disbursement plus (CCD+) debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>44</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Samþykktur víxill</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>45</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Referenced home-banking credit transfer</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>46</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Interbank debit transfer</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>47</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Home-banking debit transfer</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>48</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Greiðslukort</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>49</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Beingreiðsla</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>50</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Greiðsla með póstkröfu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>51</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>FR, norme 6 97-Telereglement CFONB (French Organisation for</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>52</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Urgent commercial payment</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>53</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Urgent Treasury Payment</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>54</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Kreditkort</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>55</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Debitkort</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>56</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Gíróseðill</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>57</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skv. samningi</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>58</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Erlend millifærsla (IBAN/SEPA)</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>59</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>SEPA direct debit</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>60</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>61</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af skuldara</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>62</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af skuldara og samþykkt af banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>63</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af skuldara og samþykkt af þriðja aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>64</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>65</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af banka og samþykkt af öðrum banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>66</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af þriðja aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>67</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skuldaviðurkenning undirrituð af þriðja aðila og samþykkt af banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>68</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Greiðsluþjónusta á netinu</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>70</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn af skuldunaut á skuldara</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>74</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn af skuldunaut á banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>75</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn af skuldunaut, studdur af öðrum banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>76</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn af skuldunaut á banka og studdur af þriðja aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>77</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn af skuldunaut á þriðja aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>78</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reikningur útgefinn á þriðja aðila, samþykktur og studdur af banka</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>91</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Bankaábyrgð sem ekki er hægt að færa á milli aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>92</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Staðbundin ávísun sem ekki er hægt að færa á milli aðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>93</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Tilvísun gíróseðils</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>94</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Áríðandi gíróseðill</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>95</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Gíróseðill eftir frjálsu sniðmáti</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>96</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Umbeðin greiðsluaðferð var ekki notuð</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>97</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Færsluvísun milli samstarfsaðila</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>ZZZ</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Skv. samkomulagi</SimpleValue>
+			</Value>
+		</Row>
+	</SimpleCodeList>
+</CodeList>
