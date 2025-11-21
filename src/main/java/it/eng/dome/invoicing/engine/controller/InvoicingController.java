@@ -1,15 +1,17 @@
 package it.eng.dome.invoicing.engine.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
-import it.eng.dome.invoicing.engine.model.InvoiceBom;
-import it.eng.dome.invoicing.engine.service.BomService;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
+import it.eng.dome.invoicing.engine.service.render.Envelope;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 
@@ -27,51 +32,51 @@ public class InvoicingController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(InvoicingController.class);
 
-    @Autowired
-    private BomService bomService;
+//    @Autowired
+//    private BomService bomService;
     
     @Autowired
     private InvoicingService invoicingService;
 
     @Autowired
-    private ObjectMapper jacksonObjectMapper;
+//    private ObjectMapper jacksonObjectMapper;
 
-    @GetMapping("invoices/{billId}/dev/bom")
-    public ResponseEntity<InvoiceBom> getInvoiceBom(@PathVariable String billId) {
-        try {
-            InvoiceBom bom = bomService.getBomFor(billId);
-            return ResponseEntity.ok(bom);
-        } catch (Exception e) {            
-            logger.error("Error retrieving BOM for {}", billId);
-            logger.error(e.getLocalizedMessage(), e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
-    
     @GetMapping("invoices/{billId}")
-    public ResponseEntity<String> getInvoice(
-            @PathVariable String billId,
+    public ResponseEntity<Resource> getInvoice(@PathVariable String billId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
         try {
             if (format == null || format.isEmpty() || "peppol".equalsIgnoreCase(format)
                     || "peppol-xml".equalsIgnoreCase(format) || "xml".equalsIgnoreCase(format)) {
                 String xml = invoicingService.getPeppolXml(billId);
+                Resource resource = new ByteArrayResource(xml.getBytes());
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_XML)
-                        .body(xml);
+                        .body(resource);
             }
             else if("html".equalsIgnoreCase(format)) {
                 String html = this.invoicingService.getPeppolHTML(billId).getContent();
+                Resource resource = new ByteArrayResource(html.getBytes());
                 return ResponseEntity.ok()
                         .contentType(MediaType.TEXT_HTML)
-                        .body(html);
+                        .body(resource);
+            }
+            else if("pdf".equalsIgnoreCase(format)) {
+                Envelope<ByteArrayOutputStream> pdf = this.invoicingService.getPeppolPdf(billId);
+                ByteArrayResource resource = new ByteArrayResource(pdf.getContent().toByteArray());
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                ContentDisposition.attachment()
+                                    .filename(pdf.getName()+".pdf")
+                                    .build().toString())
+                        .body(resource);
             }
             else {
+                String msg = "BAD REQUEST: Unsupported output format: " + format;
+                ByteArrayResource resource = new ByteArrayResource(msg.getBytes());
                 return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body("BAD REQUEST: Unsupported output format: " + format);
+                    .body(resource);
             }
         } catch (PeppolValidationException e) {
             logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());

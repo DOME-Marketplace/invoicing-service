@@ -5,6 +5,7 @@ import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
 import it.eng.dome.invoicing.engine.service.render.BomToPeppol;
 import it.eng.dome.invoicing.engine.service.render.Envelope;
+import it.eng.dome.invoicing.engine.service.render.Html2Pdf;
 import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
 import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
 
@@ -20,6 +21,7 @@ import peppol.bis.invoice3.validation.ValidationResult;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -60,6 +62,12 @@ public class InvoicingService {
         Envelope<String> xml = new Peppol2XML().render(invoice);
         Envelope<String> html = new PeppolXML2Html().render(xml);
         return html;
+    }
+
+    public Envelope<ByteArrayOutputStream> getPeppolPdf(String billId) throws Exception {
+        Envelope<String> html = this.getPeppolHTML(billId);
+        Envelope<ByteArrayOutputStream> pdf = new Html2Pdf().render(html);
+        return pdf;
     }
 
     public String getPeppolXml(String billId) throws ExternalServiceException {
