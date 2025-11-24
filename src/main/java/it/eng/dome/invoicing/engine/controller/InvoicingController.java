@@ -56,7 +56,15 @@ public class InvoicingController {
                                             .filename(pdf.getName() + ".pdf")
                                             .build().toString())
                             .body(pdfResource);
-
+                case "all":
+                    Resource allResource = invoicingService.getInvoiceAllFormats(billId);
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                            .header(HttpHeaders.CONTENT_DISPOSITION,
+                                    ContentDisposition.attachment()
+                                            .filename("invoice-" + billId.substring(billId.lastIndexOf(":") + 1).replaceAll("[^A-Za-z0-9]", "") + "-all.zip")
+                                            .build().toString())
+                            .body(allResource);
                 default:
                     String msg = "BAD REQUEST: Unsupported output format: " + fmt;
                     ByteArrayResource errorResource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
@@ -96,6 +104,7 @@ public class InvoicingController {
             InputStreamResource resource;
             String fileName;
             MediaType mediaType;
+            //FIXME: change the filename with sellerId, buyerId, fromDate, toDate
 
             switch (fmt) {
                 case "peppol", "xml", "peppol-xml":
@@ -113,6 +122,12 @@ public class InvoicingController {
                 case "pdf":
                     resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
                     fileName = "invoices-pdf.zip";
+                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                    break;
+
+                case "all":
+                    resource = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
+                    fileName = "invoices-all.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 

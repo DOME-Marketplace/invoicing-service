@@ -189,7 +189,9 @@ public class BomService {
         // TODO: add POPs
         // Q: are they needed?
 
-        //FIXME: rename the second parameter to something meaningful
-        return new Envelope<>(bom, customerBillId, "BOM");
+        //FIXME: rename the invoiceId parameter to something meaningful
+        String lastPart = customerBillId.substring(customerBillId.lastIndexOf(":") + 1);
+        String invoiceId = "inv-" + lastPart.replaceAll("[^A-Za-z0-9]", "");
+        return new Envelope<>(bom, invoiceId, "bom");
     }
 }

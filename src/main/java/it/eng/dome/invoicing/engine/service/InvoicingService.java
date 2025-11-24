@@ -116,4 +116,30 @@ public class InvoicingService {
         return new InputStreamResource(new ByteArrayInputStream(zipBytes));
     }
 
+    public InputStreamResource getInvoiceAllFormats(String billId) throws Exception {
+        Envelope<String> xml = getPeppolXml(billId);
+        Envelope<String> html = getPeppolHTML(billId);
+        Envelope<ByteArrayOutputStream> pdf = getPeppolPdf(billId);
+        // Generic Envelope collection
+        Collection<Envelope<?>> all = List.of(xml, html, pdf);
+
+        byte[] zipBytes = ZipUtils.createZip(all);
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+    }
+
+    public InputStreamResource getInvoicesAll(
+            String buyerId,
+            String sellerId,
+            OffsetDateTime fromDate,
+            OffsetDateTime toDate) throws Exception {
+
+        Collection<Envelope<String>> xmls = getPeppolsXml(buyerId, sellerId, fromDate, toDate);
+        Collection<Envelope<String>> htmls = getPeppolsHTML(buyerId, sellerId, fromDate, toDate);
+        Collection<Envelope<ByteArrayOutputStream>> pdfs = getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
+
+        byte[] zipBytes = ZipUtils.zipPerInvoice(xmls, htmls, pdfs);
+
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+    }
+
 }
