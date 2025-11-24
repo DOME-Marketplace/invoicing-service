@@ -71,12 +71,14 @@ public class BomToPeppol {
     private static final int SCALE = 2;
     private static final String EXEMPTION_TEXT = "Not subject to VAT";
 
-    public Collection<Invoice> render(Collection<InvoiceBom> boms) {
-        Collection<Invoice> out = new ArrayList<>();
-        for (InvoiceBom bom : boms) {
-            out.add(this.render(bom));
-        }
-        return out;
+    public Collection<Envelope<Invoice>> render(Collection<Envelope<InvoiceBom>> envBoms) {
+        Collection<Envelope<Invoice>> out = new ArrayList<>();
+		if (envBoms != null) {
+			for (Envelope<InvoiceBom> e : envBoms) {
+				out.add(this.render(e));
+			}
+		}
+		return out;
     }
 
     /**
@@ -85,9 +87,10 @@ public class BomToPeppol {
      * @param bom input domain invoice
      * @return peppol.bis.invoice3.domain.Invoice ready to be serialized
      */
-    public Invoice render(InvoiceBom bom) {
-        if (bom == null) throw new IllegalArgumentException("InvoiceBom cannot be null");
+    public Envelope<Invoice> render(Envelope<InvoiceBom> envBom) {
+        if (envBom == null) throw new IllegalArgumentException("InvoiceBom cannot be null");
 
+        InvoiceBom bom = envBom.getContent();
         Organization supplierOrg = bom.getOrganizationWithRole("Seller");
         Organization customerOrg = bom.getOrganizationWithRole("Buyer");
         BillingAccount sellerBA = bom.getBillingAccountWithRole("Seller");
@@ -164,7 +167,7 @@ public class BomToPeppol {
             }
         }
 
-        return new Invoice(
+        Invoice invoice = new Invoice(
                 cb.getId(),
                 cb.getBillDate().toLocalDate().toString(),
                 cb.getAmountDue().getUnit(),
@@ -176,6 +179,8 @@ public class BomToPeppol {
         ).withInvoiceTypeCode(380)
          .withBuyerReference("n/a")
          .withDueDate(cb.getPaymentDueDate().toLocalDate().toString());
+        
+        return new Envelope<>(invoice, envBom.getName(), envBom.getFormat());
     }
 
     /**

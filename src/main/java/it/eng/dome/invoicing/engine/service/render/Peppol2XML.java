@@ -15,15 +15,16 @@ public class Peppol2XML {
 
     private static final Logger logger = LoggerFactory.getLogger(Peppol2XML.class);
 
-    public Collection<Envelope<String>> render(Collection<Invoice> invoices) {
-        Collection<Envelope<String>> out = new ArrayList<>();
-        for (Invoice invoice : invoices) {
-            out.add(this.render(invoice));
-        }
-        return out;
-    }
+    public Collection<Envelope<String>> render(Collection<Envelope<Invoice>> invoices) {
+		Collection<Envelope<String>> out = new ArrayList<>();
+		for (Envelope<Invoice> envInvoice : invoices) {
+			out.add(this.render(envInvoice));
+		}
+		return out;
+	}
 
-    public Envelope<String> render(Invoice invoice) {
+    public Envelope<String> render(Envelope<Invoice> envInvoice) {
+		Invoice invoice = envInvoice.getContent();
         PeppolBillingApi<Invoice> api = PeppolBillingApi.create(invoice);
         ValidationResult result = api.validate();
 
@@ -36,6 +37,6 @@ public class Peppol2XML {
             throw new PeppolValidationException(sb.toString());
         }
 
-        return new Envelope<String>(api.prettyPrint(), invoice.xmlRoot().id(), "xml");
+        return new Envelope<String>(api.prettyPrint(), envInvoice.getName(), "xml");
     }
 }

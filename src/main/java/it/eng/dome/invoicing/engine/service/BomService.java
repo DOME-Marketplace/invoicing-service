@@ -3,6 +3,7 @@ package it.eng.dome.invoicing.engine.service;
 import it.eng.dome.brokerage.api.*;
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.model.InvoiceBom;
+import it.eng.dome.invoicing.engine.service.render.Envelope;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOffering;
 import it.eng.dome.tmforum.tmf632.v4.model.Organization;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -43,8 +44,8 @@ public class BomService {
         this.accountManagementAPI = accountManagementAPI;
 	}
 
-    public List<InvoiceBom> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
-        List<InvoiceBom> out = new ArrayList<>();
+    public List<Envelope<InvoiceBom>> getBomsFor(String buyerId, String sellerId, OffsetDateTime fromDate, OffsetDateTime toDate) throws ExternalServiceException {
+    	List<Envelope<InvoiceBom>> out = new ArrayList<>();
 
         Map<String, String> filter = new HashMap<>();
         if (buyerId != null) filter.put("relatedParty.id", buyerId); // only one filter per relatedParty.id is allowed
@@ -98,7 +99,7 @@ public class BomService {
         return out;
     }
 
-    public InvoiceBom getBomFor(String customerBillId) throws ExternalServiceException {
+    public Envelope<InvoiceBom> getBomFor(String customerBillId) throws ExternalServiceException {
 
         // retrieve the customer bill...
         InvoiceBom bom = null;
@@ -188,6 +189,7 @@ public class BomService {
         // TODO: add POPs
         // Q: are they needed?
 
-        return bom;
+        //FIXME: rename the second parameter to something meaningful
+        return new Envelope<>(bom, customerBillId, "BOM");
     }
 }
