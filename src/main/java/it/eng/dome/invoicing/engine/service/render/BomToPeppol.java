@@ -61,6 +61,7 @@ import peppol.bis.invoice3.domain.TaxableAmount;
  * - If any invoice line is classified 'O' (not subject) then PartyTaxScheme (VAT CompanyID) is not added
  *   to supplier/customer to satisfy BR-O-02.
  * - Computes TaxSubtotals and TaxTotal, re-computes TaxInclusive.
+ * - Handles discounts (negative ACBR) by creating separate discount lines with negative quantity and positive price.
  *
  * This class is intentionally compact and uses a small set of helpers. It includes Javadoc on public methods.
  */
@@ -146,39 +147,20 @@ public class BomToPeppol {
         // legal totals
         LegalMonetaryTotal legal = createLegalMonetaryTotal(cb, taxTotal);
 
-        // invoice lines
+        // invoice lines - handle positive and negative (discount) amounts
         List<InvoiceLine> lines = new java.util.ArrayList<>();
+        int lineCounter = 1;
         if (bom.getAppliedCustomerBillingRates() != null) {
             for (AppliedCustomerBillingRate acbr : bom.getAppliedCustomerBillingRates()) {
-                Product product = bom.getProduct(acbr.getProduct().getId());
-                BigDecimal ratePct = BigDecimal.ZERO;
-                String taxSchemeId = "VAT";
-                if (acbr.getAppliedTax() != null && !acbr.getAppliedTax().isEmpty()) {
-                    if (acbr.getAppliedTax().get(0).getTaxRate() != null) {
-                        ratePct = toBD(acbr.getAppliedTax().get(0).getTaxRate()).multiply(BigDecimal.valueOf(100));
-                    }
-                    if (acbr.getAppliedTax().get(0).getTaxCategory() != null) {
-                        taxSchemeId = acbr.getAppliedTax().get(0).getTaxCategory();
-                    }
+                BigDecimal amount = toBD(acbr.getTaxExcludedAmount().getValue());
+
+                if (amount.compareTo(BigDecimal.ZERO) < 0) {
+                    // Discount line (negative amount)
+                    lines.add(createDiscountLine(acbr, bom, supplierId, lineCounter++));
+                } else {
+                    // Normal line (positive amount)
+                    lines.add(createNormalLine(acbr, bom, supplierId, lineCounter++));
                 }
-
-                String classified = ratePct.compareTo(BigDecimal.ZERO) > 0 ? "S" : (supplierId != null ? "Z" : "O");
-                ClassifiedTaxCategory tc = new ClassifiedTaxCategory(classified, new TaxScheme(taxSchemeId));
-                if (!"O".equals(classified)) tc.withPercent(fmtMoney(ratePct));
-                else addTaxExemptionReasonIfSupported(tc, EXEMPTION_TEXT);
-
-                Item item = new Item(product != null ? product.getName() : "Product", tc)
-                        .withSellersItemIdentification(new SellersItemIdentification(acbr.getId()));
-
-                Price price = new Price(new PriceAmount(fmtMoney(toBD(acbr.getTaxExcludedAmount().getValue())),
-                        acbr.getTaxExcludedAmount().getUnit()));
-
-                InvoiceLine line = new InvoiceLine(acbr.getId(),
-                        new InvoicedQuantity("1", "EA"),
-                        new LineExtensionAmount(fmtMoney(toBD(acbr.getTaxExcludedAmount().getValue())), acbr.getTaxExcludedAmount().getUnit()),
-                        item, price);
-
-                lines.add(line);
             }
         }
 
@@ -194,6 +176,76 @@ public class BomToPeppol {
         ).withInvoiceTypeCode(380)
          .withBuyerReference("n/a")
          .withDueDate(cb.getPaymentDueDate().toLocalDate().toString());
+    }
+
+    /**
+     * Create a normal invoice line (positive amount).
+     */
+    private InvoiceLine createNormalLine(AppliedCustomerBillingRate acbr, InvoiceBom bom, String supplierId, int lineNum) {
+        Product product = bom.getProduct(acbr.getProduct().getId());
+        BigDecimal ratePct = BigDecimal.ZERO;
+        String taxSchemeId = "VAT";
+        if (acbr.getAppliedTax() != null && !acbr.getAppliedTax().isEmpty()) {
+            if (acbr.getAppliedTax().get(0).getTaxRate() != null) {
+                ratePct = toBD(acbr.getAppliedTax().get(0).getTaxRate()).multiply(BigDecimal.valueOf(100));
+            }
+            if (acbr.getAppliedTax().get(0).getTaxCategory() != null) {
+                taxSchemeId = acbr.getAppliedTax().get(0).getTaxCategory();
+            }
+        }
+
+        String classified = ratePct.compareTo(BigDecimal.ZERO) > 0 ? "S" : (supplierId != null ? "Z" : "O");
+        ClassifiedTaxCategory tc = new ClassifiedTaxCategory(classified, new TaxScheme(taxSchemeId));
+        if (!"O".equals(classified)) tc.withPercent(fmtMoney(ratePct));
+        else addTaxExemptionReasonIfSupported(tc, EXEMPTION_TEXT);
+
+        Item item = new Item(product != null ? product.getName() : "Product", tc)
+                .withSellersItemIdentification(new SellersItemIdentification(acbr.getId()));
+
+        BigDecimal amount = toBD(acbr.getTaxExcludedAmount().getValue());
+        Price price = new Price(new PriceAmount(fmtMoney(amount), acbr.getTaxExcludedAmount().getUnit()));
+
+        return new InvoiceLine(String.valueOf(lineNum),
+                new InvoicedQuantity("1", "EA"),
+                new LineExtensionAmount(fmtMoney(amount), acbr.getTaxExcludedAmount().getUnit()),
+                item, price);
+    }
+
+    /**
+     * Create a discount line (negative quantity with positive price).
+     * Compliant with BR-27: the unit price is never negative.
+     */
+    private InvoiceLine createDiscountLine(AppliedCustomerBillingRate acbr, InvoiceBom bom, String supplierId, int lineNum) {
+        Product product = bom.getProduct(acbr.getProduct().getId());
+        BigDecimal ratePct = BigDecimal.ZERO;
+        String taxSchemeId = "VAT";
+        if (acbr.getAppliedTax() != null && !acbr.getAppliedTax().isEmpty()) {
+            if (acbr.getAppliedTax().get(0).getTaxRate() != null) {
+                ratePct = toBD(acbr.getAppliedTax().get(0).getTaxRate()).multiply(BigDecimal.valueOf(100));
+            }
+            if (acbr.getAppliedTax().get(0).getTaxCategory() != null) {
+                taxSchemeId = acbr.getAppliedTax().get(0).getTaxCategory();
+            }
+        }
+
+        String classified = ratePct.compareTo(BigDecimal.ZERO) > 0 ? "S" : (supplierId != null ? "Z" : "O");
+        ClassifiedTaxCategory tc = new ClassifiedTaxCategory(classified, new TaxScheme(taxSchemeId));
+        if (!"O".equals(classified)) tc.withPercent(fmtMoney(ratePct));
+        else addTaxExemptionReasonIfSupported(tc, EXEMPTION_TEXT);
+
+        BigDecimal discountAmount = toBD(acbr.getTaxExcludedAmount().getValue()).abs();
+        String productName = product != null ? product.getName() : "Product";
+        String discountDescription = "Discount: " + productName;
+
+        Item item = new Item(discountDescription, tc)
+                .withSellersItemIdentification(new SellersItemIdentification(acbr.getId()));
+
+        Price price = new Price(new PriceAmount(fmtMoney(discountAmount), acbr.getTaxExcludedAmount().getUnit()));
+
+        return new InvoiceLine(String.valueOf(lineNum),
+                new InvoicedQuantity("-1", "EA"),
+                new LineExtensionAmount(fmtMoney(discountAmount.negate()), acbr.getTaxExcludedAmount().getUnit()),
+                item, price);
     }
 
     // -----------------------
@@ -300,7 +352,6 @@ public class BomToPeppol {
                     if (oi == null) continue;
                     Object idVal = null;
                     try { idVal = oi.getIdentificationId(); } catch (Throwable ignore) {}
- 
 
                     if (idVal != null) {
                         String raw = idVal.toString().trim();
@@ -414,8 +465,6 @@ public class BomToPeppol {
         }
     }
 
-
-
     /**
      * If supplierId is missing and there is at least one zero-rated line, BR-O-02 applies.
      * Return true when invoice contains a zero-rated or missing-tax line AND supplierId is null.
@@ -479,5 +528,4 @@ public class BomToPeppol {
                 .findFirst()
                 .orElse(null);
     }
-
 }
