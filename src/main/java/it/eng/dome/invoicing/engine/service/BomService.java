@@ -189,9 +189,13 @@ public class BomService {
         // TODO: add POPs
         // Q: are they needed?
 
-        //FIXME: rename the invoiceId parameter to something meaningful
-        String lastPart = customerBillId.substring(customerBillId.lastIndexOf(":") + 1);
-        String invoiceId = "inv-" + lastPart.replaceAll("[^A-Za-z0-9]", "");
-        return new Envelope<>(bom, invoiceId, "bom");
+        String buyerName = bom.getOrganizationWithRole("Buyer").getTradingName();
+        String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
+        String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
+
+        String bomId = "Invoice from " + buyerName + " to " + sellerName + " on " + date;
+
+        return new Envelope<>(bom, bomId, "bom");
+
     }
 }

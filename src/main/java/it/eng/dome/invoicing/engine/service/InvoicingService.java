@@ -124,7 +124,7 @@ public class InvoicingService {
         Collection<Envelope<?>> all = List.of(xml, html, pdf);
 
         byte[] zipBytes = ZipUtils.createZip(all);
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes), xml.getName());
     }
 
     public InputStreamResource getInvoicesAll(
