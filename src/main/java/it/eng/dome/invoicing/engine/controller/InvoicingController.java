@@ -106,7 +106,6 @@ public class InvoicingController {
             InputStreamResource resource;
             String fileName;
             MediaType mediaType;
-            //FIXME: change the filename with sellerId, buyerId, fromDate, toDate
 
             switch (fmt) {
                 case "peppol", "xml", "peppol-xml":
