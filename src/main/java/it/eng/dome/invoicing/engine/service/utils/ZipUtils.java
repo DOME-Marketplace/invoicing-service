@@ -11,10 +11,28 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+
+/**
+ * Utility class for building ZIP archives from collections of {@link Envelope}.
+ * <p>
+ * Supports exporting a set of envelopes to a single ZIP file ({@link #createZip})
+ * or building a ZIP that contains one nested ZIP per invoice ({@link #zipPerInvoice}).
+ */
 public class ZipUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ZipUtils.class);
 
+
+    /**
+     * Creates a ZIP archive containing one file per provided {@link Envelope}.
+     * <p>
+     * Each entry uses the envelope name and format (e.g. <code>INV001.xml</code>).
+     * Only String and ByteArrayOutputStream contents are supported.
+     *
+     * @param envelopes the envelopes to include in the ZIP
+     * @return a byte array containing the ZIP data
+     * @throws IOException if an I/O error occurs while writing the ZIP
+     */
     public static byte[] createZip(Collection<? extends Envelope<?>> envelopes) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -75,6 +93,17 @@ public class ZipUtils {
         return baos.toByteArray();
     }
 
+    /**
+     * Builds a ZIP archive containing one nested ZIP per invoice.
+     * <p>
+     * All envelopes are grouped by their name (invoice identifier).
+     * For each group a ZIP is generated, and all resulting ZIPs are then packed
+     * into the final parent ZIP.
+     *
+     * @param collections one or more collections of envelopes (e.g. XML, HTML, PDF)
+     * @return a ZIP file containing one ZIP per invoice
+     * @throws IOException if an error occurs during ZIP creation
+     */
     @SafeVarargs
     public static byte[] zipPerInvoice(Collection<? extends Envelope<?>>... collections) throws IOException {
 
