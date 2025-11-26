@@ -7,6 +7,9 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import it.eng.dome.invoicing.engine.service.utils.NamingUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ import peppol.bis.invoice3.domain.Invoice;
 
 @Service
 public class InvoicingService {
+
+    private static final Logger log = LoggerFactory.getLogger(InvoicingService.class);
 
     @Autowired
     BomService bomService;
@@ -113,7 +118,7 @@ public class InvoicingService {
 
     private <T> InputStreamResource createZipResource(Collection<Envelope<T>> envelopes) throws IOException {
         byte[] zipBytes = ZipUtils.createZip(envelopes);
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes), NamingUtils.sanitizeFilename(NamingUtils.extractFileNameFromEnvelopes(envelopes)));
     }
 
     public InputStreamResource getInvoiceAllFormats(String billId) throws Exception {
@@ -138,8 +143,6 @@ public class InvoicingService {
         Collection<Envelope<ByteArrayOutputStream>> pdfs = getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
 
         byte[] zipBytes = ZipUtils.zipPerInvoice(xmls, htmls, pdfs);
-
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes), NamingUtils.sanitizeFilename(NamingUtils.extractFileNameFromEnvelopes(pdfs)));
     }
-
 }

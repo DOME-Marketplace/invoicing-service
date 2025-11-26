@@ -111,25 +111,37 @@ public class InvoicingController {
             switch (fmt) {
                 case "peppol", "xml", "peppol-xml":
                     resource = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices-xml.zip";
+                    fileName = resource.getDescription()
+                            .replace("InputStream resource [", "")
+                            .replace("]", "")
+                            + "-xml.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 case "html":
                     resource = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices-html.zip";
+                    fileName = resource.getDescription()
+                            .replace("InputStream resource [", "")
+                            .replace("]", "")
+                            +"-html.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 case "pdf":
                     resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices-pdf.zip";
+                    fileName = resource.getDescription()
+                            .replace("InputStream resource [", "")
+                            .replace("]", "")
+                            + "-pdf.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
                 case "all":
                     resource = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
-                    fileName = "invoices-all.zip";
+                    fileName = resource.getDescription()
+                            .replace("InputStream resource [", "")
+                            .replace("]", "")
+                            +"-all.zip";
                     mediaType = MediaType.APPLICATION_OCTET_STREAM;
                     break;
 
