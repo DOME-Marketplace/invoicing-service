@@ -36,13 +36,13 @@ public class InvoicingController {
             switch (fmt) {
                 case "peppol", "xml", "peppol-xml":
                     String xml = invoicingService.getPeppolXml(billId).getContent();
-                    Resource xmlResource = new ByteArrayResource(xml.getBytes());
+                    Resource xmlResource = new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8));
                     return ResponseEntity.ok()
                             .contentType(MediaType.APPLICATION_XML)
                             .body(xmlResource);
                 case "html":
                     String html = invoicingService.getPeppolHTML(billId).getContent();
-                    Resource htmlResource = new ByteArrayResource(html.getBytes());
+                    Resource htmlResource = new ByteArrayResource(html.getBytes(StandardCharsets.UTF_8));
                     return ResponseEntity.ok()
                             .contentType(MediaType.TEXT_HTML)
                             .body(htmlResource);

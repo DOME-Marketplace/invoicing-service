@@ -177,10 +177,50 @@ public class BomToPeppol {
                 legal,
                 lines
         ).withInvoiceTypeCode(380)
-         .withBuyerReference("n/a")
+         .withBuyerReference(customerOrg.getTradingName())
          .withDueDate(cb.getPaymentDueDate().toLocalDate().toString());
         
-        return new Envelope<>(invoice, envBom.getName(), envBom.getFormat());
+	    List<String> mandatoryNotes = new ArrayList<>();
+		
+	    if (supplierCountry != null && !supplierCountry.isBlank()) {
+	        mandatoryNotes.add("Invoice issued in " + supplierCountry);
+	    }
+	
+	    String invoiceCat = "O";
+	    if (bom.getAppliedCustomerBillingRates() != null) {
+	        for (AppliedCustomerBillingRate acbr : bom.getAppliedCustomerBillingRates()) {
+	            BigDecimal ratePct = BigDecimal.ZERO;
+	            if (acbr.getAppliedTax() != null && !acbr.getAppliedTax().isEmpty() &&
+	                acbr.getAppliedTax().get(0).getTaxRate() != null) {
+	                ratePct = toBD(acbr.getAppliedTax().get(0).getTaxRate()).multiply(BigDecimal.valueOf(100));
+	            }
+	            String lineCat = ratePct.compareTo(BigDecimal.ZERO) > 0 ? "S" : (supplierId != null ? "Z" : "O");
+	            if ("S".equals(lineCat)) {
+	                invoiceCat = "S";
+	                break;
+	            }
+	            if ("Z".equals(lineCat) && !"S".equals(invoiceCat)) {
+	                invoiceCat = "Z";
+	            }
+	        }
+	    }
+	
+	    String taxNote;
+	    switch(invoiceCat) {
+	        case "S": taxNote = "VAT applies - normal regime"; break;
+	        case "Z": taxNote = "VAT not charged - zero-rated transaction"; break;
+	        case "O": taxNote = "VAT not applicable - exempted"; break;
+	        default: taxNote = "VAT status unknown";
+	    }
+	
+	    mandatoryNotes.add(taxNote);
+	    mandatoryNotes.add("Electronic invoice compatible with PEPPOL BIS 3.0");
+
+	    String concatenatedNotes = String.join("; ", mandatoryNotes);
+	    invoice.withNote(concatenatedNotes);
+	
+	    return new Envelope<>(invoice, envBom.getName(), envBom.getFormat());
+        
     }
 
     /**
