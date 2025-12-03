@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import it.eng.dome.brokerage.api.APIPartyApis;
-import it.eng.dome.invoicing.engine.exception.InvoicingBadRelatedPartyException;
+import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.invoicing.tedb.TEDBCachedClient;
 import it.eng.dome.invoicing.tedb.TEDBClient;
 import it.eng.dome.invoicing.engine.util.countryguesser.CountryGuesser;
