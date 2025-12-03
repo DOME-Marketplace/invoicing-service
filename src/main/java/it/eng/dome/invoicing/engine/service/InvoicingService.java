@@ -7,9 +7,6 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import it.eng.dome.invoicing.engine.service.utils.NamingUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
@@ -21,6 +18,7 @@ import it.eng.dome.invoicing.engine.service.render.Envelope;
 import it.eng.dome.invoicing.engine.service.render.Html2Pdf;
 import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
 import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
+import it.eng.dome.invoicing.engine.service.utils.NamingUtils;
 import it.eng.dome.invoicing.engine.service.utils.ZipUtils;
 import peppol.bis.invoice3.domain.Invoice;
 
@@ -31,8 +29,6 @@ import peppol.bis.invoice3.domain.Invoice;
  */
 @Service
 public class InvoicingService {
-
-    private static final Logger log = LoggerFactory.getLogger(InvoicingService.class);
 
     @Autowired
     BomService bomService;
