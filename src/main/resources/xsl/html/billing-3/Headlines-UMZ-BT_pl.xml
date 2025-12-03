@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SemanticModel>
+	<BusinessTerm id="UMZ-BT-001">
+		<TermName>Fax</TermName>
+		<DisplayName>Fax</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-002">
+		<TermName>Settlement period date</TermName>
+		<DisplayName>Settlement period date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-003">
+		<TermName>Cost center</TermName>
+		<DisplayName>Cost center</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-004">
+		<TermName></TermName>
+		<DisplayName></DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-005">
+		<TermName>Description</TermName>
+		<DisplayName>Description</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-006">
+		<TermName>Tax inclusive amount&#160;</TermName>
+		<DisplayName>Tax inclusive amount&#160;</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-007">
+		<TermName>Invoice currency</TermName>
+		<DisplayName>Invoice currency</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-008">
+		<TermName>Further information</TermName>
+		<DisplayName>Further information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-009">
+		<TermName>Additional buyer's information</TermName>
+		<DisplayName>Additional buyer's information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-010">
+		<TermName>Account type</TermName>
+		<DisplayName>Account type</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-011">
+		<TermName>Invoice period</TermName>
+		<DisplayName>Invoice period</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-020">
+		<TermName>Legal name and address</TermName>
+		<DisplayName>Legal name and address</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-026">
+		<TermName>Legal name</TermName>
+		<DisplayName>Legal name</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-071">
+		<TermName>Reference to invoice</TermName>
+		<DisplayName>Reference to invoice</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-072">
+		<TermName>Notes</TermName>
+		<DisplayName>Notes</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-074">
+		<TermName>Grace date</TermName>
+		<DisplayName>Grace date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-075">
+		<TermName>Originator document ref</TermName>
+		<DisplayName>Originator document ref</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-076">
+		<TermName>Claim no.</TermName>
+		<DisplayName>Claim no.</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-077">
+		<TermName>Cat.</TermName>
+		<DisplayName>Cat.</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-078">
+		<TermName>Total invoiced amount</TermName>
+		<DisplayName>Total invoiced amount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-079">
+		<TermName>Total credit note amount</TermName>
+		<DisplayName>Total credit note amount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-080">
+		<TermName>Discount</TermName>
+		<DisplayName>Discount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-081">
+		<TermName>Charge</TermName>
+		<DisplayName>Charge</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-082">
+		<TermName>Customer discount</TermName>
+		<DisplayName>Customer discount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-083">
+		<TermName>base amount</TermName>
+		<DisplayName>base amount</DisplayName>
+	</BusinessTerm>
+
+	<!-- CREDIT NOTE TITLES -->
+	<BusinessTerm id="UMZ-BT-012">
+		<TermName>Credited</TermName>
+		<DisplayName>Credited</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-013">
+		<TermName>Booking information</TermName>
+		<DisplayName>Booking information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-014">
+		<TermName>Credit note currency</TermName>
+		<DisplayName>Credit note currency</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-015">
+		<TermName>Credit note issue date</TermName>
+		<DisplayName>Credit note issue date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-016">
+		<TermName>Address ID</TermName>
+		<DisplayName>Address ID</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-017">
+		<TermName>Client number</TermName>
+		<DisplayName>Client number</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-018">
+		<TermName>Reference to credit note</TermName>
+		<DisplayName>Reference to credit note</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-019">
+		<TermName>No.</TermName>
+		<DisplayName>No.</DisplayName>
+	</BusinessTerm>
+	
+	<!-- PAYMENT NOTIFICATION TITLES -->
+	<BusinessTerm id="UMZ-BT-021">
+		<TermName>Document</TermName>
+		<DisplayName>Document</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-022">
+		<TermName>Payment date</TermName>
+		<DisplayName>Payment date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-023">
+		<TermName>Payment reference</TermName>
+		<DisplayName>Payment reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-024">
+		<TermName>Remittance advice</TermName>
+		<DisplayName>Remittance advice</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-025">
+		<TermName>Total paid</TermName>
+		<DisplayName>Total paid</DisplayName>
+	</BusinessTerm>
+	
+
+	<!-- ORDER TITLES -->
+	<BusinessTerm id="UMZ-BT-027">
+		<TermName>Originator</TermName>
+		<DisplayName>Originator</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-028">
+		<TermName>Name</TermName>
+		<DisplayName>Name</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-029">
+		<TermName>Customer reference</TermName>
+		<DisplayName>Customer reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-030">
+		<TermName>Accounting Cost</TermName>
+		<DisplayName>Accounting Cost</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-031">
+		<TermName>Final buyer</TermName>
+		<DisplayName>Final buyer</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-032">
+		<TermName>Buyer tax representative VAT identifier</TermName>
+		<DisplayName>VAT no.</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-033">
+		<TermName>Item serial identification</TermName>
+		<DisplayName>Item serial identification</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-034">
+		<TermName>Item lot information</TermName>
+		<DisplayName>Item lot information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-035">
+		<TermName>Allowance base amount</TermName>
+		<DisplayName>Allowance base amount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-036">
+		<TermName>Originator information</TermName>
+		<DisplayName>Originator information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-037">
+		<TermName>Issue date</TermName>
+		<DisplayName>Issue date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-038">
+		<TermName>Order amount</TermName>
+		<DisplayName>Order amount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-039">
+		<TermName>Order currency</TermName>
+		<DisplayName>Order currency</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-040">
+		<TermName>Item specification reference</TermName>
+		<DisplayName>Item specification reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-041">
+		<TermName>Final buyer</TermName>
+		<DisplayName>Final buyer</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-042">
+		<TermName>Number of lines</TermName>
+		<DisplayName>Number of lines</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-043">
+		<TermName>*Unit prices exclude VAT</TermName>
+		<DisplayName>*Unit prices exclude VAT</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-044">
+		<TermName>Issue time</TermName>
+		<DisplayName>Issue time</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-045">
+		<TermName>Buyer electronic address</TermName>
+		<DisplayName>Buyer electronic address</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-046">
+		<TermName>Originator identifier</TermName>
+		<DisplayName>ID</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-047">
+		<TermName>Quotation document reference</TermName>
+		<DisplayName>Quotation document reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-048">
+		<TermName>Order document reference</TermName>
+		<DisplayName>Order document reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-073">
+		<TermName>Validity period</TermName>
+		<DisplayName>Validity period</DisplayName>
+	</BusinessTerm>
+	
+
+	<!-- QUOTATION TITLES -->
+	<BusinessTerm id="UMZ-BT-066">
+		<TermName>Quotation reference</TermName>
+		<DisplayName>Quotation reference</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-067">
+		<TermName>Request for quotation line ID</TermName>
+		<DisplayName>Request for quotation line ID</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-068">
+		<TermName>Quotation amount</TermName>
+		<DisplayName>Quotation amount</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-069">
+		<TermName>Quotation currency</TermName>
+		<DisplayName>Quotation currency</DisplayName>
+	</BusinessTerm>
+
+	<!-- INVOICE RESPONSE -->
+	<BusinessTerm id="UMZ-BT-049">
+		<TermName>Sender</TermName>
+		<DisplayName>Sender</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-050">
+		<TermName>Receiver</TermName>
+		<DisplayName>Receiver</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-051">
+		<TermName>Identifier</TermName>
+		<DisplayName>Identifier</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-052">
+		<TermName>Electronic address</TermName>
+		<DisplayName>Electronic address</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-053">
+		<TermName>Contact</TermName>
+		<DisplayName>Contact</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-054">
+		<TermName>Document response</TermName>
+		<DisplayName>Document response</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-055">
+		<TermName>Invoice status</TermName>
+		<DisplayName>Invoice status</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-056">
+		<TermName>Status date</TermName>
+		<DisplayName>Status date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-057">
+		<TermName>Reason</TermName>
+		<DisplayName>Reason</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-058">
+		<TermName>Conditions</TermName>
+		<DisplayName>Conditions</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-059">
+		<TermName>Action</TermName>
+		<DisplayName>Action</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-060">
+		<TermName>Effective date</TermName>
+		<DisplayName>Effective date</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-061">
+		<TermName>No reason specified</TermName>
+		<DisplayName>No reason specified</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-062">
+		<TermName>No action</TermName>
+		<DisplayName>No action</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-063">
+		<TermName>Additional sender's information</TermName>
+		<DisplayName>Additional sender's information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-064">
+		<TermName>Additional receiver's information</TermName>
+		<DisplayName>Additional receiver's information</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-065">
+		<TermName>Example</TermName>
+		<DisplayName>Example</DisplayName>
+	</BusinessTerm>
+	<BusinessTerm id="UMZ-BT-070">
+		<TermName>Response date timestamp</TermName>
+		<DisplayName>Response date timestamp</DisplayName>
+	</BusinessTerm>
+
+</SemanticModel>

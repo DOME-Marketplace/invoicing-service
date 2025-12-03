@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.10</version>
-        <relativePath/><!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
 
     <groupId>it.eng.dome.invoicing</groupId>
     <artifactId>service</artifactId>
 
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <name>Invoicing Service</name>
     <description>Invoicing Service</description>
 
@@ -23,6 +24,19 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -38,67 +52,73 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
-		        <exclusion>
-		            <groupId>com.vaadin.external.google</groupId>
-		            <artifactId>android-json</artifactId>
-		        </exclusion>
-		    </exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<!-- Springdoc OpenAPI dependency -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- Springdoc OpenAPI dependency -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
 
-		<!-- TMForum SDK dependencies -->
-		<!-- TMF620 Product Catalog Management -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf620-v4</artifactId>
-			<version>[2.1.0, 2.2.0)</version>
-		</dependency>
-		<!-- TMF622 Product Ordering -->
+        <!-- TMForum SDK dependencies -->
+        <!-- TMF620 Product Catalog Management -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf620-v4</artifactId>
+            <version>[2.1.0, 2.2.0)</version>
+        </dependency>
+        <!-- TMF622 Product Ordering -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf622-v4</artifactId>
             <version>[2.1.0, 2.2.0)</version>
         </dependency>
-		<!-- TMF632 API Party Management -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf632-v4</artifactId>
-			<version>[2.1.0, 2.2.0)</version>
-		</dependency>
-		<!-- TMF637 Product Inventory Management -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf637-v4</artifactId>
-			<version>[2.1.0, 2.2.0)</version>
-		</dependency>
-		<!-- TMF678 Customer Bill -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf678-v4</artifactId>
-			<version>[2.1.0, 2.2.0)</version>
-		</dependency>
-		
-		<!-- Brokerage Utils dependencies -->
-		<dependency>
-			<groupId>it.eng.dome.brokerage</groupId>
-			<artifactId>brokerage-utils</artifactId>
-			<version>[2.2.0, 2.3.0)</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
+        <!-- TMF632 API Party Management -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf632-v4</artifactId>
+            <version>[2.1.0, 2.2.0)</version>
+        </dependency>
+        <!-- TMF637 Product Inventory Management -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf637-v4</artifactId>
+            <version>[2.1.0, 2.2.0)</version>
+        </dependency>
+        <!--  TMF666 Account Management  -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf666-v4</artifactId>
+            <version>[2.1.0, 2.2.0)</version>
+        </dependency>
+        <!-- TMF678 Customer Bill -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf678-v4</artifactId>
+            <version>[2.1.0, 2.2.0)</version>
+        </dependency>
+
+        <!-- Brokerage Utils dependencies -->
+        <dependency>
+            <groupId>it.eng.dome.brokerage</groupId>
+            <artifactId>brokerage-utils</artifactId>
+            <version>[2.2.0, 2.3.0)</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -108,35 +128,60 @@
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
-		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- Spring Boot Actuator -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- Spring Boot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        
+        <!-- PEPPOL Billing 3 API -->
+        <dependency>
+            <groupId>no.digipost</groupId>
+            <artifactId>peppol-bis-billing-3-generator-api</artifactId>
+            <version>v0.5-billing-3.0.18</version>
+        </dependency>
+        <dependency>
+            <groupId>no.digipost</groupId>
+            <artifactId>peppol-bis-billing-3-generator-validation</artifactId>
+            <version>v0.5-billing-3.0.18</version>
+        </dependency>
+
+        <!-- HTML 2 PDF -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.21.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>invoicing-service</finalName>
         <plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>1.18.34</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.34</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -156,17 +201,17 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
-	    <profile>
-	        <id>generate-rest-apis</id>
-	        <activation>
-	            <activeByDefault>false</activeByDefault>
-	        </activation>
-	        <properties>
-	            <spring-boot.run.arguments>--rest_api_docs.generate_md=true</spring-boot.run.arguments>
-	        </properties>
-	    </profile>
-	</profiles>
+        <profile>
+            <id>generate-rest-apis</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <spring-boot.run.arguments>--rest_api_docs.generate_md=true</spring-boot.run.arguments>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

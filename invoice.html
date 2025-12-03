@@ -1,0 +1,1062 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>PEPPOL BIS-BILLING 3 Invoice AND CREDIT NOTE</title>
+      <style>
+                
+					* {
+						box-sizing: border-box;
+					}
+
+					body {
+						font-family: verdana, Helvetica, sans-serif;
+						font-size: 76%;
+                        margin: 1em;
+					}
+
+					p {
+						margin: 0;
+						padding: 0;
+					}
+
+                    .container {
+                        min-width: 240px;
+                        margin: 1em auto 0;
+                    }
+
+					.corner_title_center_content>h1 {
+						padding: 0;
+						margin: 0;
+						font-size: 0.8em;
+						font-weight: 700;
+					}
+
+					.corner_title_center_content>div {
+						font-family: arial, verdana, Helvetica, sans-serif;
+						text-align: center;
+						line-height: 240%;
+						font-size: 1.7em;
+					}
+
+					.blue_box {
+						border: 1px solid #A6C3D1;
+						background-color: #F4FBFE;
+						padding: 0.2em;
+						min-height: 6em;
+						margin-bottom: 0.8em;
+					}
+					.red_box {
+						border: 1px solid #CDA1B6;
+						background-color: #FEF5F9;
+						padding: 0.2em;
+						min-height: 6em;
+						margin-bottom: 0.8em;
+					}
+
+					.blue_box_no_back {
+						border: 1px solid #A6C3D1;
+						padding: 0.5em;
+					}
+
+					.red_box_no_back {
+						border: 1px solid #CDA1B6;
+						padding: 0.5em;
+					}
+
+					.text_center {
+						padding: 0.5em;
+						text-align: center;
+					}
+					.text_right {
+						text-align: right;
+                    }
+					.text_left {
+						text-align: left;
+					}                    
+
+                    .blue_title,
+                    .red_title {
+                        padding: 0.8em 0 0.4em 0.4em;
+                        text-align: left;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                    }
+                    .blue_title {
+                        color: #5f92a8;
+                    }
+                    .red_title {
+                        color: #8F5873;
+                    }
+
+                    .box_with_top_margin {
+                        margin-top: 0.3em;
+                    }
+
+                    .larger_text {
+                        font-size: 1.15em;
+                    }
+
+                    .main_header .seller {
+                        align-items: flex-end;
+                    }
+
+                    .main_header .document_details {
+						font-family: arial, verdana, Helvetica, sans-serif;
+                        justify-self: flex-end;
+                        align-self: flex-start;
+                        text-align: right;
+                    }
+
+                    .main_header .document_details h1{
+						margin: 0 0 .2em 0;
+                        font-size: 1.6em;
+                    }
+
+                    .buyer_payment_info_holder {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .buyer_payment_info_holder .blue_box {
+                        height: 80px;
+                    }
+
+                    .buyer_payment_info_holder .amount_payable .blue_box {
+                        margin-bottom: 0.3em;
+                    }
+
+                    .buyer_payment_info_holder .credit_note_buyer_payment_info_wrapper,
+                    .credit_note_buyer_payment_info_wrapper .date_holder {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .amount_payable {
+                        position: relative;
+                    }
+
+                    .credit_note_buyer_payment_info_wrapper .red_box{
+                        position: relative;
+                        height: 80px;
+                    }
+
+                    .credit_note_buyer_payment_info_wrapper .red_box .currency{
+                        position: absolute;
+                        right: 1px;
+                        bottom: -1.8em;
+                    }
+
+                    .table_header, .credit_note_table_header {
+                        font-weight: normal;
+						background-color: #F4FBFE;
+                        padding: 0.5em;
+                        border-bottom: 1px solid #A6C3D1;
+                    } 
+
+                    .table_header {
+						background-color: #F4FBFE;
+                    } 
+
+                    .credit_note_table_header {
+                        background-color: #FEF5F9;
+                    } 
+
+                    .table_body {
+                        font-weight: normal;
+                        padding: 0 0.5em;
+                    } 
+
+					.buyer_info {
+						margin: 1.2em 0 1.2em 1.2em;
+					}
+
+					.title {
+						margin: 0.1em 0 0.6em 0;
+						text-transform: capitalize;
+						font-size: 0.9em;
+					}
+
+                    .payment_table {
+                        min-height: 5em;
+                    }
+
+                    .payment_table .blue_box_no_back, 
+                    .payment_table .red_box_no_back {
+                        padding: 0;
+                        border-top: none;
+                    }
+
+					.payment_table .red_box_no_back .payment_table_header {
+                        border-top: 1px solid #CDA1B6;
+					}
+
+					.payment_table .blue_box_no_back .payment_table_header {
+                        border-top: 1px solid #A6C3D1;
+					}
+
+                    .payment_table .payment_table_header_title:last-child {
+                        margin-right: 0;
+                    }
+
+                    .payment_table .payment_table_body_data:last-of-type {
+                        margin-bottom: 1em;
+                    }
+
+                    .payment_means_code {
+                        padding: 0.5em;
+                    }
+
+                    .payment_table .payment_means_name {
+                        padding: 0.5em;
+                    }
+
+					.payment_table_header .payment_means_code {
+                        border-bottom: 1px solid #A6C3D1;
+                        border-left: 1px solid #A6C3D1;
+                        border-top: none;
+					}
+
+					.blue_box_no_back .payment_table_header .payment_means_code {
+                        border-color: #A6C3D1;
+					}
+
+					.red_box_no_back .payment_table_header .payment_means_code {
+                        border-color: #CDA1B6;
+					}
+                    
+					
+
+					.payment_table .payment_table_body .table_body {
+                        display: flex;
+                        justify-content: space-between;
+                        background: #fff;
+                        border-bottom: none;
+                        margin-top: 0.5em;
+					}
+
+					.payment_table .payment_table_body .payment_table_cell {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+					}
+                    
+					.payment_table .payment_table_body .payment_table_cell:last-of-type {
+                        text-align: right;
+					}
+					.payment_table .payment_table_body .payment_table_cell:first-of-type {
+                        text-align: left;
+					}
+
+					.payment_table .payment_table_body .payment_table_body_data {
+                        margin-bottom: 1em;
+					}
+
+                    .payment_table_row_blue {
+                        border-top: 1px solid #A6C3D1;
+                    }
+
+                    .credit_note_description {
+                        height: fit-content;
+                    }
+
+                    .items_table .blue_box_no_back, 
+                    .items_table .red_box_no_back {
+                        padding:0;
+                    }
+
+                    .items_table .items_table_body_data:first-of-type {
+                        height: 15px;
+                    }
+
+                    .items_table .items_table_body_data_name_column_header {
+                        width: 100%;
+                        margin-bottom: 0.1em;
+                    }
+
+                    
+
+                    .payable_amount {
+                        font-weight: 700;
+                    }
+
+                    .document_info_currency {
+                        text-align: right;
+                        position: absolute;
+                        right: 0;
+                    }
+
+                    .tax_amount .tax_amount_content {
+                        margin-right: 25%;
+                    }
+
+                    .divider_horizontal {
+                        display: inline-block;
+                        width: 100%;
+                        height: 0px;
+                        border-top: 1px solid #000;
+                        margin: 4px 0;
+                    }
+
+                    
+                    .items_table_body_data label,
+                    .collapse_expand_all_label {
+                        cursor:pointer;
+                    }
+                    .items_table_body_data label {
+                        position: relative;
+                        top: -1.2em;
+                    }
+
+                    .expand_arrow, .double_expand_arrow {
+                        font-size: 2.2em;
+                        font-weight: bold;
+                        display: inline-block;
+                        transition: all .3s;
+                        transform: rotate(-90deg);
+                        -webkit-transform: rotate(-90deg);
+                        -moz-transform: rotate(-90deg);
+                        -ms-transform: rotate(-90deg);
+                        -o-transform: rotate(-90deg);
+                        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+                        margin-right:5px;
+                        user-select: none;
+                        position: relative;
+                        top: 6px;
+                    }
+
+                    .double_expand_arrow {
+                        padding: 3px 3px 3px 0;
+                        box-sizing: content-box;
+                        font-size: 2em;
+                        left: -0.2em;
+                        top: 0;
+                    }
+
+                    .hide_content_input:checked + .items_table_body_holder .items_table_body_data .expand_arrow,
+                    .hide_all_content_input:checked + .items_table_header .items_table_header_title .collapse_expand_all_label .double_expand_arrow {
+                        transition: all .3s;
+                        transform: rotate(-180deg);
+                        -webkit-transform: rotate(-180deg);
+                        -moz-transform: rotate(-180deg);
+                        -ms-transform: rotate(-180deg);
+                        -o-transform: rotate(-180deg);
+                    }
+
+                    .hide_all_content_input:checked ~ .items_table_body .items_table_body_holder .items_table_body_data .expand_arrow {
+                        cursor: default;
+                        transition: all .3s;
+                        opacity: 0;
+                    }
+
+                    .hide_content {
+                        min-height: 2em; /* any arbitrary height but best at the minimum initial height you would want. */
+                        overflow: hidden;
+                        transition: all 0.3s ease;
+                    }
+
+                    .hide_content_input, .hide_all_content_input {
+                        display: none;
+                    }           
+                    
+                    .items_table_body > .hide_content_input:checked + .items_table_body_holder .items_table_body_data .hide_content,
+                    .items_table .hide_all_content_input:checked ~ .items_table_body .items_table_body_holder .items_table_body_data .hide_content {
+                        min-height: 0;
+                        height: 0;
+                        opacity: 0;
+                        display: block;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .items_table_body > .hide_content_input:checked + .items_table_body_holder + .items_table_body_small_screen_holder .document_lines_small_screen_additional_information_line .hide_content,
+                    .items_table .hide_all_content_input:checked ~ .items_table_body .items_table_body_small_screen_holder .document_lines_small_screen_additional_information_line .hide_content {
+                        min-height: 0;
+                        height: 0;
+                        opacity: 0;
+                        display: block;
+                        transition: all 0.3s ease;
+                    }
+                    
+
+                    .items_table_header_title:nth-child(1),
+                    .items_table_body_data:nth-child(1) {
+                        width: 7%;
+                    }
+                    .items_table_header_title:nth-child(2),
+                    .items_table_body_data:nth-child(2) {
+                        width: 10%;
+                    }
+                    .items_table_header_title:nth-child(3),
+                    .items_table_body_data:nth-child(3) {
+                        width: 30%;
+                    }
+                    .items_table_header_title:nth-child(4),
+                    .items_table_body_data:nth-child(4) {
+                        width: 10%;
+                    }
+                    .items_table_header_title:nth-child(5),
+                    .items_table_body_data:nth-child(5) {
+                        width: 11%;
+                    }
+                    .items_table_header_title:nth-child(6),
+                    .items_table_body_data:nth-child(6) {
+                        width: 10%;
+                    }
+                    .items_table_header_title:nth-child(7),
+                    .items_table_body_data:nth-child(7) {
+                        width: 10%;
+                    }
+                    .items_table_header_title:nth-child(8),
+                    .items_table_body_data:nth-child(8) {
+                        width: 12%;
+                    }
+
+                    .items_table_body_holder {
+                        padding: 0.3em 0.5em;
+                    }
+
+                    .items_table_body_holder:first-of-type {
+                        padding-top: 0.6em;
+                    }
+
+                    .items_table_body_holder:last-of-type {
+                        padding-bottom: 0.6em;
+                    }
+
+                    .items_table_body_small_screen_holder {
+                        display: none !important;
+                    }
+
+
+                    .tax_table .blue_box_no_back,
+                    .tax_table .red_box_no_back {
+                        padding: 0;
+                    }
+
+                    .tax_table .table_header,
+                    .tax_table .credit_note_table_header {
+                        padding: 0.5em 0;
+                    }
+
+                    .tax_table .table_body {
+                        padding: 0;
+                    }
+
+                    .tax_table .table_header .tax_table_header_title,
+                    .tax_table .credit_note_table_header .tax_table_header_title {
+                        justify-self: flex-end;
+                        padding: .5em;
+                        text-align: right;
+                    }
+
+
+                    .tax_table .table_body .table_body_data_row1 {
+                        justify-content: flex-end;
+                    }
+
+                    .tax_table .table_body .table_body_data_row2 {
+                        display: flex;
+                        justify-content: flex-end;
+                        border-top: 1px solid #A6C3D1;
+                    }
+
+                    .tax_table .table_body .tax_table_body_data {
+                        justify-self: flex-end;
+                        text-align: right;
+                        padding: .5em;
+                        margin-right: 0.2em;
+                    }
+
+
+                    .information_banner .blue_box,
+                    .information_banner .red_box {
+                        min-height:4em;
+                    }
+
+                    .information_banner .blue_box .blue_title,
+                    .information_banner .red_box .red_title {
+                        font-size:1.5em;
+                        margin:0;
+                    }
+
+                    .seller_information .seller_contact_label {
+                        display: none;
+                    }
+
+
+                    .display_on_small_screen {
+                        display: none;
+                    }
+
+                    .hide_on_small_screen {
+                        display: block !important;
+                    }
+                
+
+                
+                    .row {
+                        display: flex;
+                        page-break-inside: avoid;
+                        width: 100%;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        flex-direction: row;
+                        align-items: stretch;
+                        }
+
+                    .col-10 {
+                        width: 10%;
+                        }
+
+                    .col-25 {
+                        width: 25%;
+                        }
+
+                    .col-30 {
+                        width: 30%;
+                        }
+                        
+                    .col-33 {
+                        width: 33.333%;
+                        }
+
+                    .col-50 {
+                        width: 50%;
+                        }
+                        
+                    .col-66 {
+                        width: 66.666%;
+                        }
+
+                    .col-75 {
+                        width: 75%;
+                        }
+
+                    .col-100 {
+                        width: 100%;
+                        }
+                        
+                    .col-50.margin-right-big:only-child {
+                        width: calc(50% - 1em)
+                        }
+
+                    .col-50.margin-right-small:only-child {
+                        width: calc(50% - 0.5em)
+                        }
+
+                    .margin-right-big {
+                        margin-right: 2em;
+                        }
+
+                    .margin-right-small {
+                        margin-right: 1em;
+                        }
+
+                        .margin-right-big:last-of-type,
+                        .margin-right-small:last-of-type {
+                        margin-right: 0;
+                    }
+                    
+                    .align-center {
+                        align-items: center;
+                    }
+                    
+                
+                    
+                
+                    
+                    @media (max-width:992px) {
+
+                        .sm_screen_wrap_row {
+                            flex-wrap: wrap;
+                            margin-bottom: 2em;
+                        }
+
+                        .sm_screen_wrap_reverse_row {
+                            flex-wrap: wrap-reverse;
+                            margin-bottom: 2em;
+                        }
+
+                        .sm-col-100 {
+                            width: 100% !important;
+                        }
+
+                        .sm-col-100.margin-right-big {
+                            margin-right: 0 !important;
+                        }
+
+                        
+                        .main_header {
+                            flex-wrap: wrap-reverse;
+                        }
+                        
+                        .main_header .document_details {
+                            margin-bottom: 2em;
+                        }
+                        
+                        .main_header .seller .seller_info  {
+                            width: auto;
+                            margin-right: 2em;
+                        }
+
+                        .main_header .seller .seller_contact {
+                            width: auto;
+                        }
+                        
+
+                        
+                        .items_table_header_title:nth-child(1),
+                        .items_table_body_data:nth-child(1) {
+                            width: 7%;
+                            min-width:40px
+                        }
+                        .items_table_header_title:nth-child(2),
+                        .items_table_body_data:nth-child(2) {
+                            width: 18%;
+                            min-width:80px
+                        }
+                        .items_table_header_title:nth-child(3),
+                        .items_table_body_data:nth-child(3) {
+                            
+                            width: 30%;
+                        }
+                        .items_table_header_title:nth-child(4),
+                        .items_table_body_data:nth-child(4) {
+                            
+                            width: 0;
+                            display: none;
+                        }
+                        .items_table_header_title:nth-child(5),
+                        .items_table_body_data:nth-child(5) {
+                            
+                            width: 0;
+                            display: none;
+                        }
+                        .items_table_header_title:nth-child(6),
+                        .items_table_body_data:nth-child(6) {
+                            
+                            width: 0;
+                            display: none;
+                        }
+                        .items_table_header_title:nth-child(7),
+                        .items_table_body_data:nth-child(7) {
+                            
+                            width: 0;
+                            display: none;
+                        }
+                        .items_table_header_title:nth-child(8),
+                        .items_table_body_data:nth-child(8) {
+                            
+                            width: 45%;
+                        }
+
+                        .items_table_body_small_screen_holder {
+                            display: flex !important;
+                            padding: 0 0.5em 0.3em 0.5em;
+                        }
+
+                        .document_lines_small_screen_additional_information_line:nth-child(1) {
+                            
+                            width: 25%;
+                            min-width: 120px
+                        }
+                        .document_lines_small_screen_additional_information_line:nth-child(2) {
+                            
+                            width: 75%;
+                            padding-bottom: 0.5em;
+                        }
+
+                        
+
+                        .seller_information,
+                        .payment_table {
+                            margin-bottom: 1em;
+                        }
+                        
+                        .tax_amount .tax_amount_content {
+                            margin: 0 0 2em 0;
+                        }
+
+                        .display_on_small_screen {
+                            display: block;
+                        }
+
+                        .hide_on_small_screen {
+                            display: none !important;
+                        }
+                    }
+
+                    @media (max-width:768px) {
+
+                        .xs_screen_wrap_row {
+                            flex-wrap: wrap;
+                            margin-bottom: 2em;
+                        }
+
+                        .xs_screen_wrap_reverse_row {
+                            flex-wrap: wrap-reverse;
+                            margin-bottom: 2em;
+                        }
+
+                        .xs-col-100 {
+                            width: 100% !important;
+                        }
+
+                        .xs-col-100.margin-right-big {
+                            margin-right: 0 !important;
+                    }
+                    
+
+                    
+                    @media print {
+                        .container {
+                            width:80em;
+                        }
+                        
+                        .hide_content_input:checked + .items_table_body_holder .items_table_body_data .expand_arrow,
+                        .expand_arrow,
+                        .collapse_expand_all_label {
+                            transform: rotate(0);
+                            display: none;
+                        }
+                        .items_table_body > .hide_content_input:checked + .items_table_body_holder .items_table_body_data .hide_content,
+                        .items_table .hide_all_content_input:checked ~ .items_table_body .items_table_body_holder .items_table_body_data .hide_content {
+                            min-height: 2em; /* any arbitrary height but best at the minimum initial height you would want. */
+                            overflow: hidden;
+                            height: unset;
+                            opacity: 1;
+                        }
+                        .items_table_body_data label {
+                            top: 0;
+                        } 
+
+                        .information_banner {
+                            margin-right: 2em;
+                        }
+
+                        
+                        
+                        .main_header {
+                            flex-wrap: nowrap !important;
+                        }
+                        
+                        .main_header .document_details {
+                            margin-bottom: 0 !important;
+                        }
+                        
+
+                        
+                        .items_table {
+                            margin-right: 2em;
+                        }
+
+
+                        .items_table_header_title:nth-child(1),
+                        .items_table_body_data:nth-child(1) {
+                            width: 7%;
+                        }
+                        .items_table_header_title:nth-child(2),
+                        .items_table_body_data:nth-child(2) {
+                            width: 10%;
+                        }
+                        .items_table_header_title:nth-child(3),
+                        .items_table_body_data:nth-child(3) {
+                            width: 30%;
+                        }
+                        .items_table_header_title:nth-child(4),
+                        .items_table_body_data:nth-child(4) {
+                            width: 10%;
+                            display: block;
+                        }
+                        .items_table_header_title:nth-child(5),
+                        .items_table_body_data:nth-child(5) {
+                            width: 11%;
+                            display: block;
+                        }
+                        .items_table_header_title:nth-child(6),
+                        .items_table_body_data:nth-child(6) {
+                            width: 10%;
+                            display: block;
+                        }
+                        .items_table_header_title:nth-child(7),
+                        .items_table_body_data:nth-child(7) {
+                            width: 10%;
+                            display: block;
+                        }
+                        .items_table_header_title:nth-child(8),
+                        .items_table_body_data:nth-child(8) {
+                            width: 12%;
+                        }
+
+
+                        .items_table_body_holder > .items_table_body_data .hide_on_small_screen.item_line_additional_info {
+                            display: block !important;
+                        }
+                        
+                        .items_table_body_small_screen_holder {
+                            display: none !important;
+                        }
+                        
+
+
+                        .sm-col-100.col-50,
+                        .xs-col-100.col-50 {
+                            width: 50% !important;
+                        }
+
+                        .sm-col-100.margin-right-big,
+                        .xs-col-100.margin-right-big {
+                            margin-right: 2em !important;
+                        }
+                        
+                        .sm_screen_wrap_row,
+                        .sm_screen_wrap_reverse_row,
+                        .xs_screen_wrap_row,
+                        .xs_screen_wrap_reverse_row {
+                            flex-wrap: nowrap !important;
+                            margin-bottom: 0 !important;
+                        }
+                    }
+                    
+                
+                </style>
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   </head>
+   <body>
+      <div class="container">
+         <header class="main_header row">
+            <div class="seller col-50 sm-col-100 margin-right-big">
+               <div class="row">
+                  <div class="col-100">
+                     <p class="title">Seller: </p>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="seller_info col-50 margin-right-small">
+                     <p><b>ACME, S.L.</b><br><span class="UBLStreetName">Corso Mortara</span> 
+                        <br><span class="UBLCityName">10100 
+                           Turin,
+                           </span>ES<br>VATES-A00000001</p>
+                  </div>
+                  <div class="seller_contact col-50 margin-right-small"><br><small><b>Cost center: </b> 
+                        urn:ngsi-ld:organization:d8dcc7a3-0774-4824-b552-d05d91986565</small><br><small><b>VAT no. 
+                           </b>ESVATES-A00000001 
+                        [VAT]
+                        </small></div>
+               </div>
+            </div>
+            <div class="document_details col-50 sm-col-100 margin-right-big">
+               <h1>INVOICE 
+                  urn:ngsi-ld:customer-bill:beb50ce0-3ab9-403f-84e6-ee03c44be13b</h1><small><b>Buyer reference: </b><span>n/a</span><br></small></div>
+         </header><br><br><div class="row buyer_and_due_dates_holder sm_screen_wrap_row">
+            <div class="buyer col-50 sm-col-100 margin-right-big">
+               <div class="blue_box">
+                  <p class="title">Buyer: </p>
+                  <div class="buyer_info"><b>FICODES, S.L.</b><br><span class="UBLStreetName">street</span> 
+                     <br><span class="UBLCityName">551122 
+                        A Coruña, 
+                        </span>ES<br><span class="UBLID">VATES-B87798617</span></div>
+               </div>
+            </div>
+            <div class="buyer_payment_info_holder col-50 sm-col-100 margin-right-big">
+               <div class="row">
+                  <div class="blue_box corner_title_center_content col-50 margin-right-small">
+                     <h1>Payment due date</h1>
+                     <div>12/02/2025</div>
+                  </div>
+                  <div class="amount_payable col-50 margin-right-small">
+                     <div class="blue_box corner_title_center_content">
+                        <h1 class="text_left">Payable amount</h1>
+                        <div class="payable_amount">1,000,000.00</div>
+                     </div>
+                     <div class="document_info_currency">
+                        <div><small>Invoice currency: </small>EUR</div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-50 margin-right-small">
+                     <p class="text_left"><b><small>Issue date</small></b><br><small>09/02/2025</small><br></p>
+                     <p></p>
+                  </div>
+                  <div class="col-50 margin-right-small"></div>
+               </div>
+            </div>
+         </div><br><div class="row payment_means_and_descripton_holder sm_screen_wrap_row">
+            <div class="payment_table col-50 sm-col-100 margin-right-big">
+               <div class="blue_box_no_back">
+                  <div class="payment_table_header row">
+                     <div class="payment col-50" data-name="payment">
+                        <p class="text_center"><b>Payment means</b></p>
+                     </div>
+                     <div class="payment_means_code col-50" data-name="payment_means_code">
+                        <p>
+                           [1]
+                           Not specified</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="blue_box_no_back description col-50 sm-col-100 margin-right-big">
+               <p><small></small></p>
+               <p><small><b>Description</b></small></p><br><p><small><b>Cost center: </b> 
+                     urn:ngsi-ld:organization:e4fa0e9f-1779-49c0-9e8a-66a02bf1fe4e</small></p>
+            </div>
+         </div><br><br><div class="row">
+            <div class="col-100">
+               <div class="items_table">
+                  <div class="blue_box_no_back"><input type="checkbox" name="collapse_expand_all" class="hide_all_content_input" id="collapse_expand_all"><div class="items_table_header table_header row align-center">
+                        <div class="items_table_header_title"><label for="collapse_expand_all" class="collapse_expand_all_label"><span class="double_expand_arrow">«</span></label></div>
+                        <div class="items_table_header_title"><b>Item no.</b></div>
+                        <div class="items_table_header_title"><b>Name</b></div>
+                        <div class="items_table_header_title text_right"><b>Quantity</b></div>
+                        <div class="items_table_header_title text_right"><b>Unit amount</b></div>
+                        <div class="items_table_header_title text_right"><b>VAT</b></div>
+                        <div class="items_table_header_title text_right"><b>Amount</b></div>
+                        <div class="items_table_header_title text_right"><b>Tax inclusive amount&nbsp;<br></b></div>
+                     </div>
+                     <div class="items_table_body"><input type="checkbox" name="one" class="hide_content_input" id="urn:ngsi-ld:applied-customer-billing-rate:50640b1e-778a-4a11-8a96-af296574ffc9"><div class="items_table_body_holder row">
+                           <div class="items_table_body_data"><label class="expand_arrow_wrapper" for="urn:ngsi-ld:applied-customer-billing-rate:50640b1e-778a-4a11-8a96-af296574ffc9"><span class="expand_arrow">‹</span><span>urn:ngsi-ld:applied-customer-billing-rate:50640b1e-778a-4a11-8a96-af296574ffc9.</span></label></div>
+                           <div class="items_table_body_data">urn:ngsi-ld:applied-customer-billing-rate:50640b1e-778a-4a11-8a96-af296574ffc9</div>
+                           <div class="items_table_body_data">
+                              <div class="items_table_body_data_name_column_header">ACME (FM) subscription to DOME - 2025</div><small class="hide_content hide_on_small_screen item_line_additional_info"></small></div>
+                           <div class="items_table_body_data text_right">1.00 
+                              EA<small class="hide_content"><br>
+                                 [each]
+                                 </small></div>
+                           <div class="items_table_body_data text_right">1,000,000.00</div>
+                           <div class="items_table_body_data text_right">Z0</div>
+                           <div class="items_table_body_data text_right">1,000,000.00</div>
+                           <div class="items_table_body_data text_right">1,000,000.00</div>
+                        </div>
+                        <div class="items_table_body_small_screen_holder row">
+                           <div class="document_lines_small_screen_additional_information_line"></div>
+                           <div class="document_lines_small_screen_additional_information_line"><small class="hide_content"><b>Quantity: </b>1.00 
+                                 EA 
+                                 <small class="hide_content">
+                                    [each]
+                                    </small><br><b>Unit amount: </b>1,000,000.00<br><b>VAT: </b>Z0<br><b>Amount: </b>1,000,000.00<br></small></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div><br><div class="row sm_screen_wrap_reverse_row">
+            <div class="tax_table col-50 sm-col-100 margin-right-big">
+               <div class="blue_box_no_back">
+                  <div class="table_header row">
+                     <div class="tax_table_header_title col-10"></div>
+                     <div class="tax_table_header_title col-30"><b>Tax overview</b></div>
+                     <div class="tax_table_header_title col-30"><b>Taxable amount</b></div>
+                     <div class="tax_table_header_title col-30"><b>Tax</b></div>
+                  </div>
+                  <div class="table_body">
+                     <div class="table_body_data_row1 row">
+                        <div class="tax_table_body_data col-10">Z0</div>
+                        <div class="tax_table_body_data col-30">
+                            
+                           [0%]
+                           </div>
+                        <div class="tax_table_body_data col-30">1,000,000.00</div>
+                        <div class="tax_table_body_data col-30">0.00</div>
+                     </div>
+                     <div class="table_body_data_row2">
+                        <div class="tax_table_body_data"><b>Total tax: 0.00</b></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="tax_amount col-50 sm-col-100 margin-right-big">
+               <div class="tax_amount_content">
+                  <div class="row">
+                     <div class="col-66">
+                        <p class="text_right">Total before tax: </p>
+                     </div>
+                     <div class="col-33">
+                        <p class="text_right">1,000,000.00</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-66">
+                        <p class="text_right">Total tax: </p>
+                     </div>
+                     <div class="col-33">
+                        <p class="text_right">0.00</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-33"></div>
+                     <div class="col-66">
+                        <div class="divider_horizontal"></div>
+                     </div>
+                  </div>
+                  <div class="row larger_text">
+                     <div class="col-66">
+                        <p class="text_right"><b>Total invoiced amount: </b></p>
+                     </div>
+                     <div class="col-33">
+                        <p class="text_right"><b><small>EUR 
+                                 </small>1,000,000.00</b></p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-33"></div>
+                     <div class="col-66">
+                        <div class="divider_horizontal"></div>
+                     </div>
+                  </div>
+                  <div class="row larger_text">
+                     <div class="col-66">
+                        <p class="text_right"><b>Payable amount: </b></p>
+                     </div>
+                     <div class="col-33">
+                        <p class="text_right"><b><small>EUR 
+                                 </small>1,000,000.00</b></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div><br><div class="information_banner">
+            <div class="blue_box">
+               <h1 class="blue_title">Further information</h1>
+            </div>
+         </div>
+         <div class="row xs_screen_wrap_row">
+            <div class="delivery_location col-50 xs-col-100 margin-right-big"></div>
+            <div class="col-50 xs-col-100 margin-right-big"></div>
+         </div><br><div class="row xs_screen_wrap_row">
+            <div class="seller_information col-50 xs-col-100 margin-right-big">
+               <p class="blue_title">Additional seller's information</p>
+               <div class="blue_box_no_back"><small><b>Legal name and address: </b></small><br>ACME, S.L.<br><span class="UBLStreetName">Corso Mortara</span> 
+                  <br><span class="UBLCityName">10100 
+                     Turin, 
+                     </span>ES
+                  <div class="box_with_top_margin"><small><b>Electronic address: </b></small></div>VATES-A00000001
+                  [0060]
+                  <br><div class="box_with_top_margin">
+                     <p><small><b>VAT no.: </b></small></p>ESVATES-A00000001</div>
+                  <div class="box_with_top_margin">
+                     <p><small><b>Legal registration ID: </b></small></p>VATES-A00000001 [0060]
+                     <br><p class="box_with_top_margin"><small><b>Name: </b></small></p>ACME, S.L.<br></div>
+               </div>
+            </div>
+            <div class="buyer_information col-50 xs-col-100 margin-right-big">
+               <p class="blue_title">Additional buyer's information</p>
+               <div class="blue_box_no_back">
+                  <p><small><b>Legal name and address: </b></small></p>FICODES, S.L.<br><span class="UBLStreetName">street</span> 
+                  <br><span class="UBLCityName">551122 
+                     A Coruña, 
+                     </span>ES
+                  <div class="box_with_top_margin">
+                     <p><small><b>Electronic address: </b></small></p>VATES-B87798617
+                     [0060]
+                     </div>
+                  <div class="box_with_top_margin">
+                     <p><b><small>VAT no.: </small></b></p>ESVATES-B87798617</div>
+                  <div class="box_with_top_margin">
+                     <p><small><b>Legal registration ID: </b></small></p>VATES-B87798617 [0060]
+                     <br><p class="box_with_top_margin"><small><b>Name: </b></small></p>FICODES, S.L.<br></div>
+               </div><br></div>
+         </div><br><br><br><br><br></div>
+   </body>
+</html>

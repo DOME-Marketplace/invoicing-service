@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.invoicing.engine.rate.RateManager;
+
+import it.eng.dome.invoicing.engine.exception.InvoicingBadRelatedPartyException;
+
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
 import it.eng.dome.tmforum.tmf622.v4.model.Price;
