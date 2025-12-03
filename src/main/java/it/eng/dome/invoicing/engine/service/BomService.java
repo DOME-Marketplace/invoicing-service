@@ -102,7 +102,7 @@ public class BomService {
     public Envelope<InvoiceBom> getBomFor(String customerBillId) throws ExternalServiceException {
 
         // retrieve the customer bill...
-        InvoiceBom bom = null;
+        InvoiceBom bom;
         try {
             CustomerBill cb;
             cb = this.customerBillAPI.getCustomerBill(customerBillId, null);
@@ -164,7 +164,7 @@ public class BomService {
         // Q: which billing accounts to retrieve for those organisations?
         try {
             // add billing account (for each organization referenced within the CB)
-            HashMap<String, String> sellerFilter = new HashMap<>();
+            Map<String, String> sellerFilter = new HashMap<>();
             String sellerId = bom.getOrganizationWithRole("Seller").getId();
             sellerFilter.put("relatedParty.id", sellerId);
             List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, sellerFilter);
@@ -172,7 +172,7 @@ public class BomService {
             //FIXME: take the first one only for now
             bom.add(sellerBAs.get(0), "Seller");
 
-            HashMap<String, String> buyerFilter = new HashMap<>();
+            Map<String, String> buyerFilter = new HashMap<>();
             String buyerId = bom.getOrganizationWithRole("Buyer").getId();
             buyerFilter.put("relatedParty.id", buyerId);
             List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, buyerFilter);
