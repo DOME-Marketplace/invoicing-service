@@ -34,18 +34,31 @@ public class InvoicingController {
         try {
             String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
             switch (fmt) {
-                case "peppol", "xml", "peppol-xml":
-                    String xml = invoicingService.getPeppolXml(billId).getContent();
-                    Resource xmlResource = new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8));
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_XML)
-                            .body(xmlResource);
-                case "html":
-                    String html = invoicingService.getPeppolHTML(billId).getContent();
-                    Resource htmlResource = new ByteArrayResource(html.getBytes(StandardCharsets.UTF_8));
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.TEXT_HTML)
-                            .body(htmlResource);
+            case "peppol", "xml", "peppol-xml":
+            	Envelope<String> peppolXmlEnvelope = invoicingService.getPeppolXml(billId);
+                String xml = invoicingService.getPeppolXml(billId).getContent();
+                Resource xmlResource = new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8));
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_XML)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                ContentDisposition.attachment()
+                                        .filename(peppolXmlEnvelope.getName() + ".xml")
+                                        .build().toString())
+                        .body(xmlResource);
+
+            case "html":
+            	Envelope<String> peppolHtmlEnvelope = invoicingService.getPeppolHTML(billId);
+
+                String html = invoicingService.getPeppolHTML(billId).getContent();
+                Resource htmlResource = new ByteArrayResource(html.getBytes(StandardCharsets.UTF_8));
+                return ResponseEntity.ok()
+                        .contentType(MediaType.TEXT_HTML)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                ContentDisposition.attachment()
+                                        .filename(peppolHtmlEnvelope.getName() + ".html")
+                                        .build().toString())
+                        .body(htmlResource);
+
                 case "pdf":
                     Envelope<ByteArrayOutputStream> pdf = invoicingService.getPeppolPdf(billId);
                     ByteArrayResource pdfResource = new ByteArrayResource(pdf.getContent().toByteArray());

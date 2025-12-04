@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.2</code> :calendar: 04/12/2025
+**Improvements**
+* Implemented a feature to download invoices in XML and HTML formats.
+
 ### <code>2.0.1</code> :calendar: 03/12/2025
 **Improvements**
 * Implemented a feature that exports invoices to generate PEPPOL-compliant XML, HTML, and PDF outputs with correct filename generation.
