@@ -13,8 +13,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.exception.BadRelatedPartyException;
+import it.eng.dome.brokerage.model.Invoice;
 import it.eng.dome.invoicing.engine.rate.RateManager;
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
 import it.eng.dome.tmforum.tmf622.v4.model.OrderPrice;
@@ -64,8 +64,7 @@ public class TaxService {
 		return order;
 	}
 
-	public BillingResponseDTO applyTaxes(CustomerBill cb, List<AppliedCustomerBillingRate> acbrs)
-			throws Exception {
+	private Invoice applyTaxes(CustomerBill cb, List<AppliedCustomerBillingRate> acbrs) throws Exception{
 		
 		List<AppliedCustomerBillingRate> acbrWithTaxes=new ArrayList<AppliedCustomerBillingRate>();
 		
@@ -75,7 +74,7 @@ public class TaxService {
 		
 		this.updateCustomerBillWithTaxes(cb, acbrWithTaxes);
 		
-		return new BillingResponseDTO(cb,acbrWithTaxes);
+		return new Invoice(cb,acbrWithTaxes);
 	}
 	
 	private CustomerBill updateCustomerBillWithTaxes(@NotNull CustomerBill cb, @NotNull List<AppliedCustomerBillingRate> acbrsWithTaxes) {
@@ -115,7 +114,7 @@ public class TaxService {
 		return taxItems;
 	}
 
-	private AppliedCustomerBillingRate applyTaxes(AppliedCustomerBillingRate bill) throws Exception {
+	private AppliedCustomerBillingRate applyTaxes(AppliedCustomerBillingRate bill) throws Exception{
 
 		// retrieve the involved parties
 		List<RelatedParty> involvedParties = this.retrieveRelatedParties(bill);
@@ -368,6 +367,18 @@ public class TaxService {
 			}
 		}
 		return null;
+	}
+	
+	public List<Invoice> applyTaxes(@NotNull List<Invoice> invoices) throws Exception{
+		List<Invoice> invoicesWithTaxes=new ArrayList<Invoice>();
+		
+		for(Invoice invoice:invoices) {
+			if(invoice.getCustomerBill()!=null && invoice.getAcbrs()!=null && !invoice.getAcbrs().isEmpty())
+				invoicesWithTaxes.add(this.applyTaxes(invoice.getCustomerBill(), invoice.getAcbrs()));
+		}
+		
+		
+		return invoicesWithTaxes;
 	}
 
 }
