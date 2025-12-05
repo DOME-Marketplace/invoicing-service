@@ -2,6 +2,18 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.2</code> :calendar: 04/12/2025
+**Improvements**
+* Implemented a feature to download invoices in XML and HTML formats.
+
+### <code>2.0.1</code> :calendar: 03/12/2025
+**Improvements**
+* Implemented a feature that exports invoices to generate PEPPOL-compliant XML, HTML, and PDF outputs with correct filename generation.
+* Added filtering functionality to select invoices by seller, buyer, and date range for export.
+* Enhanced PEPPOL rendering for improved compliance and output quality.
+* Introduced consistent error handling across controller methods for validation (`PeppolValidationException`) and external service (`ExternalServiceException`) exceptions.
+* Integrated utilities to standardize filenames and package multiple invoices into ZIP archives.
+
 
 ### <code>2.0.0</code> :calendar: 17/11/2025
 **Improvements**

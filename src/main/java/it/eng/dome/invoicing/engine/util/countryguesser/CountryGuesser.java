@@ -1,5 +1,5 @@
 
-package it.eng.dome.invoicing.util.countryguesser;
+package it.eng.dome.invoicing.engine.util.countryguesser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
