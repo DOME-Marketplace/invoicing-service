@@ -2,9 +2,16 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.3</code> :calendar: 05/12/2025 (WIP)
+**Improvements**
+* Usage of the `AbstractMarkdownGenerator` class to generate `REST_APIs.md`.
+* Replace **RestTemplate** for **RestClient**.
+
+
 ### <code>2.0.2</code> :calendar: 04/12/2025
 **Improvements**
 * Implemented a feature to download invoices in XML and HTML formats.
+
 
 ### <code>2.0.1</code> :calendar: 03/12/2025
 **Improvements**

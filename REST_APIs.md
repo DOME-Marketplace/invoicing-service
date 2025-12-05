@@ -1,6 +1,6 @@
 # Invoicing Service
 
-**Version:** 2.0.0  
+**Version:** 2.0.3  
 **Description:** Swagger REST APIs for the invoicing-service software  
 
 
@@ -11,6 +11,12 @@
 |------|------|------|
 | POST | `/invoicing/previewTaxes` | previewTaxes |
 | POST | `/invoicing/applyTaxes` | applyTaxes |
+
+### invoicing-controller
+| Verb | Path | Task |
+|------|------|------|
+| GET | `/invoicing/invoices` | getInvoices |
+| GET | `/invoicing/invoices/{billId}` | getInvoice |
 
 ### Invoicing Service Controller
 | Verb | Path | Task |
