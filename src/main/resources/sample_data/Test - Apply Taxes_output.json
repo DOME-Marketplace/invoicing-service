@@ -1,0 +1,291 @@
+[
+    {
+        "customerBill": {
+            "billDate": "2025-06-19T17:14:33.213Z",
+            "billNo": "BILL-1764235967387",
+            "lastUpdate": "2025-11-27T09:32:47.387956Z",
+            "paymentDueDate": "2025-06-19T17:14:33.213Z",
+            "amountDue": {
+                "unit": "EUR",
+                "value": 100.83333
+            },
+            "billingAccount": {
+                "id": "urn:ngsi-ld:billing-account:3bf025cb-1b58-48be-b0ae-bb0967d09d3b",
+                "name": "My Billing Account"
+            },
+            "billingPeriod": {
+                "endDateTime": "2025-06-19T17:14:33.213Z",
+                "startDateTime": "2025-06-18T17:14:33.213Z"
+            },
+            "relatedParty": [
+                {
+                    "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "name": "FICODES",
+                    "role": "seller",
+                    "atReferredType": "organization"
+                },
+                {
+                    "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "name": "FICODES",
+                    "role": "buyer",
+                    "atReferredType": "organization"
+                }
+            ],
+            "remainingAmount": {
+                "unit": "EUR",
+                "value": 100.83333
+            },
+            "state": "new",
+            "taxExcludedAmount": {
+                "unit": "EUR",
+                "value": 83.33333
+            },
+            "taxIncludedAmount": {
+                "unit": "EUR",
+                "value": 100.83333
+            },
+            "taxItem": [
+                {
+                    "taxCategory": "VAT",
+                    "taxRate": 0.21,
+                    "taxAmount": {
+                        "unit": "EUR",
+                        "value": 17.499998
+                    }
+                }
+            ]
+        },
+        "acbrs": [
+            {
+                "date": "2025-06-18T17:14:33.213Z",
+                "description": "Bill for Product 'urn:ngsi-ld:product:19402bf1-0889-46e5-9f6c-6fc458be024f' in billingPeriod [{2025-06-18}-{2025-06-19}]",
+                "isBilled": true,
+                "name": "recurring-prepaid Bill",
+                "type": "recurring-prepaid",
+                "appliedTax": [
+                    {
+                        "taxCategory": "VAT",
+                        "taxRate": 0.21,
+                        "taxAmount": {
+                            "unit": "EUR",
+                            "value": 17.499998
+                        }
+                    }
+                ],
+                "billingAccount": {
+                    "id": "urn:ngsi-ld:billing-account:3bf025cb-1b58-48be-b0ae-bb0967d09d3b",
+                    "name": "My Billing Account"
+                },
+                "periodCoverage": {
+                    "endDateTime": "2025-06-19T17:14:33.213Z",
+                    "startDateTime": "2025-06-18T17:14:33.213Z"
+                },
+                "product": {
+                    "id": "urn:ngsi-ld:product:19402bf1-0889-46e5-9f6c-6fc458be024f"
+                },
+                "relatedParty": [
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "seller",
+                        "atReferredType": "organization"
+                    },
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "buyer",
+                        "atReferredType": "organization"
+                    }
+                ],
+                "taxExcludedAmount": {
+                    "unit": "EUR",
+                    "value": 83.33333
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 100.83333
+                },
+                "atSchemaLocation": "https://raw.githubusercontent.com/DOME-Marketplace/tmf-api/refs/heads/main/DOME/TrackedShareableEntity.schema.json"
+            }
+        ]
+    },
+    {
+        "customerBill": {
+            "billDate": "2024-12-30T23:15:56.9640635Z",
+            "billNo": "BILL-1764174427732",
+            "lastUpdate": "2025-11-26T16:27:07.7327373Z",
+            "paymentDueDate": "2024-12-30T23:15:56.9640635Z",
+            "amountDue": {
+                "unit": "EUR",
+                "value": 12.1
+            },
+            "billingAccount": {
+                "id": "urn:ngsi-ld:billing-account:3bf025cb-1b58-48be-b0ae-bb0967d09d3b",
+                "name": "My Billing Account"
+            },
+            "billingPeriod": {
+                "endDateTime": "2024-12-30T23:15:56.9640635Z",
+                "startDateTime": "2024-12-14T23:15:56.9640635Z"
+            },
+            "relatedParty": [
+                {
+                    "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "name": "FICODES",
+                    "role": "Seller",
+                    "atReferredType": "Individual"
+                },
+                {
+                    "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                    "name": "FICODES",
+                    "role": "Buyer",
+                    "atReferredType": "Individual"
+                }
+            ],
+            "remainingAmount": {
+                "unit": "EUR",
+                "value": 12.1
+            },
+            "state": "new",
+            "taxExcludedAmount": {
+                "unit": "EUR",
+                "value": 10.0
+            },
+            "taxIncludedAmount": {
+                "unit": "EUR",
+                "value": 12.1
+            },
+            "taxItem": [
+                {
+                    "taxCategory": "VAT",
+                    "taxRate": 0.21,
+                    "taxAmount": {
+                        "unit": "EUR",
+                        "value": 1.05
+                    }
+                },
+                {
+                    "taxCategory": "VAT",
+                    "taxRate": 0.21,
+                    "taxAmount": {
+                        "unit": "EUR",
+                        "value": 1.05
+                    }
+                }
+            ]
+        },
+        "acbrs": [
+            {
+                "date": "2024-12-17T10:04:38.983Z",
+                "description": "Bill for Product 'urn:ngsi-ld:product:33a92eeb-2b8a-4c78-81c4-97a64a7b4fac' in billingPeriod [{2024-12-08}-{2024-12-17}]",
+                "isBilled": true,
+                "name": "recurring Bill",
+                "type": "recurring",
+                "appliedTax": [
+                    {
+                        "taxCategory": "VAT",
+                        "taxRate": 0.21,
+                        "taxAmount": {
+                            "unit": "EUR",
+                            "value": 1.05
+                        }
+                    }
+                ],
+                "billingAccount": {
+                    "id": "urn:ngsi-ld:billing-account:3bf025cb-1b58-48be-b0ae-bb0967d09d3b",
+                    "name": "My Billing Account"
+                },
+                "periodCoverage": {
+                    "endDateTime": "2024-12-17T10:04:38.983Z",
+                    "startDateTime": "2024-12-08T10:04:38.983Z"
+                },
+                "product": {
+                    "id": "urn:ngsi-ld:product:33a92eeb-2b8a-4c78-81c4-97a64a7b4fac"
+                },
+                "relatedParty": [
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "Seller",
+                        "atReferredType": "Individual"
+                    },
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "Buyer",
+                        "atReferredType": "Individual"
+                    }
+                ],
+                "taxExcludedAmount": {
+                    "unit": "EUR",
+                    "value": 5.0
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 6.05
+                },
+                "atSchemaLocation": "https://raw.githubusercontent.com/DOME-Marketplace/tmf-api/refs/heads/main/DOME/TrackedShareableEntity.schema.json"
+            },
+            {
+                "date": "2024-12-27T10:04:38.983Z",
+                "description": "Bill for Product 'urn:ngsi-ld:product:33a92eeb-2b8a-4c78-81c4-97a64a7b4fac' in billingPeriod [{2024-12-18}-{2024-12-27}]",
+                "isBilled": true,
+                "name": "recurring Bill",
+                "type": "recurring",
+                "appliedTax": [
+                    {
+                        "taxCategory": "VAT",
+                        "taxRate": 0.21,
+                        "taxAmount": {
+                            "unit": "EUR",
+                            "value": 1.05
+                        }
+                    }
+                ],
+                "billingAccount": {
+                    "id": "urn:ngsi-ld:billing-account:3bf025cb-1b58-48be-b0ae-bb0967d09d3b",
+                    "name": "My Billing Account"
+                },
+                "periodCoverage": {
+                    "endDateTime": "2024-12-27T10:04:38.983Z",
+                    "startDateTime": "2024-12-18T10:04:38.983Z"
+                },
+                "product": {
+                    "id": "urn:ngsi-ld:product:33a92eeb-2b8a-4c78-81c4-97a64a7b4fac"
+                },
+                "relatedParty": [
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "Seller",
+                        "atReferredType": "Individual"
+                    },
+                    {
+                        "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+                        "name": "FICODES",
+                        "role": "Buyer",
+                        "atReferredType": "Individual"
+                    }
+                ],
+                "taxExcludedAmount": {
+                    "unit": "EUR",
+                    "value": 5.0
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 6.05
+                },
+                "atSchemaLocation": "https://raw.githubusercontent.com/DOME-Marketplace/tmf-api/refs/heads/main/DOME/TrackedShareableEntity.schema.json"
+            }
+        ]
+    }
+]
