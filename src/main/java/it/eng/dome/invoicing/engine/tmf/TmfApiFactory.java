@@ -180,7 +180,7 @@ public final class TmfApiFactory implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		
-		log.info("Revenue Engine is using the following TMForum endpoint prefix: " + tmfEndpoint);	
+		log.info("Invoicing Service is using the following TMForum endpoint prefix: " + tmfEndpoint);	
 		if (tmfEnvoy) {
 			log.info("You set the apiProxy for TMForum endpoint. No tmf_port {} can be applied", tmfPort);	
 		} else {

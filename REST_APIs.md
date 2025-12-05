@@ -12,7 +12,7 @@
 | POST | `/invoicing/previewTaxes` | previewTaxes |
 | POST | `/invoicing/applyTaxes` | applyTaxes |
 
-### invoicing-controller
+### Get Invoices Controller
 | Verb | Path | Task |
 |------|------|------|
 | GET | `/invoicing/invoices` | getInvoices |

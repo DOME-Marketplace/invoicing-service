@@ -13,6 +13,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +22,7 @@ import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping("/invoicing")
-
+@Tag(name = "Get Invoices Controller", description = "Get Invoices in XML and HTML formats")
 public class InvoicingController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(InvoicingController.class);
