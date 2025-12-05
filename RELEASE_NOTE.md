@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.3</code> :calendar: 05/12/2025
+**Improvements**
+* Updated `/invoicing/applyTaxes` REST API with payload and response a list of `Invoice`. 
+
 ### <code>2.0.2</code> :calendar: 04/12/2025
 **Improvements**
 * Implemented a feature to download invoices in XML and HTML formats.
@@ -13,7 +17,6 @@
 * Enhanced PEPPOL rendering for improved compliance and output quality.
 * Introduced consistent error handling across controller methods for validation (`PeppolValidationException`) and external service (`ExternalServiceException`) exceptions.
 * Integrated utilities to standardize filenames and package multiple invoices into ZIP archives.
-
 
 ### <code>2.0.0</code> :calendar: 17/11/2025
 **Improvements**
