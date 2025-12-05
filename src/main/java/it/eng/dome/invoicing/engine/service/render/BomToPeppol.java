@@ -558,6 +558,9 @@ public class BomToPeppol {
     }
 
     private String getPostalAddressField(List<Contact> contacts, String fieldName) {
+        if (contacts == null || contacts.isEmpty()) {
+            return "N/A";
+        }
         return contacts.stream()
                 .flatMap(c -> c.getContactMedium().stream())
                 .filter(cm -> "PostalAddress".equalsIgnoreCase(cm.getMediumType()))
