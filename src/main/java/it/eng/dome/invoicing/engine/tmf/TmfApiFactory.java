@@ -150,7 +150,7 @@ public final class TmfApiFactory implements InitializingBean {
 
 			String basePath = tmfEndpoint;
 			if (!tmfEnvoy) { // no envoy specific path
-				basePath += TMF_ENDPOINT_CONCAT_PATH + "account-management" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort;
+				basePath += TMF_ENDPOINT_CONCAT_PATH + "account" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort;
 			}
 
 			apiClientTmf666.setBasePath(basePath + "/" + tmf666AccountManagementPath);
