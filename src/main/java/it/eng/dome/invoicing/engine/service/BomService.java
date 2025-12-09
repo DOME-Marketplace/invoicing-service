@@ -193,7 +193,7 @@ public class BomService {
         String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
         String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
 
-        String bomId = "Invoice from " + buyerName + " to " + sellerName + " on " + date;
+        String bomId = "Invoice from " + sellerName + " to " + buyerName + " on " + date;
 
         return new Envelope<>(bom, bomId, "bom");
 

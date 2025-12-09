@@ -25,6 +25,7 @@ import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.exception.DefaultErrorResponse;
 import it.eng.dome.brokerage.exception.ErrorResponse;
 import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
+import it.eng.dome.brokerage.model.Invoice;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -45,29 +46,36 @@ public class CalculateTaxesController {
 	protected TaxService taxService;
 	
     /**
-     * The POST /invoicing/applyTaxes REST API is invoked to calculate the taxes that must be applied to the bill 
+     * The REST API POST /invoicing/applyTaxes is invoked to calculate the taxes that must be applied to the bill 
      * 
-     * @param dto An {@link ApplyTaxesRequestDTO} with the {@link CustomerBill} and {@link AppliedCustomerBillingRate}(s) of a {@link Product} for which the taxes must be applied
-     * @return a {@link BillingResponseDTO} containing the CustomerBill and the AppliedcustomerBillingRate updated with taxes
+     * @param invoices A list of {@link Invoice} to which the taxes must be applied
+     * @return A list of {@link Invoice} with taxes
      */
     @PostMapping(value="/applyTaxes", consumes=MediaType.APPLICATION_JSON)
-   	public ResponseEntity<?> applyTaxes(@RequestBody ApplyTaxesRequestDTO dto, HttpServletRequest request) {
+   	public ResponseEntity<?> applyTaxes(@RequestBody List<Invoice> invoices, HttpServletRequest request) {
    		try {
 
    			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
 //   			Product product = dto.getProduct();
 //   			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
 
-   			CustomerBill cb = dto.getCustomerBill();
-   			Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
+   			if(invoices!=null && !invoices.isEmpty()) {
+   				List<Invoice> invoicesWithTaxes= taxService.applyTaxes(invoices);
+   				return ResponseEntity.ok(invoicesWithTaxes);
+   			}else {
+   				return ResponseEntity.ok(invoices);
+   			}
+
+   			//CustomerBill cb = dto.getCustomerBill();
+   			//Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
    			
-   			List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
-   			Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
+   			//List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
+   			//Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
    			
    	        // 2) calculate the taxes
    			//ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
-   			BillingResponseDTO billsWithTaxes=taxService.applyTaxes(cb, bills);
-            return ResponseEntity.ok(billsWithTaxes);
+   			//BillingResponseDTO billsWithTaxes=taxService.applyTaxes(cb, bills);
+           // return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
 			logger.error("Error in applyTaxes: {}", e.getMessage());

@@ -150,7 +150,7 @@ public final class TmfApiFactory implements InitializingBean {
 
 			String basePath = tmfEndpoint;
 			if (!tmfEnvoy) { // no envoy specific path
-				basePath += TMF_ENDPOINT_CONCAT_PATH + "account-management" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort;
+				basePath += TMF_ENDPOINT_CONCAT_PATH + "account" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort;
 			}
 
 			apiClientTmf666.setBasePath(basePath + "/" + tmf666AccountManagementPath);
@@ -180,7 +180,7 @@ public final class TmfApiFactory implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		
-		log.info("Revenue Engine is using the following TMForum endpoint prefix: " + tmfEndpoint);	
+		log.info("Invoicing Service is using the following TMForum endpoint prefix: " + tmfEndpoint);	
 		if (tmfEnvoy) {
 			log.info("You set the apiProxy for TMForum endpoint. No tmf_port {} can be applied", tmfPort);	
 		} else {
