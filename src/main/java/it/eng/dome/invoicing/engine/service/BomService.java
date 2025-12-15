@@ -54,7 +54,7 @@ public class BomService {
         if (toDate != null) filter.put("billDate<= ", toDate.truncatedTo(ChronoUnit.SECONDS).toString());
 
         try {
-            List<CustomerBill> bills = this.customerBillAPI.listCustomerBills(null, 0, 100, filter);
+            List<CustomerBill> bills = this.customerBillAPI.listCustomerBills(null, 0, 1000, filter);
             logger.debug("Found {} Customer Bills between {} and {}", bills.size(), fromDate, toDate);
 
             for (CustomerBill cb : bills) {
@@ -117,7 +117,7 @@ public class BomService {
         try {
             List<AppliedCustomerBillingRate> acbrs;
             Map<String, String> filter = Map.of("bill.id", bom.getCustomerBill().getId());
-            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 5, filter);
+            acbrs = this.appliedCustomerBillingRateAPI.listAppliedCustomerBillingRates(null, 0, 1000, filter);
             for(AppliedCustomerBillingRate acbr: acbrs) {
                 bom.add(acbr);
             }
@@ -167,7 +167,7 @@ public class BomService {
             Map<String, String> sellerFilter = new HashMap<>();
             String sellerId = bom.getOrganizationWithRole("Seller").getId();
             sellerFilter.put("relatedParty.id", sellerId);
-            List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, sellerFilter);
+            List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, sellerFilter);
 //            if (sellerBAs.size() == 1
             //FIXME: take the first one only for now
             bom.add(sellerBAs.get(0), "Seller");
@@ -175,7 +175,7 @@ public class BomService {
             Map<String, String> buyerFilter = new HashMap<>();
             String buyerId = bom.getOrganizationWithRole("Buyer").getId();
             buyerFilter.put("relatedParty.id", buyerId);
-            List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 100, buyerFilter);
+            List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, buyerFilter);
 //            if (buyerBAs.size() == 1)
             //FIXME: take the first one only for now
             bom.add(buyerBAs.get(0), "Buyer");
