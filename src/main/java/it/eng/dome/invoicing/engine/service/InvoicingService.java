@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
@@ -248,6 +249,26 @@ public class InvoicingService {
         byte[] zipBytes = ZipUtils.createZip(all);
         return new InputStreamResource(new ByteArrayInputStream(zipBytes), xml.getName());
     }
+    
+    /**
+     * returns a ZIP containing a single invoice in XML and HTML formats.
+     * @param billId
+     * @return Resource	
+     */
+	public Resource getInvoiceXmlAndHtmlFormats(String billId) {
+
+		try {
+			Envelope<String> xml = getPeppolXml(billId);
+			Envelope<String> html = getPeppolHTML(billId);
+			// Generic Envelope collection
+			Collection<Envelope<?>> all = List.of(xml, html);
+
+			byte[] zipBytes = ZipUtils.createZip(all);
+			return new InputStreamResource(new ByteArrayInputStream(zipBytes), xml.getName());
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get invoice in XML and HTML formats for billId: " + billId, e);
+		}
+	}
 
     /**
      * Returns a ZIP containing all invoices for a buyer and seller, with each invoice in XML, HTML, PDF.
@@ -272,4 +293,6 @@ public class InvoicingService {
         byte[] zipBytes = ZipUtils.zipPerInvoice(xmls, htmls, pdfs);
         return new InputStreamResource(new ByteArrayInputStream(zipBytes), NamingUtils.sanitizeFilename(NamingUtils.extractFileNameFromEnvelopes(pdfs)));
     }
+
+
 }
