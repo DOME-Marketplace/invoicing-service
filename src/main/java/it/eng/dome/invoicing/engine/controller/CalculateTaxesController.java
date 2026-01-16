@@ -24,7 +24,6 @@ import it.eng.dome.brokerage.api.ProductInventoryApis;
 import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.exception.DefaultErrorResponse;
 import it.eng.dome.brokerage.exception.ErrorResponse;
-import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.brokerage.model.Invoice;
 import it.eng.dome.invoicing.engine.service.TaxService;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;

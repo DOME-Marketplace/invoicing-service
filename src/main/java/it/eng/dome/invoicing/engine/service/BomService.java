@@ -92,6 +92,7 @@ public class BomService {
                 }
             }
         } catch (ApiException e) {
+        	logger.error("Error retrieving Customer Bills: {}", e.getMessage());
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
@@ -109,6 +110,7 @@ public class BomService {
             // ...and create the bom
             bom = new InvoiceBom(cb);
         } catch (ApiException e) {
+        	logger.error("Error retrieving Customer Bill with id {}: {}", customerBillId, e.getMessage());
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
@@ -161,28 +163,33 @@ public class BomService {
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
-        // Q: which billing accounts to retrieve for those organisations?
         try {
             // add billing account (for each organization referenced within the CB)
             Map<String, String> sellerFilter = new HashMap<>();
             String sellerId = bom.getOrganizationWithRole("Seller").getId();
             sellerFilter.put("relatedParty.id", sellerId);
             List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, sellerFilter);
-//            if (sellerBAs.size() == 1
             //FIXME: take the first one only for now
             bom.add(sellerBAs.get(0), "Seller");
+            if (sellerBAs.size() == 0) {
+				logger.warn("No Billing Account found for Seller with id {}", sellerId);
+			}
+            
 
             Map<String, String> buyerFilter = new HashMap<>();
             String buyerId = bom.getOrganizationWithRole("Buyer").getId();
             buyerFilter.put("relatedParty.id", buyerId);
             List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, buyerFilter);
-//            if (buyerBAs.size() == 1)
             //FIXME: take the first one only for now
             bom.add(buyerBAs.get(0), "Buyer");
+            if (buyerBAs.size() == 0) {	
+            	logger.warn("No Billing Account found for Buyer with id {}", buyerId);
+            }
 
            /*BillingAccount buyerBA = this.accountManagementAPI.getBillingAccount(bom.getCustomerBill().getBillingAccount().getId(), null);
            bom.add(buyerBA, "Buyer");*/
         } catch (it.eng.dome.tmforum.tmf666.v4.ApiException e) {
+        	logger.error("Error retrieving Billing Account: {}", e.getMessage());
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
