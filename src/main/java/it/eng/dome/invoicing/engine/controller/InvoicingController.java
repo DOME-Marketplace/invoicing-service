@@ -71,6 +71,19 @@ public class InvoicingController {
                                             .filename(pdf.getName() + ".pdf")
                                             .build().toString())
                             .body(pdfResource);
+                    
+                case "xml-html":
+					Resource xmlHtmlResource = invoicingService.getInvoiceXmlAndHtmlFormats(billId);
+
+					return ResponseEntity.ok()
+							.contentType(MediaType.APPLICATION_OCTET_STREAM)
+							.header(HttpHeaders.CONTENT_DISPOSITION,
+									ContentDisposition.attachment()
+											.filename(xmlHtmlResource.getDescription().replace("InputStream resource [", "")
+												    .replace("]", "") +".zip")
+											.build().toString())
+							.body(xmlHtmlResource);
+					
                 case "all":
                     Resource allResource = invoicingService.getInvoiceAllFormats(billId);
                                                            
@@ -82,6 +95,7 @@ public class InvoicingController {
                                             	    .replace("]", "") +".zip")
                                             .build().toString())
                             .body(allResource);
+                    
                 default:
                     String msg = "BAD REQUEST: Unsupported output format: " + fmt;
                     ByteArrayResource errorResource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
