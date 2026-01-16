@@ -169,22 +169,28 @@ public class BomService {
             String sellerId = bom.getOrganizationWithRole("Seller").getId();
             sellerFilter.put("relatedParty.id", sellerId);
             List<BillingAccount> sellerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, sellerFilter);
-            //FIXME: take the first one only for now
             bom.add(sellerBAs.get(0), "Seller");
-            if (sellerBAs.size() == 0) {
-				logger.warn("No Billing Account found for Seller with id {}", sellerId);
-			}
+            if (sellerBAs.isEmpty()) {
+                logger.warn("No Billing Account found for Seller with id {}", sellerId);
+            } else {
+                // FIXME: take the first one only for now
+                bom.add(sellerBAs.get(0), "Seller");
+            }
+
             
 
             Map<String, String> buyerFilter = new HashMap<>();
             String buyerId = bom.getOrganizationWithRole("Buyer").getId();
             buyerFilter.put("relatedParty.id", buyerId);
             List<BillingAccount> buyerBAs = this.accountManagementAPI.listBillingAccounts(null, 0, 1000, buyerFilter);
-            //FIXME: take the first one only for now
             bom.add(buyerBAs.get(0), "Buyer");
-            if (buyerBAs.size() == 0) {	
-            	logger.warn("No Billing Account found for Buyer with id {}", buyerId);
+            if (buyerBAs.isEmpty()) {
+                logger.warn("No Billing Account found for Buyer with id {}", buyerId);
+            } else {
+                // FIXME: take the first one only for now
+                bom.add(buyerBAs.get(0), "Buyer");
             }
+
 
            /*BillingAccount buyerBA = this.accountManagementAPI.getBillingAccount(bom.getCustomerBill().getBillingAccount().getId(), null);
            bom.add(buyerBA, "Buyer");*/
