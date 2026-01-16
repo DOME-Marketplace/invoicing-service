@@ -54,27 +54,12 @@ public class CalculateTaxesController {
    	public ResponseEntity<?> applyTaxes(@RequestBody List<Invoice> invoices, HttpServletRequest request) {
    		try {
 
-   			// 1) retrieve the Product, the CustomerBill and the AppliedCustomerBillingRate list from the ApplyTaxesRequestDTO
-//   			Product product = dto.getProduct();
-//   			Assert.state(!Objects.isNull(product), "Missing the instance of Product in the ApplyTaxesRequestDTO");
-
    			if(invoices!=null && !invoices.isEmpty()) {
    				List<Invoice> invoicesWithTaxes= taxService.applyTaxes(invoices);
    				return ResponseEntity.ok(invoicesWithTaxes);
    			}else {
    				return ResponseEntity.ok(invoices);
    			}
-
-   			//CustomerBill cb = dto.getCustomerBill();
-   			//Assert.state(!Objects.isNull(cb), "Missing the CustomerBill in the ApplyTaxesRequestDTO");
-   			
-   			//List<AppliedCustomerBillingRate> bills = dto.getAppliedCustomerBillingRate();
-   			//Assert.state(!Objects.isNull(bills), "Missing the list of AppliedCustomerBillingRate in the ApplyTaxesRequestDTO");
-   			
-   	        // 2) calculate the taxes
-   			//ApplyTaxesResponseDTO billsWithTaxes = taxService.applyTaxes(product, cb, bills);
-   			//BillingResponseDTO billsWithTaxes=taxService.applyTaxes(cb, bills);
-           // return ResponseEntity.ok(billsWithTaxes);
    		}
    		catch(Exception e) {
 			logger.error("Error in applyTaxes: {}", e.getMessage());
@@ -97,9 +82,6 @@ public class CalculateTaxesController {
 			return ResponseEntity.ok(orderWithTaxes);
 		} catch (Exception e) {
 			logger.error("Error in previewTaxes: {}", e.getMessage());
-
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//					.body(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
 			
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new DefaultErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), URI.create(request.getRequestURI())));

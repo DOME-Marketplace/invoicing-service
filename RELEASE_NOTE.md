@@ -1,9 +1,11 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
-### <code>2.0.5</code> :calendar: 16/01/2026
-**Refactoring**
-* General cleanup and Refactored `BomService` class.
+
+### <code>2.0.5</code> :calendar: 07/01/2026
+**Improvements**
+* Removed unused code. 
+* Updated brokerage-utils version to 2.2.7
 
 ### <code>2.0.4</code> :calendar: 15/12/2025
 **BugFixing**
