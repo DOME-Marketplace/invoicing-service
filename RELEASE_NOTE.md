@@ -1,6 +1,10 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
+### <code>2.0.5</code> :calendar: 16/01/2026
+**Refactoring**
+* General cleanup and Refactored `BomService` class.
+
 ### <code>2.0.4</code> :calendar: 15/12/2025
 **BugFixing**
 * Bug Fixing and Refactored `BomToPeppol` and `BomService` class.
