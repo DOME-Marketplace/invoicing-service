@@ -1,6 +1,6 @@
 # Invoicing Service
 
-**Version:** 2.0.5  
+**Version:** 2.0.7  
 **Description:** Swagger REST APIs for the invoicing-service software  
 
 
