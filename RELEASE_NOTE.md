@@ -2,6 +2,15 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.7</code> :calendar: 19/01/2026
+**Improvements**
+* TaxItem of CustomerBill aggregated by same taxRate and taxCategory
+
+### <code>2.0.6</code> :calendar: 16/01/2026
+**Improvements**
+* Implemented ZIP file downloads containing invoices in both XML and HTML formats.
+
+
 ### <code>2.0.5</code> :calendar: 07/01/2026
 **Improvements**
 * Removed unused code. 

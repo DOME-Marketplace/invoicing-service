@@ -5,6 +5,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import it.eng.dome.brokerage.exception.BadRelatedPartyException;
 import it.eng.dome.brokerage.model.Invoice;
+import it.eng.dome.invoicing.engine.model.TaxItemKey;
 import it.eng.dome.invoicing.engine.rate.RateManager;
 
 import it.eng.dome.tmforum.tmf622.v4.model.Money;
@@ -83,17 +86,21 @@ public class TaxService {
 		Float totalTaxIncludedAmount=0f;
 		List<TaxItem> taxItems=new ArrayList<TaxItem>();
 		
+		// For each ACBR sum the amount and get the TaxItem
 		for(AppliedCustomerBillingRate acbr: acbrsWithTaxes) {
 			totalTaxIncludedAmount += acbr.getTaxIncludedAmount().getValue();
 			taxItems.addAll(this.getTaxItemsFromAppliedBillingTaxRate(acbr.getAppliedTax()));
 		}
+		
+		// Aggregated TaxItem list for each tax rate and tax type
+		List<TaxItem> aggregatedTaxItems= aggregateTaxItems(taxItems);
 		
 		it.eng.dome.tmforum.tmf678.v4.model.Money taxIncludedAmount = new it.eng.dome.tmforum.tmf678.v4.model.Money();
 		taxIncludedAmount.setUnit(cb.getTaxExcludedAmount().getUnit());
 		taxIncludedAmount.setValue(totalTaxIncludedAmount);
 		
 		cb.setTaxIncludedAmount(taxIncludedAmount);
-		cb.setTaxItem(taxItems);
+		cb.setTaxItem(aggregatedTaxItems);
 		cb.setAmountDue(taxIncludedAmount);
 		cb.setRemainingAmount(taxIncludedAmount);
 		
@@ -381,5 +388,39 @@ public class TaxService {
 		
 		return invoicesWithTaxes;
 	}
+	
+	public List<TaxItem> aggregateTaxItems(List<TaxItem> taxItems){
+		
+		Map<TaxItemKey, List<TaxItem>> grouped =
+		        taxItems.stream()
+		                .collect(Collectors.groupingBy(
+		                        item -> new TaxItemKey(item.getTaxRate(), item.getTaxCategory())
+		                ));
+
+		List<TaxItem> result = new ArrayList<>();
+
+		for (Map.Entry<TaxItemKey, List<TaxItem>> entry : grouped.entrySet()) {
+		    TaxItem first = entry.getValue().get(0);
+
+		    float sum = 0f;
+		    for (TaxItem item : entry.getValue()) {
+		        sum += item.getTaxAmount().getValue();
+		    }
+
+		    it.eng.dome.tmforum.tmf678.v4.model.Money money = new it.eng.dome.tmforum.tmf678.v4.model.Money();
+		    money.setValue(sum);
+		    money.setUnit(first.getTaxAmount().getUnit());
+		    
+		    TaxItem aggregated = new TaxItem();
+		    aggregated.setTaxRate(entry.getKey().getTaxRate());
+		    aggregated.setTaxCategory(entry.getKey().getTaxCategory());
+		    aggregated.setTaxAmount(money);
+
+		    result.add(aggregated);
+		}
+		
+		return result;
+	}
+	
 
 }
