@@ -202,13 +202,17 @@ public class BomService {
         // TODO: add POPs
         // Q: are they needed?
 
-        String buyerName = bom.getOrganizationWithRole("Buyer").getTradingName();
-        String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
-        String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
+        String billNo = bom.getCustomerBill().getBillNo();
+        if (billNo == null || billNo.isBlank()) {
+            // fallback
+            String buyerName = bom.getOrganizationWithRole("Buyer").getTradingName();
+            String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
+            String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
 
-        String bomId = "Invoice from " + sellerName + " to " + buyerName + " on " + date;
+            billNo = "Invoice from " + sellerName + " to " + buyerName + " on " + date;
+        }
 
-        return new Envelope<>(bom, bomId, "bom");
+        return new Envelope<>(bom, billNo, "bom");
 
     }
 }
