@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.8</code> :calendar: 23/01/2026
+**BugFixing**
+* Stopped using InputStreamResource.getDescription() for filenames and now derive them from Envelope/NamingUtils instead.
+* Fixed ZIP responses by returning raw InputStreamResource from the service and setting Content-Type: application/zip in the controller.
+
 ### <code>2.0.7</code> :calendar: 19/01/2026
 **Improvements**
 * TaxItem of CustomerBill aggregated by same taxRate and taxCategory
