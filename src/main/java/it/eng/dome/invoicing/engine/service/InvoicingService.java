@@ -19,7 +19,6 @@ import it.eng.dome.invoicing.engine.service.render.Envelope;
 import it.eng.dome.invoicing.engine.service.render.Html2Pdf;
 import it.eng.dome.invoicing.engine.service.render.Peppol2XML;
 import it.eng.dome.invoicing.engine.service.render.PeppolXML2Html;
-import it.eng.dome.invoicing.engine.service.utils.NamingUtils;
 import it.eng.dome.invoicing.engine.service.utils.ZipUtils;
 import peppol.bis.invoice3.domain.Invoice;
 
@@ -229,7 +228,7 @@ public class InvoicingService {
      */
     private <T> InputStreamResource createZipResource(Collection<Envelope<T>> envelopes) throws IOException {
         byte[] zipBytes = ZipUtils.createZip(envelopes);
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes), NamingUtils.sanitizeFilename(NamingUtils.extractFileNameFromEnvelopes(envelopes)));
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
     }
 
     /**
@@ -247,28 +246,28 @@ public class InvoicingService {
         Collection<Envelope<?>> all = List.of(xml, html, pdf);
 
         byte[] zipBytes = ZipUtils.createZip(all);
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes), xml.getName());
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
     }
-    
+
     /**
      * returns a ZIP containing a single invoice in XML and HTML formats.
      * @param billId
      * @return Resource	
      */
-	public Resource getInvoiceXmlAndHtmlFormats(String billId) {
+    public Resource getInvoiceXmlAndHtmlFormats(String billId) {
 
-		try {
-			Envelope<String> xml = getPeppolXml(billId);
-			Envelope<String> html = getPeppolHTML(billId);
-			// Generic Envelope collection
-			Collection<Envelope<?>> all = List.of(xml, html);
+        try {
+            Envelope<String> xml = getPeppolXml(billId);
+            Envelope<String> html = getPeppolHTML(billId);
+            // Generic Envelope collection
+            Collection<Envelope<?>> all = List.of(xml, html);
 
-			byte[] zipBytes = ZipUtils.createZip(all);
-			return new InputStreamResource(new ByteArrayInputStream(zipBytes), xml.getName());
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to get invoice in XML and HTML formats for billId: " + billId, e);
-		}
-	}
+            byte[] zipBytes = ZipUtils.createZip(all);
+            return new InputStreamResource(new ByteArrayInputStream(zipBytes));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get invoice in XML and HTML formats for billId: " + billId, e);
+        }
+    }
 
     /**
      * Returns a ZIP containing all invoices for a buyer and seller, with each invoice in XML, HTML, PDF.
@@ -291,7 +290,7 @@ public class InvoicingService {
         Collection<Envelope<ByteArrayOutputStream>> pdfs = getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
 
         byte[] zipBytes = ZipUtils.zipPerInvoice(xmls, htmls, pdfs);
-        return new InputStreamResource(new ByteArrayInputStream(zipBytes), NamingUtils.sanitizeFilename(NamingUtils.extractFileNameFromEnvelopes(pdfs)));
+        return new InputStreamResource(new ByteArrayInputStream(zipBytes));
     }
 
 
