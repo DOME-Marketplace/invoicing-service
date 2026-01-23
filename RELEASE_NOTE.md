@@ -1,6 +1,9 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
+### <code>2.0.9</code> :calendar: 23/01/2026
+**BugFixing**
+* Usage of BillNo to rename zip files.
 
 ### <code>2.0.8</code> :calendar: 23/01/2026
 **BugFixing**
