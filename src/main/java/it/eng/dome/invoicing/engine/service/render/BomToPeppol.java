@@ -74,94 +74,124 @@ public class BomToPeppol {
      * @throws IllegalArgumentException if envelope or content is null
      * @throws IllegalStateException if required organizations are missing
      */
-    public Envelope<Invoice> render(Envelope<InvoiceBom> envBom) {
-        if (envBom == null) {
-            throw new IllegalArgumentException("InvoiceBom envelope cannot be null");
-        }
+	public Envelope<Invoice> render(Envelope<InvoiceBom> envBom) {
+	    if (envBom == null) {
+	        throw new IllegalArgumentException("InvoiceBom envelope cannot be null");
+	    }
+	
+	    InvoiceBom bom = envBom.getContent();
+	    if (bom == null) {
+	        throw new IllegalArgumentException("InvoiceBom content cannot be null");
+	    }
+	
+	    LOG.info("Rendering EU invoice: {}", envBom.getName());
+	
+	    // Extract organizations and billing accounts
+	    Organization supplierOrg = bom.getOrganizationWithRole("Seller");
+	    Organization customerOrg = bom.getOrganizationWithRole("Buyer");
+	    BillingAccount sellerBA = bom.getBillingAccountWithRole("Seller");
+	    BillingAccount buyerBA = bom.getBillingAccountWithRole("Buyer");
+	
+	    if (supplierOrg == null || customerOrg == null) {
+	        throw new IllegalStateException("Supplier and Customer organizations are mandatory");
+	    }
+	
+	    // Extract countries
+	    String supplierCountry = extractCountryCode(supplierOrg);
+	    String customerCountry = extractCountryCode(customerOrg);
+	    LOG.debug("Countries - Supplier: {}, Customer: {}", supplierCountry, customerCountry);
+	
+	    // Validate EU membership (warning only)
+	    validateEUCountry(supplierCountry, "Supplier");
+	    validateEUCountry(customerCountry, "Customer");
+	
+	    // Extract identifiers
+	    String supplierId = extractIdentifier(supplierOrg, supplierCountry);
+	    String customerId = extractIdentifier(customerOrg, customerCountry);
+	    LOG.info("Identifiers - Supplier: '{}', Customer: '{}'", supplierId, customerId);
+	
+	    // Select validator-safe schemes
+	    String supplierScheme = selectEUScheme(supplierId, supplierCountry);
+	    String customerScheme = selectEUScheme(customerId, customerCountry);
+	    LOG.info("Schemes - Supplier: {}, Customer: {}", supplierScheme, customerScheme);
+	
+	    // Check for tax exemption scenarios
+	    boolean hasExemption = containsZeroRatedLineWithoutSupplierId(bom, supplierId);
+	    boolean includePartyTaxScheme = !hasExemption;
+	
+	    if (hasExemption) {
+	        LOG.info("Tax exemption detected - PartyTaxScheme will be omitted (BR-O-02)");
+	    }
+	
+	    // Build parties
+	    AccountingSupplierParty supplier = buildSupplierParty(supplierOrg, supplierId, supplierScheme, includePartyTaxScheme, sellerBA);
+	    AccountingCustomerParty customer = buildCustomerParty(customerOrg, customerId, customerScheme, includePartyTaxScheme, buyerBA);
+	
+	    CustomerBill cb = bom.getCustomerBill();
+	    if (cb == null) {
+	        throw new IllegalStateException("CustomerBill cannot be null");
+	    }
+	
+	    // Build tax totals (calculate from lines, not from CustomerBill)
+	    TaxCalculationResult taxResult = calculateTaxTotals(cb, supplierId, bom);
+	
+	    // Build legal monetary total
+	    LegalMonetaryTotal legal = createLegalMonetaryTotal(cb, taxResult.getTaxTotal(), bom);
+	
+	    // Build invoice lines
+	    List<InvoiceLine> lines = createInvoiceLines(bom, supplierId);
+	
+	    String currency = getCurrency(cb);
+	
+	    // Build invoice with REQUIRED fields
+	    Invoice invoice = new Invoice(
+	            cb.getId(),
+	            cb.getBillDate().toLocalDate().toString(),
+	            currency,
+	            supplier,
+	            customer,
+	            taxResult.getTaxTotalObject(),
+	            legal,
+	            lines
+	    ).withInvoiceTypeCode(380);
+	
+	    // OPTIONAL: DueDate - only if present
+	    if (cb.getPaymentDueDate() != null) {
+	        invoice.withDueDate(cb.getPaymentDueDate().toLocalDate().toString());
+	    }else {
+	    	invoice.withDueDate(cb.getBillDate().toLocalDate().toString());
+	        LOG.info("DueDate not present - used BillDate as fallback");
+	    }
+	
+	    // OPTIONAL: BuyerReference - only if present
+	    if (customerOrg.getTradingName() != null && !customerOrg.getTradingName().isBlank()) {
+	        invoice.withBuyerReference(customerOrg.getTradingName());
+	    }else {
+	    	invoice.withBuyerReference("N/A");
+	        LOG.info("BuyerReference not present - omitted");
+	    }
+	
+	    // Add invoice notes
+	    addInvoiceNotes(invoice, supplierCountry, bom, supplierId);
+	
+	    LOG.info("EU invoice rendered successfully: {}", cb.getId());
+	    return new Envelope<>(invoice, envBom.getName(), envBom.getFormat());
+	}
 
-        InvoiceBom bom = envBom.getContent();
-        if (bom == null) {
-            throw new IllegalArgumentException("InvoiceBom content cannot be null");
-        }
-
-        LOG.info("Rendering EU invoice:  {}", envBom.getName());
-
-        // Extract organizations and billing accounts
-        Organization supplierOrg = bom.getOrganizationWithRole("Seller");
-        Organization customerOrg = bom.getOrganizationWithRole("Buyer");
-        BillingAccount sellerBA = bom.getBillingAccountWithRole("Seller");
-        BillingAccount buyerBA = bom.getBillingAccountWithRole("Buyer");
-
-        if (supplierOrg == null || customerOrg == null) {
-            throw new IllegalStateException("Supplier and Customer organizations are mandatory");
-        }
-
-        // Extract countries
-        String supplierCountry = extractCountryCode(supplierOrg);
-        String customerCountry = extractCountryCode(customerOrg);
-        LOG.debug("Countries - Supplier: {}, Customer: {}", supplierCountry, customerCountry);
-
-        // Validate EU membership (warning only)
-        validateEUCountry(supplierCountry, "Supplier");
-        validateEUCountry(customerCountry, "Customer");
-
-        // Extract identifiers
-        String supplierId = extractIdentifier(supplierOrg, supplierCountry);
-        String customerId = extractIdentifier(customerOrg, customerCountry);
-        LOG.info("Identifiers - Supplier:  '{}', Customer: '{}'", supplierId, customerId);
-
-        // Select validator-safe schemes
-        String supplierScheme = selectEUScheme(supplierId, supplierCountry);
-        String customerScheme = selectEUScheme(customerId, customerCountry);
-        LOG.info("Schemes - Supplier: {}, Customer: {}", supplierScheme, customerScheme);
-
-        // Check for tax exemption scenarios
-        boolean hasExemption = containsZeroRatedLineWithoutSupplierId(bom, supplierId);
-        boolean includePartyTaxScheme = ! hasExemption;
-
-        if (hasExemption) {
-            LOG.info("Tax exemption detected - PartyTaxScheme will be omitted (BR-O-02)");
-        }
-
-        // Build parties
-        AccountingSupplierParty supplier = buildSupplierParty(supplierOrg, supplierId, supplierScheme, includePartyTaxScheme, sellerBA);
-        AccountingCustomerParty customer = buildCustomerParty(customerOrg, customerId, customerScheme, includePartyTaxScheme, buyerBA);
-
-        CustomerBill cb = bom.getCustomerBill();
-        if (cb == null) {
-            throw new IllegalStateException("CustomerBill cannot be null");
-        }
-
-        // Build tax totals (calculate from lines, not from CustomerBill)
-        TaxCalculationResult taxResult = calculateTaxTotals(cb, supplierId, bom);
-
-        // Build legal monetary total
-        LegalMonetaryTotal legal = createLegalMonetaryTotal(cb, taxResult. getTaxTotal(), bom);
-
-        // Build invoice lines
-        List<InvoiceLine> lines = createInvoiceLines(bom, supplierId);
-
-        // Build invoice
-        Invoice invoice = new Invoice(
-                cb.getId(),
-                cb.getBillDate().toLocalDate().toString(),
-                cb.getAmountDue().getUnit() != null ? cb.getAmountDue().getUnit() : "EUR",
-                supplier,
-                customer,
-                taxResult.getTaxTotalObject(),
-                legal,
-                lines
-        ).withInvoiceTypeCode(380)
-         .withBuyerReference(customerOrg.getTradingName())
-         .withDueDate(cb.getPaymentDueDate().toLocalDate().toString());
-
-        // Add invoice notes
-        addInvoiceNotes(invoice, supplierCountry, bom, supplierId);
-
-        LOG.info("EU invoice rendered successfully: {}", cb.getId());
-        return new Envelope<>(invoice, envBom. getName(), envBom.getFormat());
-    }
-
+	/**
+	 * Extracts currency from CustomerBill with fallback to EUR.
+	 * Currency is REQUIRED in PEPPOL, so fallback to EUR is acceptable.
+	 */
+	private String getCurrency(CustomerBill cb) {
+	    if (cb.getTaxIncludedAmount() != null && cb.getTaxIncludedAmount().getUnit() != null) {
+	        return cb.getTaxIncludedAmount().getUnit();
+	    }
+	    if (cb.getTaxExcludedAmount() != null && cb.getTaxExcludedAmount().getUnit() != null) {
+	        return cb.getTaxExcludedAmount().getUnit();
+	    }
+	    LOG.warn("No currency found in CustomerBill - using EUR as default");
+	    return "EUR";
+	}
     // ==========================================
     // EU COUNTRY VALIDATION
     // ==========================================
