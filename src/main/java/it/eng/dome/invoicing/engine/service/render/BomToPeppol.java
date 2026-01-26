@@ -560,11 +560,15 @@ public class BomToPeppol {
      * @return PEPPOL PostalAddress with defaults for missing fields
      */
     private PostalAddress buildPostalAddress(BillingAccount ba, String countryCode) {
+        if (countryCode == null) {
+            throw new IllegalStateException("Country code is mandatory for PostalAddress");
+        }
+        
         String street = getPostalAddressField(ba != null ? ba.getContact() : null, "street");
-        String city = getPostalAddressField(ba != null ? ba. getContact() : null, "city");
+        String city = getPostalAddressField(ba != null ? ba.getContact() : null, "city");
         String postcode = getPostalAddressField(ba != null ? ba.getContact() : null, "postcode");
 
-        return new PostalAddress(new Country(countryCode != null ? countryCode : "XX"))
+        return new PostalAddress(new Country(countryCode))
                 .withStreetName(street != null ? street : "N/A")
                 .withCityName(city != null ? city : "N/A")
                 .withPostalZone(postcode != null ? postcode : "00000");
