@@ -311,7 +311,8 @@ public class InvoicingService {
             Collection<Envelope<?>> all = List.of(xml, html);
 
             byte[] zipBytes = ZipUtils.createZip(all);
-            logger.info("Created XML and HTML ZIP for billId: {}, size: {} bytes", billId, zipBytes.length);
+            logger.info("Created XML and HTML ZIP for billId: {}: {} bytes, first bytes: {}", billId, zipBytes.length, 
+                    String.format("%02X %02X %02X %02X", zipBytes[0], zipBytes[1], zipBytes[2], zipBytes[3]));
             
             return new ByteArrayResource(zipBytes);
         } catch (Exception e) {
