@@ -1,6 +1,13 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
+
+### <code>2.0.10</code> :calendar: 27/01/2026
+**BugFixing**
+* Peppol Validation more flexible.
+* Replace InputStreamResource with ByteArrayResource for ZIP downloads.
+* Add comprehensive logging to InvoicingService for better debugging.
+
 ### <code>2.0.9</code> :calendar: 23/01/2026
 **BugFixing**
 * Usage of BillNo to rename zip files.

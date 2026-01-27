@@ -199,20 +199,14 @@ public class BomService {
             throw new ExternalServiceException(e.getMessage(), e);
         }
 
-        // TODO: add POPs
-        // Q: are they needed?
+        // fallback
+        String buyerName = bom.getOrganizationWithRole("Buyer").getTradingName();
+        String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
+        String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
 
-        String billNo = bom.getCustomerBill().getBillNo();
-        if (billNo == null || billNo.isBlank()) {
-            // fallback
-            String buyerName = bom.getOrganizationWithRole("Buyer").getTradingName();
-            String sellerName = bom.getOrganizationWithRole("Seller").getTradingName();
-            String date   = bom.getCustomerBill().getBillDate().toLocalDate().toString();
+        String folderName = "Invoice from " + sellerName + " to " + buyerName + " on " + date;       
 
-            billNo = "Invoice from " + sellerName + " to " + buyerName + " on " + date;
-        }
-
-        return new Envelope<>(bom, billNo, "bom");
+        return new Envelope<>(bom, folderName, "bom");
 
     }
 }

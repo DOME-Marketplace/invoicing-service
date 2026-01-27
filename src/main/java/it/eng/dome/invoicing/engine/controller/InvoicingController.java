@@ -9,14 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
@@ -140,7 +138,7 @@ public class InvoicingController {
     }
 
     @GetMapping("invoices")
-    public ResponseEntity<InputStreamResource> getInvoices(
+    public ResponseEntity<Resource> getInvoices(
             @RequestParam(name = "sellerId", required = false) String sellerId,
             @RequestParam(name = "buyerId", required = false) String buyerId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format,
@@ -148,7 +146,7 @@ public class InvoicingController {
             @RequestParam(name = "toDate", required = false) OffsetDateTime toDate) {
         try {
             String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
-            InputStreamResource resource;
+            Resource resource;
             String fileName;
             MediaType mediaType;
 
@@ -201,7 +199,7 @@ public class InvoicingController {
 
                 default: {
                     String msg = "BAD REQUEST: Unsupported output format: " + fmt;
-                    resource = new InputStreamResource(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
+                    resource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(resource);
                 }
