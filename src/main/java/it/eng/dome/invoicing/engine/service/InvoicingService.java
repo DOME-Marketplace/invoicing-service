@@ -9,8 +9,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
@@ -197,113 +195,91 @@ public class InvoicingService {
 
     /**
      * Returns a ZIP of invoices in XML format between seller and buyer id within a date range.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param buyerId  Buyer identifier
      * @param sellerId Seller identifier
      * @param fromDate Start date
      * @param toDate   End date
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      * @throws ExternalServiceException if fetching fails
      * @throws IOException              if ZIP creation fails
      */
-    public Resource getInvoicesXml(String buyerId, String sellerId, OffsetDateTime fromDate,
+    public byte[] getInvoicesXml(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws ExternalServiceException, IOException {
         logger.debug("Creating XML ZIP for buyer: {}, seller: {}", buyerId, sellerId);
-        Resource resource = createZipResource(getPeppolsXml(buyerId, sellerId, fromDate, toDate));
+        byte[] zipBytes = ZipUtils.createZip(getPeppolsXml(buyerId, sellerId, fromDate, toDate));
         logger.info("Created XML ZIP for buyer: {}, seller: {}, size: {} bytes", 
-                    buyerId, sellerId, resource.contentLength());
-        return resource;
+                    buyerId, sellerId, zipBytes.length);
+        return zipBytes;
     }
 
     /**
      * Returns a ZIP of invoices in HTML format between seller and buyer id within a date range.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param buyerId  Buyer identifier
      * @param sellerId Seller identifier
      * @param fromDate Start date
      * @param toDate   End date
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      * @throws Exception if fetching fails or ZIP creation fails
      */
-    public Resource getInvoicesHtml(String buyerId, String sellerId, OffsetDateTime fromDate,
+    public byte[] getInvoicesHtml(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws Exception {
         logger.debug("Creating HTML ZIP for buyer: {}, seller: {}", buyerId, sellerId);
-        Resource resource = createZipResource(getPeppolsHTML(buyerId, sellerId, fromDate, toDate));
+        byte[] zipBytes = ZipUtils.createZip(getPeppolsHTML(buyerId, sellerId, fromDate, toDate));
         logger.info("Created HTML ZIP for buyer: {}, seller: {}, size: {} bytes", 
-                    buyerId, sellerId, resource.contentLength());
-        return resource;
+                    buyerId, sellerId, zipBytes.length);
+        return zipBytes;
     }
 
     /**
      * Returns a ZIP of invoices in PDF format between seller and buyer id within a date range.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param buyerId  Buyer identifier
      * @param sellerId Seller identifier
      * @param fromDate Start date
      * @param toDate   End date
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      * @throws Exception if fetching fails or ZIP creation fails
      */
-    public Resource getInvoicesPdf(String buyerId, String sellerId, OffsetDateTime fromDate,
+    public byte[] getInvoicesPdf(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws Exception {
         logger.debug("Creating PDF ZIP for buyer: {}, seller: {}", buyerId, sellerId);
-        Resource resource = createZipResource(getPeppolsPdf(buyerId, sellerId, fromDate, toDate));
+        byte[] zipBytes = ZipUtils.createZip(getPeppolsPdf(buyerId, sellerId, fromDate, toDate));
         logger.info("Created PDF ZIP for buyer: {}, seller: {}, size: {} bytes", 
-                    buyerId, sellerId, resource.contentLength());
-        return resource;
-    }
-
-    /**
-     * Creates a ZIP resource from a collection of envelopes.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
-     *
-     * @param envelopes Collection of envelopes to zip
-     * @param <T>       Type of envelope content
-     * @return Resource containing the ZIP with proper content length
-     * @throws IOException if ZIP creation fails
-     */
-    private <T> Resource createZipResource(Collection<Envelope<T>> envelopes) throws IOException {
-        logger.debug("Creating ZIP from {} envelopes", envelopes.size());
-        byte[] zipBytes = ZipUtils.createZip(envelopes);
-        logger.info("Created ZIP: {} bytes", zipBytes.length);
-        return new ByteArrayResource(zipBytes);
+                    buyerId, sellerId, zipBytes.length);
+        return zipBytes;
     }
 
     /**
      * Returns a ZIP containing a single invoice in all formats (XML, HTML, PDF).
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param billId Customer Bill identifier
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      * @throws Exception if rendering fails
      */
-    public Resource getInvoiceAllFormats(String billId) throws Exception {
+    public byte[] getInvoiceAllFormats(String billId) throws Exception {
         logger.debug("Creating all formats ZIP for billId: {}", billId);
         Envelope<String> xml = getPeppolXml(billId);
         Envelope<String> html = getPeppolHTML(billId);
         Envelope<ByteArrayOutputStream> pdf = getPeppolPdf(billId);
-        // Generic Envelope collection
         Collection<Envelope<?>> all = List.of(xml, html, pdf);
 
         byte[] zipBytes = ZipUtils.createZip(all);
         logger.info("Created all formats ZIP for billId: {}, size: {} bytes", billId, zipBytes.length);
-        return new ByteArrayResource(zipBytes);
+        return zipBytes;
     }
 
     /**
      * Returns a ZIP containing a single invoice in XML and HTML formats.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param billId Customer Bill identifier
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      */
-    public Resource getInvoiceXmlAndHtmlFormats(String billId) {
+    public byte[] getInvoiceXmlAndHtmlFormats(String billId) {
         try {
             logger.debug("Creating XML and HTML ZIP for billId: {}", billId);
             Envelope<String> xml = getPeppolXml(billId);
@@ -311,10 +287,9 @@ public class InvoicingService {
             Collection<Envelope<?>> all = List.of(xml, html);
 
             byte[] zipBytes = ZipUtils.createZip(all);
-            logger.info("Created XML and HTML ZIP for billId: {}: {} bytes, first bytes: {}", billId, zipBytes.length, 
-                    String.format("%02X %02X %02X %02X", zipBytes[0], zipBytes[1], zipBytes[2], zipBytes[3]));
+            logger.info("Created XML and HTML ZIP for billId: {}, size: {} bytes", billId, zipBytes.length);
             
-            return new ByteArrayResource(zipBytes);
+            return zipBytes;
         } catch (Exception e) {
             throw new RuntimeException("Failed to get invoice in XML and HTML formats for billId: " + billId, e);
         }
@@ -322,16 +297,15 @@ public class InvoicingService {
 
     /**
      * Returns a ZIP containing all invoices for a buyer and seller, with each invoice in XML, HTML, PDF.
-     * Uses ByteArrayResource to ensure proper Content-Length header for marketplace compatibility.
      *
      * @param buyerId  Buyer identifier
      * @param sellerId Seller identifier
      * @param fromDate Start date
      * @param toDate   End date
-     * @return Resource containing the ZIP
+     * @return byte array containing the ZIP
      * @throws Exception if rendering fails
      */
-    public Resource getInvoicesAll(
+    public byte[] getInvoicesAll(
             String buyerId,
             String sellerId,
             OffsetDateTime fromDate,
@@ -345,7 +319,7 @@ public class InvoicingService {
         byte[] zipBytes = ZipUtils.zipPerInvoice(xmls, htmls, pdfs);
         logger.info("Created all formats ZIP for buyer: {}, seller: {}, size: {} bytes", 
                     buyerId, sellerId, zipBytes.length);
-        return new ByteArrayResource(zipBytes);
+        return zipBytes;
     }
 
 }
