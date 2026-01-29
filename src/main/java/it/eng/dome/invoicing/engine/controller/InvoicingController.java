@@ -30,7 +30,7 @@ public class InvoicingController {
     private InvoicingService invoicingService;
 
     @GetMapping("invoices/{billId}")
-    public ResponseEntity<Resource> getInvoice(@PathVariable String billId,
+    public ResponseEntity<?> getInvoice(@PathVariable String billId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
         try {
             String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
@@ -80,33 +80,48 @@ public class InvoicingController {
 				Envelope<String> xmlEnvelope = invoicingService.getPeppolXml(billId);
 				String baseName = NamingUtils.sanitizeFilename(xmlEnvelope.getName());
 
-				Resource xmlHtmlResource = invoicingService.getInvoiceXmlAndHtmlFormats(billId);
+				byte[] zipBytes = invoicingService.getInvoiceXmlAndHtmlFormats(billId);
 
 				String fileName = baseName + "-xml-html.zip";
+				
+				logger.info("Returning xml-html ZIP for billId {}: {} bytes", billId, zipBytes.length);
 
 				return ResponseEntity.ok()
-						.contentType(MediaType.parseMediaType("application/zip"))
+						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.contentLength(zipBytes.length)
 						.header(HttpHeaders.CONTENT_DISPOSITION,
 								ContentDisposition.attachment()
 										.filename(fileName)
 										.build().toString())
-						.body(xmlHtmlResource);
+						.header("Content-Transfer-Encoding", "binary")
+						.header("Accept-Ranges", "bytes")
+						.header("X-Content-Type-Options", "nosniff")
+						.header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+						.body(zipBytes);
 			}
 
             case "all": {
                 Envelope<String> xmlEnvelope = invoicingService.getPeppolXml(billId);
                 String baseName = NamingUtils.sanitizeFilename(xmlEnvelope.getName());
 
-                Resource allResource = invoicingService.getInvoiceAllFormats(billId);
+                byte[] zipBytes = invoicingService.getInvoiceAllFormats(billId);
+
                 String fileName = baseName + "-all.zip";
+                
+                logger.info("Returning all formats ZIP for billId {}: {} bytes", billId, zipBytes.length);
 
                 return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType("application/zip"))
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .contentLength(zipBytes.length)
                         .header(HttpHeaders.CONTENT_DISPOSITION,
                                 ContentDisposition.attachment()
                                         .filename(fileName)
                                         .build().toString())
-                        .body(allResource);
+                        .header("Content-Transfer-Encoding", "binary")
+                        .header("Accept-Ranges", "bytes")
+                        .header("X-Content-Type-Options", "nosniff")
+                        .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                        .body(zipBytes);
             }
 
             default: {
@@ -138,7 +153,7 @@ public class InvoicingController {
     }
 
     @GetMapping("invoices")
-    public ResponseEntity<Resource> getInvoices(
+    public ResponseEntity<?> getInvoices(
             @RequestParam(name = "sellerId", required = false) String sellerId,
             @RequestParam(name = "buyerId", required = false) String buyerId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format,
@@ -146,62 +161,62 @@ public class InvoicingController {
             @RequestParam(name = "toDate", required = false) OffsetDateTime toDate) {
         try {
             String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
-            Resource resource;
+            byte[] zipBytes;
             String fileName;
-            MediaType mediaType;
+            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 
             switch (fmt) {
                 case "peppol":
                 case "xml":
                 case "peppol-xml": {
-                    resource = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
+                    zipBytes = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
                     var xmls = invoicingService.getPeppolsXml(buyerId, sellerId, fromDate, toDate);
                     String baseName = NamingUtils.sanitizeFilename(
                             NamingUtils.extractFileNameFromEnvelopes(xmls)
                     );
                     fileName = baseName + "-xml.zip";
-                    mediaType = MediaType.parseMediaType("application/zip");
+                    logger.info("Returning XML ZIP: {} bytes", zipBytes.length);
                     break;
                 }
 
                 case "html": {
-                    resource = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
+                    zipBytes = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
                     var htmls = invoicingService.getPeppolsHTML(buyerId, sellerId, fromDate, toDate);
                     String baseName = NamingUtils.sanitizeFilename(
                             NamingUtils.extractFileNameFromEnvelopes(htmls)
                     );
                     fileName = baseName + "-html.zip";
-                    mediaType = MediaType.parseMediaType("application/zip");
+                    logger.info("Returning HTML ZIP: {} bytes", zipBytes.length);
                     break;
                 }
 
                 case "pdf": {
-                    resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
+                    zipBytes = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
                     var pdfs = invoicingService.getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
                     String baseName = NamingUtils.sanitizeFilename(
                             NamingUtils.extractFileNameFromEnvelopes(pdfs)
                     );
                     fileName = baseName + "-pdf.zip";
-                    mediaType = MediaType.parseMediaType("application/zip");
+                    logger.info("Returning PDF ZIP: {} bytes", zipBytes.length);
                     break;
                 }
 
                 case "all": {
-                    resource = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
+                    zipBytes = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
                     var pdfs = invoicingService.getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
                     String baseName = NamingUtils.sanitizeFilename(
                             NamingUtils.extractFileNameFromEnvelopes(pdfs)
                     );
                     fileName = baseName + "-all.zip";
-                    mediaType = MediaType.parseMediaType("application/zip");
+                    logger.info("Returning all formats ZIP: {} bytes", zipBytes.length);
                     break;
                 }
 
                 default: {
                     String msg = "BAD REQUEST: Unsupported output format: " + fmt;
-                    resource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
+                    byte[] errorBytes = msg.getBytes(StandardCharsets.UTF_8);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(resource);
+                            .body(errorBytes);
                 }
             }
 
@@ -211,7 +226,12 @@ public class InvoicingController {
                                     .filename(fileName)
                                     .build().toString())
                     .contentType(mediaType)
-                    .body(resource);
+                    .contentLength(zipBytes.length)
+                    .header("Content-Transfer-Encoding", "binary")
+                    .header("Accept-Ranges", "bytes")
+                    .header("X-Content-Type-Options", "nosniff")
+                    .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                    .body(zipBytes);
 
         } catch (ExternalServiceException e) {
             logger.error("External service error for invoices {}-{}: {}", buyerId, sellerId, e.getMessage(), e);
