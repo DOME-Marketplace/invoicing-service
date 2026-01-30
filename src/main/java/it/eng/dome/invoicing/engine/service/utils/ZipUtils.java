@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-
 /**
  * Utility class for building ZIP archives from collections of {@link Envelope}.
  * <p>
@@ -21,7 +20,6 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ZipUtils.class);
-
 
     /**
      * Creates a ZIP archive containing one file per provided {@link Envelope}.
@@ -36,60 +34,51 @@ public class ZipUtils {
     public static byte[] createZip(Collection<? extends Envelope<?>> envelopes) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        if (envelopes == null || envelopes.isEmpty()) {
-            log.warn("createZip: no envelopes provided → returning empty zip");
-            return baos.toByteArray();
-        }
+        try (ZipOutputStream zos = new ZipOutputStream(baos, StandardCharsets.UTF_8)) {
 
-        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
-
-            for (Envelope<?> env : envelopes) {
-                if (env == null) {
-                    log.warn("createZip: null envelope found → skipping");
-                    continue;
-                }
-
-                String name = env.getName();
-                if (name == null || name.isBlank()) {
-                    log.warn("createZip: envelope has null/blank name → skipping (env={})", env);
-                    continue;
-                }
-
-                String format = env.getFormat();
-                if (format == null || format.isBlank()) {
-                    log.warn("createZip: envelope '{}' has null/blank format → skipping", name);
-                    continue;
-                }
-
-                Object content = env.getContent();
-                if (content == null) {
-                    log.warn("createZip: envelope '{}' has null content → skipping", name);
-                    continue;
-                }
-
-                String fileName = name + "." + format;
-
-                try {
-                    ZipEntry entry = new ZipEntry(fileName);
-                    zos.putNextEntry(entry);
-
-                    if (content instanceof String s) {
-                        zos.write(s.getBytes(StandardCharsets.UTF_8));
-                    } else if (content instanceof ByteArrayOutputStream b) {
-                        zos.write(b.toByteArray());
-                    } else {
-                        log.error("createZip: envelope '{}' has unsupported content type → skipping (type={})",
-                                name, content.getClass().getName());
+            if (envelopes == null || envelopes.isEmpty()) {
+                log.warn("createZip: no envelopes provided → returning EMPTY but VALID zip");
+            } else {
+                for (Envelope<?> env : envelopes) {
+                    if (env == null) {
+                        log.warn("createZip: null envelope found → skipping");
+                        continue;
                     }
 
-                    zos.closeEntry();
+                    String name = env.getName();
+                    String format = env.getFormat();
+                    Object content = env.getContent();
 
-                } catch (Exception ex) {
-                    log.error("createZip: failed writing entry '{}' → skipping. Error: {}",
-                            fileName, ex.getMessage(), ex);
+                    if (name == null || name.isBlank()
+                            || format == null || format.isBlank()
+                            || content == null) {
+                        log.warn("createZip: invalid envelope → skipping (name={}, format={}, content={})",
+                                name, format, content == null ? "null" : content.getClass().getName());
+                        continue;
+                    }
+
+                    String fileName = name + "." + format;
+                    zos.putNextEntry(new ZipEntry(fileName));
+
+                    try {
+                        if (content instanceof String s) {
+                            zos.write(s.getBytes(StandardCharsets.UTF_8));
+                        } else if (content instanceof ByteArrayOutputStream b) {
+                            zos.write(b.toByteArray());
+                        } else {
+                            log.error("createZip: unsupported content type for '{}' → skipping (type={})",
+                                    fileName, content.getClass().getName());
+                        }
+                    } finally {
+                        zos.closeEntry();
+                    }
                 }
             }
+
+            // Ensures the central directory is written even for empty ZIPs
+            zos.finish();
         }
+
         return baos.toByteArray();
     }
 
@@ -111,7 +100,7 @@ public class ZipUtils {
 
         if (collections == null) {
             log.warn("zipPerInvoice: collections is null → returning empty zip");
-            return new byte[0];
+            return createZip(Collections.emptyList());
         }
 
         // Group envelopes by their name (only non-null/blank names)
@@ -139,10 +128,10 @@ public class ZipUtils {
 
         if (grouped.isEmpty()) {
             log.warn("zipPerInvoice: no valid envelopes found → returning empty zip");
-            return new byte[0];
+            return createZip(Collections.emptyList());
         }
 
-        //zip per each invoice
+        // zip per each invoice
         Map<String, byte[]> perInvoiceZips = new HashMap<>();
 
         for (var e : grouped.entrySet()) {
@@ -165,15 +154,18 @@ public class ZipUtils {
         // Create final zip containing per-invoice zips
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        try (ZipOutputStream zos = new ZipOutputStream(out)) {
+        try (ZipOutputStream zos = new ZipOutputStream(out, StandardCharsets.UTF_8)) {
             for (var entry : perInvoiceZips.entrySet()) {
                 zos.putNextEntry(new ZipEntry(entry.getKey()));
-                zos.write(entry.getValue());
-                zos.closeEntry();
+                try {
+                    zos.write(entry.getValue());
+                } finally {
+                    zos.closeEntry();
+                }
             }
+            zos.finish();
         }
 
         return out.toByteArray();
     }
-
 }

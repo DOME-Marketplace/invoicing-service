@@ -37,16 +37,6 @@ public class InvoicingService {
     public InvoicingService() {
     }
 
-    /**
-     * Retrieves all invoices for a given buyer and seller id within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return Collection of Invoice envelopes
-     * @throws ExternalServiceException if fetching data fails
-     */
     private Collection<Envelope<Invoice>> getPeppolInvoices(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate) throws ExternalServiceException {
         logger.debug("Fetching PEPPOL invoices for buyer: {}, seller: {}, from: {}, to: {}", 
@@ -58,13 +48,6 @@ public class InvoicingService {
         return invoices;
     }
 
-    /**
-     * Retrieves a single Peppol Invoice by Customer Bill ID.
-     *
-     * @param billId Customer Bill identifier
-     * @return Envelope containing the invoice
-     * @throws ExternalServiceException if fetching data fails
-     */
     private Envelope<Invoice> getPeppolInvoice(String billId) throws ExternalServiceException {
         logger.debug("Fetching PEPPOL invoice for billId: {}", billId);
         Envelope<InvoiceBom> bom = bomService.getBomFor(billId);
@@ -73,13 +56,6 @@ public class InvoicingService {
         return invoice;
     }
 
-    /**
-     * Retrieves a single HTML Invoice by Customer Bill ID.
-     *
-     * @param billId Customer Bill identifier
-     * @return Envelope containing HTML representation
-     * @throws Exception if rendering fails
-     */
     public Envelope<String> getPeppolHTML(String billId) throws Exception {
         logger.debug("Rendering HTML invoice for billId: {}", billId);
         Envelope<Invoice> invoice = this.getPeppolInvoice(billId);
@@ -89,13 +65,6 @@ public class InvoicingService {
         return html;
     }
 
-    /**
-     * Retrieves a single PDF Invoice by Customer Bill ID.
-     *
-     * @param billId Customer Bill identifier
-     * @return Envelope containing PDF representation
-     * @throws Exception if rendering fails
-     */
     public Envelope<ByteArrayOutputStream> getPeppolPdf(String billId) throws Exception {
         logger.debug("Rendering PDF invoice for billId: {}", billId);
         Envelope<String> html = this.getPeppolHTML(billId);
@@ -105,13 +74,6 @@ public class InvoicingService {
         return pdf;
     }
 
-    /**
-     * Returns the PEPPOL XML representation of a single invoice.
-     *
-     * @param billId the CustomerBill identifier
-     * @return Envelope containing the invoice XML
-     * @throws ExternalServiceException if the invoice is not found or an external error occurs
-     */
     public Envelope<String> getPeppolXml(String billId) throws ExternalServiceException {
         logger.debug("Rendering XML invoice for billId: {}", billId);
         Envelope<Invoice> inv = getPeppolInvoice(billId);
@@ -122,16 +84,6 @@ public class InvoicingService {
         return xml;
     }
 
-    /**
-     * Retrieves all invoices as XML between a given buyer and seller ID within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return Collection of XML envelopes
-     * @throws ExternalServiceException if fetching data fails
-     */
     public Collection<Envelope<String>> getPeppolsXml(
             String buyerId,
             String sellerId,
@@ -147,16 +99,6 @@ public class InvoicingService {
         return xmls;
     }
 
-    /**
-     * Retrieves all invoices as HTML between a given buyer and seller ID within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return Collection of HTML envelopes
-     * @throws Exception if fetching data fails
-     */
     public Collection<Envelope<String>> getPeppolsHTML(String buyerId,
             String sellerId,
             OffsetDateTime fromDate,
@@ -171,16 +113,6 @@ public class InvoicingService {
         return htmls;
     }
 
-    /**
-     * Retrieves all invoices as PDF between a given buyer and seller ID within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return Collection of PDF envelopes
-     * @throws Exception if fetching data fails
-     */
     public Collection<Envelope<ByteArrayOutputStream>> getPeppolsPdf(String buyerId,
             String sellerId,
             OffsetDateTime fromDate,
@@ -193,17 +125,6 @@ public class InvoicingService {
         return pdfs;
     }
 
-    /**
-     * Returns a ZIP of invoices in XML format between seller and buyer id within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return byte array containing the ZIP
-     * @throws ExternalServiceException if fetching fails
-     * @throws IOException              if ZIP creation fails
-     */
     public byte[] getInvoicesXml(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws ExternalServiceException, IOException {
@@ -214,16 +135,6 @@ public class InvoicingService {
         return zipBytes;
     }
 
-    /**
-     * Returns a ZIP of invoices in HTML format between seller and buyer id within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return byte array containing the ZIP
-     * @throws Exception if fetching fails or ZIP creation fails
-     */
     public byte[] getInvoicesHtml(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws Exception {
@@ -234,16 +145,6 @@ public class InvoicingService {
         return zipBytes;
     }
 
-    /**
-     * Returns a ZIP of invoices in PDF format between seller and buyer id within a date range.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return byte array containing the ZIP
-     * @throws Exception if fetching fails or ZIP creation fails
-     */
     public byte[] getInvoicesPdf(String buyerId, String sellerId, OffsetDateTime fromDate,
             OffsetDateTime toDate)
             throws Exception {
@@ -254,13 +155,6 @@ public class InvoicingService {
         return zipBytes;
     }
 
-    /**
-     * Returns a ZIP containing a single invoice in all formats (XML, HTML, PDF).
-     *
-     * @param billId Customer Bill identifier
-     * @return byte array containing the ZIP
-     * @throws Exception if rendering fails
-     */
     public byte[] getInvoiceAllFormats(String billId) throws Exception {
         logger.debug("Creating all formats ZIP for billId: {}", billId);
         Envelope<String> xml = getPeppolXml(billId);
@@ -273,12 +167,6 @@ public class InvoicingService {
         return zipBytes;
     }
 
-    /**
-     * Returns a ZIP containing a single invoice in XML and HTML formats.
-     *
-     * @param billId Customer Bill identifier
-     * @return byte array containing the ZIP
-     */
     public byte[] getInvoiceXmlAndHtmlFormats(String billId) {
         try {
             logger.debug("Creating XML and HTML ZIP for billId: {}", billId);
@@ -295,16 +183,6 @@ public class InvoicingService {
         }
     }
 
-    /**
-     * Returns a ZIP containing all invoices for a buyer and seller, with each invoice in XML, HTML, PDF.
-     *
-     * @param buyerId  Buyer identifier
-     * @param sellerId Seller identifier
-     * @param fromDate Start date
-     * @param toDate   End date
-     * @return byte array containing the ZIP
-     * @throws Exception if rendering fails
-     */
     public byte[] getInvoicesAll(
             String buyerId,
             String sellerId,

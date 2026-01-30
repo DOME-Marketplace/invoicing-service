@@ -1,7 +1,12 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
-### <code>2.0.11</code> :calendar: 27/01/2026
+
+### <code>2.0.12</code> :calendar: 30/01/2026
+**BugFixing**
+* Fix ZIP corruption by ensuring central directory is always written via finish() and proper entry closure
+
+### <code>2.0.11</code> :calendar: 29/01/2026
 **BugFixing**
 * Fix marketplace ZIP corruption by returning byte[] directly and adding binary transfer headers.
 

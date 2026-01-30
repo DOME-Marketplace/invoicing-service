@@ -138,7 +138,6 @@ public class InvoicingController {
                     .status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .build();
         } catch (ExternalServiceException e) {
-            // External service failed, status 503
             logger.error("External service error for billId {}: {}", billId, e.getMessage(), e);
             return ResponseEntity
                     .status(HttpStatus.SERVICE_UNAVAILABLE)
