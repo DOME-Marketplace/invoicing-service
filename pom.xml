@@ -74,37 +74,37 @@
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf620-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.3</version>
         </dependency>
         <!-- TMF622 Product Ordering -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf622-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.1</version>
         </dependency>
         <!-- TMF632 API Party Management -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf632-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.2</version>
         </dependency>
         <!-- TMF637 Product Inventory Management -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf637-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.2</version>
         </dependency>
         <!--  TMF666 Account Management  -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf666-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.0</version>
         </dependency>
         <!-- TMF678 Customer Bill -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf678-v4</artifactId>
-            <version>[2.1.0, 2.2.0)</version>
+            <version>2.1.4</version>
         </dependency>
 
         <!-- Brokerage Utils dependencies -->
