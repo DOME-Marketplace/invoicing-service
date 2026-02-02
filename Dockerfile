@@ -1,12 +1,10 @@
 
 # Use a JDK17 as set in the dev environment
-FROM eclipse-temurin:17-jdk-alpine
-
-# If there si the need to upgrade to a newer version of Java use the following FROM
-# FROM alpine/java:21-jdk
+FROM eclipse-temurin:17-jdk-jammy
 
 # Install curl
-RUN apk update && apk add --no-cache curl
+RUN apt-get update && apt-get install -y curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the workdir in the container
 WORKDIR /usr/app
