@@ -2,6 +2,33 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.13</code> :calendar: 02/02/2026
+**BugFixing**
+* Fixing for ZIP, PDF, and ALL types of corruption issues.
+
+### <code>2.0.12</code> :calendar: 30/01/2026
+**BugFixing**
+* Fix ZIP corruption by ensuring central directory is always written via finish() and proper entry closure
+
+### <code>2.0.11</code> :calendar: 29/01/2026
+**BugFixing**
+* Fix marketplace ZIP corruption by returning byte[] directly and adding binary transfer headers.
+
+### <code>2.0.10</code> :calendar: 27/01/2026
+**BugFixing**
+* Peppol Validation more flexible.
+* Replace InputStreamResource with ByteArrayResource for ZIP downloads.
+* Add comprehensive logging to InvoicingService for better debugging.
+
+### <code>2.0.9</code> :calendar: 23/01/2026
+**BugFixing**
+* Usage of BillNo to rename zip files.
+
+### <code>2.0.8</code> :calendar: 23/01/2026
+**BugFixing**
+* Stopped using InputStreamResource.getDescription() for filenames and now derive them from Envelope/NamingUtils instead.
+* Fixed ZIP responses by returning raw InputStreamResource from the service and setting Content-Type: application/zip in the controller.
+
 ### <code>2.0.7</code> :calendar: 19/01/2026
 **Improvements**
 * TaxItem of CustomerBill aggregated by same taxRate and taxCategory

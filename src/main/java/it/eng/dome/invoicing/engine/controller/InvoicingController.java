@@ -4,18 +4,16 @@ import it.eng.dome.invoicing.engine.exception.ExternalServiceException;
 import it.eng.dome.invoicing.engine.exception.PeppolValidationException;
 import it.eng.dome.invoicing.engine.service.InvoicingService;
 import it.eng.dome.invoicing.engine.service.render.Envelope;
+import it.eng.dome.invoicing.engine.service.utils.NamingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
@@ -31,100 +29,116 @@ public class InvoicingController {
     private InvoicingService invoicingService;
 
     @GetMapping("invoices/{billId}")
-    public ResponseEntity<Resource> getInvoice(@PathVariable String billId,
-            @RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
-        try {
-            String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
-            switch (fmt) {
-            case "peppol", "xml", "peppol-xml":
-            	Envelope<String> peppolXmlEnvelope = invoicingService.getPeppolXml(billId);
-                String xml = invoicingService.getPeppolXml(billId).getContent();
-                Resource xmlResource = new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8));
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_XML)
-                        .header(HttpHeaders.CONTENT_DISPOSITION,
-                                ContentDisposition.attachment()
-                                        .filename(peppolXmlEnvelope.getName() + ".xml")
-                                        .build().toString())
-                        .body(xmlResource);
+	public ResponseEntity<?> getInvoice(@PathVariable String billId,
+			@RequestParam(name = "format", required = false, defaultValue = "peppol") String format) {
+		try {
+			String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
+			logger.debug("Requested invoice download for billId={} with format={}", billId, fmt);
+			
+			switch (fmt) {
+			case "peppol", "xml", "peppol-xml": {
+				Envelope<String> peppolXmlEnvelope = invoicingService.getPeppolXml(billId);
+				String xml = peppolXmlEnvelope.getContent();
+   			 	byte[] xmlBytes = xml.getBytes(StandardCharsets.UTF_8);
+				String fileName = NamingUtils.sanitizeFilename(peppolXmlEnvelope.getName()) + ".xml";
+				
+				logger.info("Returning XML invoice for billId={}, size={} bytes", billId, xmlBytes.length);
+				
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_XML)
+						.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString())
+						.body(new ByteArrayResource(xmlBytes));
+			}
 
-            case "html":
-            	Envelope<String> peppolHtmlEnvelope = invoicingService.getPeppolHTML(billId);
+			case "html": {
+				Envelope<String> peppolHtmlEnvelope = invoicingService.getPeppolHTML(billId);
+				String html = peppolHtmlEnvelope.getContent();
+				byte[] htmlBytes = html.getBytes(StandardCharsets.UTF_8);
+				
+				String fileName = NamingUtils.sanitizeFilename(peppolHtmlEnvelope.getName()) + ".html";
+				logger.info("Returning HTML invoice for billId={}, size={} bytes", billId, htmlBytes.length);
+				
+				return ResponseEntity.ok()
+						.contentType(MediaType.TEXT_HTML)
+						.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString())
+						.body(new ByteArrayResource(htmlBytes));
+			}
 
-                String html = invoicingService.getPeppolHTML(billId).getContent();
-                Resource htmlResource = new ByteArrayResource(html.getBytes(StandardCharsets.UTF_8));
-                return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_HTML)
-                        .header(HttpHeaders.CONTENT_DISPOSITION,
-                                ContentDisposition.attachment()
-                                        .filename(peppolHtmlEnvelope.getName() + ".html")
-                                        .build().toString())
-                        .body(htmlResource);
+			case "pdf": {
+				Envelope<ByteArrayOutputStream> pdf = invoicingService.getPeppolPdf(billId);
+				byte[] pdfBytes = pdf.getContent().toByteArray();
 
-                case "pdf":
-                    Envelope<ByteArrayOutputStream> pdf = invoicingService.getPeppolPdf(billId);
-                    ByteArrayResource pdfResource = new ByteArrayResource(pdf.getContent().toByteArray());
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_PDF)
-                            .header(HttpHeaders.CONTENT_DISPOSITION,
-                                    ContentDisposition.attachment()
-                                            .filename(pdf.getName() + ".pdf")
-                                            .build().toString())
-                            .body(pdfResource);
-                    
-                case "xml-html":
-					Resource xmlHtmlResource = invoicingService.getInvoiceXmlAndHtmlFormats(billId);
+				String fileName = NamingUtils.sanitizeFilename(pdf.getName()) + ".pdf";
+				logger.info("Returning PDF invoice for billId={}, size={} bytes", billId, pdfBytes.length);
+				
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_PDF)
+						.contentLength(pdfBytes.length)
+						.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString())
+						.body(new ByteArrayResource(pdfBytes));
+			}
 
-					return ResponseEntity.ok()
-							.contentType(MediaType.APPLICATION_OCTET_STREAM)
-							.header(HttpHeaders.CONTENT_DISPOSITION,
-									ContentDisposition.attachment()
-											.filename(xmlHtmlResource.getDescription().replace("InputStream resource [", "")
-												    .replace("]", "") +".zip")
-											.build().toString())
-							.body(xmlHtmlResource);
-					
-                case "all":
-                    Resource allResource = invoicingService.getInvoiceAllFormats(billId);
-                                                           
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                            .header(HttpHeaders.CONTENT_DISPOSITION,
-                                    ContentDisposition.attachment()
-                                            .filename(allResource.getDescription().replace("InputStream resource [", "")
-                                            	    .replace("]", "") +".zip")
-                                            .build().toString())
-                            .body(allResource);
-                    
-                default:
-                    String msg = "BAD REQUEST: Unsupported output format: " + fmt;
-                    ByteArrayResource errorResource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body(errorResource);
-            }
-        } catch (PeppolValidationException e) {
-            logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .build();
-        } catch (ExternalServiceException e) {
-            // External service failed, status 503
-            logger.error("External service error for billId {}: {}", billId, e.getMessage(), e);
-            return ResponseEntity
-                    .status(HttpStatus.SERVICE_UNAVAILABLE)
-                    .build();
-        } catch (Exception e) {            
-            logger.error("Error retrieving BOM for {}", billId);
-            logger.error(e.getLocalizedMessage(), e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
+			case "xml-html": {
+				Envelope<String> xmlEnvelope = invoicingService.getPeppolXml(billId);
+				String baseName = NamingUtils.sanitizeFilename(xmlEnvelope.getName());
+
+				byte[] zipBytes = invoicingService.getInvoiceXmlAndHtmlFormats(billId);
+
+				String fileName = baseName + "-xml-html.zip";
+				logger.info("Returning xml-html ZIP for billId={}, size={} bytes", billId, zipBytes.length);
+
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.contentLength(zipBytes.length)
+						.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString())
+						.header("Content-Transfer-Encoding", "binary")
+						.header("Accept-Ranges", "bytes")
+						.header("X-Content-Type-Options", "nosniff")
+						.header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+						.body(zipBytes);
+			}
+
+			case "all": {
+				Envelope<String> xmlEnvelope = invoicingService.getPeppolXml(billId);
+				String baseName = NamingUtils.sanitizeFilename(xmlEnvelope.getName());
+
+				byte[] zipBytes = invoicingService.getInvoiceAllFormats(billId);
+
+				String fileName = baseName + "-all.zip";
+
+				logger.info("Returning all formats ZIP for billId={}, size={} bytes", billId, zipBytes.length);
+
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.contentLength(zipBytes.length)
+						.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString())
+						.header("Content-Transfer-Encoding", "binary").header("Accept-Ranges", "bytes")
+						.header("X-Content-Type-Options", "nosniff")
+						.header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+						.body(zipBytes);
+			}
+
+			default: {
+				String msg = "BAD REQUEST: Unsupported output format: " + fmt;
+				ByteArrayResource errorResource = new ByteArrayResource(msg.getBytes(StandardCharsets.UTF_8));
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResource);
+			}
+			}
+		} catch (PeppolValidationException e) {
+			logger.error("PEPPOL validation problem for billId {}: {}", billId, e.getMessage());
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+		} catch (ExternalServiceException e) {
+			logger.error("External service error for billId {}: {}", billId, e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+		} catch (Exception e) {
+			logger.error("Error retrieving BOM for {}", billId);
+			logger.error(e.getLocalizedMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
     @GetMapping("invoices")
-    public ResponseEntity<InputStreamResource> getInvoices(
+    public ResponseEntity<?> getInvoices(
             @RequestParam(name = "sellerId", required = false) String sellerId,
             @RequestParam(name = "buyerId", required = false) String buyerId,
             @RequestParam(name = "format", required = false, defaultValue = "peppol") String format,
@@ -132,67 +146,78 @@ public class InvoicingController {
             @RequestParam(name = "toDate", required = false) OffsetDateTime toDate) {
         try {
             String fmt = (format == null || format.isBlank()) ? "peppol" : format.toLowerCase().trim();
-            InputStreamResource resource;
+            byte[] zipBytes;
             String fileName;
-            MediaType mediaType;
+            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 
             switch (fmt) {
-                case "peppol", "xml", "peppol-xml":
-                    resource = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
-                    fileName = resource.getDescription()
-                            .replace("InputStream resource [", "")
-                            .replace("]", "")
-                            + "-xml.zip";
-                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                case "peppol":
+                case "xml":
+                case "peppol-xml": {
+                    zipBytes = invoicingService.getInvoicesXml(buyerId, sellerId, fromDate, toDate);
+                    var xmls = invoicingService.getPeppolsXml(buyerId, sellerId, fromDate, toDate);
+                    String baseName = NamingUtils.sanitizeFilename(
+                            NamingUtils.extractFileNameFromEnvelopes(xmls)
+                    );
+                    fileName = baseName + "-xml.zip";
+                    logger.info("Returning XML ZIP: {} bytes", zipBytes.length);
                     break;
+                }
 
-                case "html":
-                    resource = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
-                    fileName = resource.getDescription()
-                            .replace("InputStream resource [", "")
-                            .replace("]", "")
-                            +"-html.zip";
-                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                case "html": {
+                    zipBytes = invoicingService.getInvoicesHtml(buyerId, sellerId, fromDate, toDate);
+                    var htmls = invoicingService.getPeppolsHTML(buyerId, sellerId, fromDate, toDate);
+                    String baseName = NamingUtils.sanitizeFilename(
+                            NamingUtils.extractFileNameFromEnvelopes(htmls)
+                    );
+                    fileName = baseName + "-html.zip";
+                    logger.info("Returning HTML ZIP: {} bytes", zipBytes.length);
                     break;
+                }
 
-                case "pdf":
-                    resource = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
-                    fileName = resource.getDescription()
-                            .replace("InputStream resource [", "")
-                            .replace("]", "")
-                            + "-pdf.zip";
-                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                case "pdf": {
+                    zipBytes = invoicingService.getInvoicesPdf(buyerId, sellerId, fromDate, toDate);
+                    var pdfs = invoicingService.getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
+                    String baseName = NamingUtils.sanitizeFilename(
+                            NamingUtils.extractFileNameFromEnvelopes(pdfs)
+                    );
+                    fileName = baseName + "-pdf.zip";
+                    logger.info("Returning PDF ZIP: {} bytes", zipBytes.length);
                     break;
+                }
 
-                case "all":
-                    resource = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
-                    fileName = resource.getDescription()
-                            .replace("InputStream resource [", "")
-                            .replace("]", "")
-                            +"-all.zip";
-                    mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                case "all": {
+                    zipBytes = invoicingService.getInvoicesAll(buyerId, sellerId, fromDate, toDate);
+                    var pdfs = invoicingService.getPeppolsPdf(buyerId, sellerId, fromDate, toDate);
+                    String baseName = NamingUtils.sanitizeFilename(
+                            NamingUtils.extractFileNameFromEnvelopes(pdfs)
+                    );
+                    fileName = baseName + "-all.zip";
+                    logger.info("Returning all formats ZIP: {} bytes", zipBytes.length);
                     break;
+                }
 
-                default:
+                default: {
                     String msg = "BAD REQUEST: Unsupported output format: " + fmt;
-                    resource = new InputStreamResource(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
+                    byte[] errorBytes = msg.getBytes(StandardCharsets.UTF_8);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(resource);
+                            .body(errorBytes);
+                }
             }
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            ContentDisposition.attachment()
+                                    .filename(fileName)
+                                    .build().toString())
                     .contentType(mediaType)
-                    .body(resource);
-            /*
-            } else {
-                // Probably no longer neeeded. To check.
-                LocalResourceRef ref = this.invoicingService.getPackagedInvoices(sellerId, buyerId, fromDate, toDate, format);
-                InputStream in = getClass().getResourceAsStream(ref.getLocation());
-                return ResponseEntity.ok()
-                        .contentType(ref.getContentType()).body(new InputStreamResource(in));
-            }
-            */
+                    .contentLength(zipBytes.length)
+                    .header("Content-Transfer-Encoding", "binary")
+                    .header("Accept-Ranges", "bytes")
+                    .header("X-Content-Type-Options", "nosniff")
+                    .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                    .body(zipBytes);
+
         } catch (ExternalServiceException e) {
             logger.error("External service error for invoices {}-{}: {}", buyerId, sellerId, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
