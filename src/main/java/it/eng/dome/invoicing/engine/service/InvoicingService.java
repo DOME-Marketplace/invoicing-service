@@ -69,8 +69,12 @@ public class InvoicingService {
         logger.debug("Rendering PDF invoice for billId: {}", billId);
         Envelope<String> html = this.getPeppolHTML(billId);
         Envelope<ByteArrayOutputStream> pdf = new Html2Pdf().render(html);
-        logger.info("Rendered PDF invoice for billId: {}, size: {} bytes", 
-                    billId, pdf.getContent().size());
+        
+        // flush on ByteArrayOutputStream 
+        ByteArrayOutputStream pdfStream = pdf.getContent();
+        pdfStream.flush();
+        
+        logger.info("Rendered PDF invoice for billId: {}, size: {} bytes", billId, pdf.getContent().size());
         return pdf;
     }
 

@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Invoicing Service* software:
 
+### <code>2.0.13</code> :calendar: 02/02/2026
+**BugFixing**
+* Fixing for ZIP, PDF, and ALL types of corruption issues.
+
 ### <code>2.0.12</code> :calendar: 30/01/2026
 **BugFixing**
 * Fix ZIP corruption by ensuring central directory is always written via finish() and proper entry closure

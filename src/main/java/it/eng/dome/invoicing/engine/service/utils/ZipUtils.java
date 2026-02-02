@@ -31,56 +31,42 @@ public class ZipUtils {
      * @return a byte array containing the ZIP data
      * @throws IOException if an I/O error occurs while writing the ZIP
      */
-    public static byte[] createZip(Collection<? extends Envelope<?>> envelopes) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	public static byte[] createZip(Collection<? extends Envelope<?>> envelopes) throws IOException {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ZipOutputStream zos = new ZipOutputStream(baos)) {
 
-        try (ZipOutputStream zos = new ZipOutputStream(baos, StandardCharsets.UTF_8)) {
+			if (envelopes != null) {
+				for (Envelope<?> env : envelopes) {
+					if (env == null)
+						continue;
 
-            if (envelopes == null || envelopes.isEmpty()) {
-                log.warn("createZip: no envelopes provided → returning EMPTY but VALID zip");
-            } else {
-                for (Envelope<?> env : envelopes) {
-                    if (env == null) {
-                        log.warn("createZip: null envelope found → skipping");
-                        continue;
-                    }
+					String name = env.getName();
+					String format = env.getFormat();
+					Object content = env.getContent();
+					if (name == null || format == null || content == null)
+						continue;
 
-                    String name = env.getName();
-                    String format = env.getFormat();
-                    Object content = env.getContent();
+					String fileName = name + "." + format;
+					zos.putNextEntry(new ZipEntry(fileName));
 
-                    if (name == null || name.isBlank()
-                            || format == null || format.isBlank()
-                            || content == null) {
-                        log.warn("createZip: invalid envelope → skipping (name={}, format={}, content={})",
-                                name, format, content == null ? "null" : content.getClass().getName());
-                        continue;
-                    }
+					if (content instanceof String s) {
+						zos.write(s.getBytes(StandardCharsets.UTF_8));
+					} else if (content instanceof ByteArrayOutputStream b) {
+						zos.write(b.toByteArray());
+					} else if (content instanceof byte[] bytes) {
+						zos.write(bytes);
+					} else {
+						throw new IllegalArgumentException("Unsupported content type: " + content.getClass());
+					}
 
-                    String fileName = name + "." + format;
-                    zos.putNextEntry(new ZipEntry(fileName));
+					zos.closeEntry();
+				}
+			}
 
-                    try {
-                        if (content instanceof String s) {
-                            zos.write(s.getBytes(StandardCharsets.UTF_8));
-                        } else if (content instanceof ByteArrayOutputStream b) {
-                            zos.write(b.toByteArray());
-                        } else {
-                            log.error("createZip: unsupported content type for '{}' → skipping (type={})",
-                                    fileName, content.getClass().getName());
-                        }
-                    } finally {
-                        zos.closeEntry();
-                    }
-                }
-            }
-
-            // Ensures the central directory is written even for empty ZIPs
-            zos.finish();
-        }
-
-        return baos.toByteArray();
-    }
+			zos.finish();
+			return baos.toByteArray();
+		}
+	}
 
     /**
      * Builds a ZIP archive containing one nested ZIP per invoice.
