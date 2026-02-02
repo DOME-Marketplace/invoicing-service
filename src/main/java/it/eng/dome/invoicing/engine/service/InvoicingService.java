@@ -2,6 +2,7 @@ package it.eng.dome.invoicing.engine.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -178,11 +179,16 @@ public class InvoicingService {
             Envelope<String> html = getPeppolHTML(billId);
             Collection<Envelope<?>> all = List.of(xml, html);
 
+            all.forEach(env -> logger.debug("Adding to ZIP: {}.{} ({} bytes)",
+                env.getName(), env.getFormat(),
+                env.getContent() instanceof String s ? s.getBytes(StandardCharsets.UTF_8).length : 0));
+            
             byte[] zipBytes = ZipUtils.createZip(all);
             logger.info("Created XML and HTML ZIP for billId: {}, size: {} bytes", billId, zipBytes.length);
             
             return zipBytes;
         } catch (Exception e) {
+        	logger.error("Failed to create XML/HTML ZIP for billId={}", billId, e);
             throw new RuntimeException("Failed to get invoice in XML and HTML formats for billId: " + billId, e);
         }
     }

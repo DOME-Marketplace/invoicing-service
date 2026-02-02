@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +66,7 @@ public class InvoicingController {
 
 			case "pdf": {
 				Envelope<ByteArrayOutputStream> pdf = invoicingService.getPeppolPdf(billId);
-				ByteArrayOutputStream pdfStream = pdf.getContent();
-				pdfStream.flush();
-				byte[] pdfBytes = pdfStream.toByteArray();
+				byte[] pdfBytes = pdf.getContent().toByteArray();
 
 				String fileName = NamingUtils.sanitizeFilename(pdf.getName()) + ".pdf";
 				logger.info("Returning PDF invoice for billId={}, size={} bytes", billId, pdfBytes.length);
