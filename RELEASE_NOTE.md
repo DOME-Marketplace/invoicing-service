@@ -1,9 +1,9 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
-### <code>2.0.14</code> :calendar: 03/02/2026
+### <code>2.0.14</code> :calendar: 05/02/2026
 **BugFixing**
-* Fix ZIP corruption on marketplace by using InputStreamResource for binary stream integrity
+* Fix ZIP corruption: Update the BAE to support binary invoices.
 
 ### <code>2.0.13</code> :calendar: 02/02/2026
 **BugFixing**
