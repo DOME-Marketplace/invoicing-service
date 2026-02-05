@@ -44,12 +44,12 @@ tmforumapi:
   tmf_endpoint: ${TMF_ENDPOINT:https://tmf.dome-marketplace-dev2.org}
   
   # tmf_envoy = false => use specific path for any tmforum software | tmf_envoy = true => use TMF_ENDPOINT as unique path (proxy) 
-  tmf_envoy:  ${TMF_ENVOY:true}
+  tmf_envoy: ${TMF_ENVOY:true}
   
   # TMF_ENVOY=false - valid only if envoy false
-  tmf_namespace:  ${TMF_NAMESPACE:marketplace}
-  tmf_postfix:  ${TMF_POSTFIX:svc.cluster.local}
-  tmf_port:  ${TMF_PORT:8080}
+  tmf_namespace: ${TMF_NAMESPACE:marketplace}
+  tmf_postfix: ${TMF_POSTFIX:svc.cluster.local}
+  tmf_port: ${TMF_PORT:8080}
    
   # TMF_ENVOY=true - internal paths used with envoy = true
   tmf620_product_catalog_management_path: tmf-api/productCatalogManagement/v4
@@ -59,6 +59,9 @@ tmforumapi:
   tmf651_agreement_management_path: tmf-api/agreementManagement/v4
   tmf666_account_management_path: tmf-api/accountManagement/v4
   tmf678_billing_path: tmf-api/customerBillManagement/v4
+
+  # read_timeout in seconds
+  read_timeout: ${TMF_READ_TIMEOUT:60}
 
 spring:
   jackson:
