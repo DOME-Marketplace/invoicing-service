@@ -4,6 +4,7 @@
 ### <code>2.1.0</code> :calendar: XX/02/2026 (WIP)
 **Improvements**
 * Add a new env var (`TMF_READ_TIMEOUT`) to set read timeout time for any requests in TMForum APIs.
+* Set Authorization `BEARER TOKEN` in the header,
 
 ### <code>2.0.14</code> :calendar: 05/02/2026
 **BugFixing**
