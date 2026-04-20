@@ -89,8 +89,14 @@ public class BomToPeppol {
 	    // Extract organizations and billing accounts
 	    Organization supplierOrg = bom.getOrganizationWithRole("Seller");
 	    Organization customerOrg = bom.getOrganizationWithRole("Buyer");
+	    if (customerOrg == null) {
+	        customerOrg = bom.getOrganizationWithRole("Customer");
+	    }
 	    BillingAccount sellerBA = bom.getBillingAccountWithRole("Seller");
 	    BillingAccount buyerBA = bom.getBillingAccountWithRole("Buyer");
+	    if (buyerBA == null) {
+	        buyerBA = bom.getBillingAccountWithRole("Customer");
+	    }
 	
 	    if (supplierOrg == null || customerOrg == null) {
 	        throw new IllegalStateException("Supplier and Customer organizations are mandatory");

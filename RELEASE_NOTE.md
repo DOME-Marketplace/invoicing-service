@@ -1,6 +1,10 @@
 # Release Notes
 
 **Release Notes** of the *Invoicing Service* software:
+### <code>2.1.2/code> :calendar: 20/04/2026
+**BugFixing**
+* added Customer as fallback in `BomService` and `BomToPeppol`
+
 ### <code>2.1.1</code> :calendar: 26/02/2026
 **BugFixing**
 * Updated `SearchResult` to support errors as JsonObject
